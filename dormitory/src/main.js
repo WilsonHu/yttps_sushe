@@ -2,11 +2,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Element from 'element-ui'
+import Echarts from 'echarts'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Element)
 // 引用路由
 import VueRouter from 'vue-router'
 // 光引用不成，还得使用
+
+Vue.use(Echarts)
 
 Vue.use(VueRouter)
 // 引用路由配置文件
