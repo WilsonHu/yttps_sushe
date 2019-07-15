@@ -152,20 +152,148 @@
             <el-col :span="8">
                 <div class="grid-content bg-purple">
                     <div style="height: 930px">
-                        <div style="height: 940px; width:85% ;background-color: white;margin-left:60px "
+                        <div style="height: 90px; width:85% ;background-color: transparent;margin-left:60px "
                              class="well well-lg">
-                            <i style="margin-left:30px">
-                                <i class="title">通行记录</i>
-                                <!--<el-input
-                                        style="width: 150px;margin-top: 35px;margin-left: 300px"
-                                        placeholder="学生姓名" clearable
-                                        auto-complete="off">
-                                    <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                                </el-input>-->
-                            </i>
+                            <i class="title">通行记录</i>
+                            <el-input
+                                    style="width: 200px;margin-left: 150px;margin-top: 15px"
+                                    placeholder="按姓名或宿舍号查询" clearable
+                                    auto-complete="off">
+                                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                            </el-input>
 
                         </div>
+                        <div style="height: 810px; width:85% ;background-color:transparent;margin-left:60px "
+                             class="well well-lg">
+                            <el-tabs v-model="activeName" @tab-click="handleClick">
+                                <el-tab-pane label="全部" name="first">
+                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
+                                        <el-row :gutter="20">
+                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList">
+                                                <el-card :body-style="{ padding: '0px' }"
+                                                         style="height: 80px;border-radius: 20px">
+                                                    <div>
+                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                             :src="require('../assets/img/'+(i.type=='进'?'in':(i.type=='未注册'?'unregistered':(i.type=='黑名单'?'blacklist':'forbid')))+'.png')"/>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
+                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span style="margin-left: 10px">{{i.name}}</span>
+                                                        <span>{{i.classes}}</span>
+                                                        <span style="padding-left: 90px;" :style="{color:(i.type=='进'?'green':(i.type=='未注册'?'orange':(i.type=='黑名单'?'red':'blue')))}">{{i.type}}</span>
 
+                                                    </div>
+                                                </el-card>
+                                            </el-col>
+                                        </el-row>
+                                        <span class="mess"></span>
+
+                                    </div>
+                                    <span>{{accesscount}}</span>
+                                </el-tab-pane>
+                                <el-tab-pane label="通行" name="second">
+                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
+                                        <el-row :gutter="20">
+                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='进'">
+                                                <el-card :body-style="{ padding: '0px' }"
+                                                         style="height: 80px;border-radius: 20px">
+                                                    <div>
+                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                             :src="require('../assets/img/'+'in'+'.png')"/>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
+                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span style="margin-left: 10px">{{i.name}}</span>
+                                                        <span>{{i.classes}}</span>
+                                                        <span style="padding-left: 90px; color: green " >{{i.type}}</span>
+
+                                                    </div>
+                                                </el-card>
+                                            </el-col>
+                                        </el-row>
+                                        <span class="mess"></span>
+
+                                    </div>
+                                </el-tab-pane>
+                                <el-tab-pane label="未注册" name="third">
+                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
+                                        <el-row :gutter="20">
+                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='未注册'">
+                                                <el-card :body-style="{ padding: '0px' }"
+                                                         style="height: 80px;border-radius: 20px">
+                                                    <div>
+                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                             :src="require('../assets/img/'+'unregistered'+'.png')"/>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
+                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span style="margin-left: 10px">{{i.name}}</span>
+                                                        <span>{{i.classes}}</span>
+                                                        <span style="padding-left: 90px; color: orange " >{{i.type}}</span>
+
+                                                    </div>
+                                                </el-card>
+                                            </el-col>
+                                        </el-row>
+                                        <span class="mess"></span>
+
+                                    </div>
+                                </el-tab-pane>
+                                <el-tab-pane label="禁行" name="fourth">
+                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
+                                        <el-row :gutter="20">
+                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='禁止'">
+                                                <el-card :body-style="{ padding: '0px' }"
+                                                         style="height: 80px;border-radius: 20px">
+                                                    <div>
+                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                             :src="require('../assets/img/'+'forbid'+'.png')"/>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
+                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span style="margin-left: 10px">{{i.name}}</span>
+                                                        <span>{{i.classes}}</span>
+                                                        <span style="padding-left: 90px; color: blue " >{{i.type}}</span>
+
+                                                    </div>
+                                                </el-card>
+                                            </el-col>
+                                        </el-row>
+                                        <span class="mess"></span>
+
+                                    </div>
+                                </el-tab-pane>
+                                <el-tab-pane label="警报" name="five">
+                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
+                                        <el-row :gutter="20">
+                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='黑名单'">
+                                                <el-card :body-style="{ padding: '0px' }"
+                                                         style="height: 80px;border-radius: 20px">
+                                                    <div>
+                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                             :src="require('../assets/img/'+'blacklist'+'.png')"/>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
+                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
+                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span style="margin-left: 10px">{{i.name}}</span>
+                                                        <span>{{i.classes}}</span>
+                                                        <span style="padding-left: 90px; color: red " >{{i.type}}</span>
+
+                                                    </div>
+                                                </el-card>
+                                            </el-col>
+                                        </el-row>
+                                        <span class="mess"></span>
+
+                                    </div>
+                                </el-tab-pane>
+                            </el-tabs>
+                        </div>
                     </div>
                 </div>
             </el-col>
@@ -183,7 +311,7 @@
         data() {
             _this = this
             return {
-                activeName: 'second',
+
                 infoManage: 'first',
                 number: [2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500],
                 count: 10,
@@ -196,7 +324,11 @@
                     attendanceNum: 0,
                     inDormitory: 0,
                     outDormitory: 0
-                }
+                },
+                activeName: 'first',
+                accesscount: 0,
+                picName: '',
+                totalRecords: 0,
             };
         },
         methods: {
@@ -279,6 +411,7 @@
 
             },
             fetchAccess(floorNo) {
+                console.log('fsd' + floorNo)
                 let params = new URLSearchParams();
                 params.append("page", _this.currentPage)
                 params.append("size", _this.pageSize)
@@ -290,9 +423,13 @@
                 }).then(res => {
                     if (res.data.code == 200) {
                         _this.accessList = res.data.data.list;
+                        _this.totalRecords = res.data.data.total;
+                        _this.accesscount = _this.accessList.length;
+
                     } else {
                         showMessage(_this, "获取通行记录失败", 0)
                     }
+
                 }).catch(error => {
                     showMessage(_this, error, 0)
                 })
@@ -311,9 +448,51 @@
                         _this.attendanceNumList.outDormitory = res.data.outDormitory
                     }
                 })
-            }
+            },
+            handleScroll2(floorNo) {
+                //变量scrollTop是滚动条滚动时，距离顶部的距离
+                var scrollTop2 = document.getElementById("div2").scrollTop
+                //变量windowHeight是可视区的高度
+                var windowHeight2 = document.getElementById("div2").clientHeight
+                //变量scrollHeight是滚动条的总高度
+                var scrollHeight2 = document.getElementById("div2").scrollHeight
+                //滚动条到底部的条件
+                if (scrollTop2 + windowHeight2 == scrollHeight2) {
+                    _this.currentPage += 1;
+                    //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
+                    if (_this.accesscount == _this.totalRecords) {
+                        $(".mess").html("无更多数据")
+                        return
+                    }
+                    let params = new URLSearchParams();
+                    params.append("page", _this.currentPage)
+                    params.append("size", _this.pageSize)
+                    params.append("floorDevice", floorNo)
+                    request({
+                        url: HOST + "/access/list",
+                        method: 'post',
+                        params: params
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            let list = res.data.data.list
+                            for (let i = 0; i < list.length; i++) {
+                                _this.accessList.push(list[i]);
+                            }
+                            _this.accesscount = _this.accessList.length;
+                        } else {
+                            showMessage(_this, "获取查询数据失败！");
+                        }
+                    }).catch(error => {
+                        console.log(error)
 
+                    })
+
+                }
+
+            },
         },
+
+
         created() {
             this.userInfo = JSON.parse(sessionStorage.getItem("user"))
             let params = new URLSearchParams();
@@ -328,7 +507,9 @@
                     for (let i = 0; i < floorDevice.length; i++) {
                         _this.deviceId.push(floorDevice[i].deviceId)
                     }
+
                     _this.fetchAccess(_this.deviceId)
+                    _this.handleScroll2(_this.deviceId)
                 } else {
                     showMessage(_this, '设备信息获取失败', 0)
                 }
@@ -337,13 +518,18 @@
             })
 
         },
+
         mounted() {
             _this.SetEchart();
             document.getElementById("div1").addEventListener("scroll", _this.handleScroll);
+            document.getElementById("div2").addEventListener("scroll2", _this.handleScroll2);
         },
         destroyed() {
             document.getElementById("div1").removeEventListener("scroll", _this.handleScroll)
+            document.getElementById("div2").removeEventListener("scroll2", _this.handleScroll2)
+
         },
+
 
     }
 
@@ -365,12 +551,6 @@
         float: right;
     }
 
-
-    :last-child {
-        margin-bottom: 0;
-    }
-
-
     .bg-purple {
         background: #f6f4ff;
 
@@ -380,7 +560,6 @@
         background: #4a6687;
 
     }
-
 
     .grid-content {
         border-radius: 4px;
@@ -403,5 +582,79 @@
     .box-card {
         height: 80px;
         width: 430px;
+    }
+
+    /*右边模块*/
+    ::-webkit-scrollbar {
+        width: 7px; /*滚动条宽度*/
+        height: 7px; /*滚动条高度*/
+        background-color: #f6f4ff;
+    }
+
+    .title {
+        font: 25px Extra Small;
+        color: #6a747c;
+        font-weight: bold;
+    }
+
+    /*右边选项卡字体*/
+    .el-tabs__item {
+        color: black;
+        padding: 0 30px;
+        margin-left: 6px;
+
+    }
+
+    /*右边模块 蓝色滑块*/
+    .el-tabs__active-bar {
+        padding: 0 30px;
+       margin-left: 20px;
+    }
+
+    .bottom {
+        margin-top: 13px;
+        line-height: 12px;
+    }
+
+    /*右边全部第一个卡片*/
+    .el-col-offset-0 {
+        margin-left: 8.33333%;
+    }
+
+    /*全部栏位置*/
+    .el-col-20 {
+        margin-left: 35px;
+        margin-right: 0px;
+    }
+
+    .el-row {
+        margin-bottom: 10px;
+
+    &
+    :last-child {
+        margin-bottom: 0;
+    }
+
+    }
+    .el-col {
+        border-radius: 4px;
+    }
+
+    .bg-purple-dark {
+        background: #99a9bf;
+    }
+
+    .bg-purple-light {
+        background: #e5e9f2;
+    }
+
+    .grid-content {
+        border-radius: 4px;
+        min-height: 935px;
+    }
+
+    .row-bg {
+        padding: 5px 0;
+        background-color: #f9fafc;
     }
 </style>
