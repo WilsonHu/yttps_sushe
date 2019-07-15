@@ -3,10 +3,13 @@ package com.eservice.iot.web;
 import com.eservice.iot.core.Result;
 import com.eservice.iot.core.ResultGenerator;
 import com.eservice.iot.model.web.AccessRecordModel;
+import com.eservice.iot.model.web.AttendanceNumber;
+import com.eservice.iot.model.web.NightAttendance;
 import com.eservice.iot.service.DormService;
 import com.eservice.iot.util.RedisUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,29 +35,21 @@ public class AccessController {
 
     @Resource
     private DormService dormService;
-    @Resource
-    private RedisUtil redisUtil;
 
-    private List<AccessRecordModel> accessRecordModelList=new ArrayList<>();
 
     @PostMapping("/list")
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size, String floorDevice){
+    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size, String floorDevice) {
         PageHelper.startPage(page, size);
-        String device[]=floorDevice.split(",");
-        Iterator iterator = redisUtil.sGet("access_set").iterator();
-        while (iterator.hasNext()) {
-            AccessRecordModel accessRecord = (AccessRecordModel)iterator.next();
-            if (accessRecord!=null) {
-                for (int i = 0; i < device.length; i++) {
-                    if (accessRecord.getDeviceId().contains(device[i])) {
-                        accessRecordModelList.add(accessRecord);
-                    }
-                }
-            }else {
-                logger.info("accessRecord is null:{}",accessRecord);
-            }
-        }
+        List<AccessRecordModel> accessRecordModelList = dormService.queryAccessRecordList(floorDevice);
         PageInfo pageInfo = new PageInfo(accessRecordModelList);
-        return  ResultGenerator.genSuccessResult(pageInfo);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    @PostMapping("/attendanceCount")
+    public Result attendanceCount() {
+        AttendanceNumber attendanceNumber = dormService.queryAttendanceNum();
+        return ResultGenerator.genSuccessResult(attendanceNumber);
+    }
+
+
 }

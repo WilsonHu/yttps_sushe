@@ -12,7 +12,7 @@
                                 <el-col :span="5" :offset="2">
                                     <p style="margin-left: 20px;margin-top: 20px">
                                         <span>楼号</span><br>
-                                        <i style=" font:30px Extra Small;  color: black;">9栋</i>
+                                        <i style=" font:30px Extra Small;  color: black;">{{userInfo.floorNo}}</i>
                                     </p>
                                 </el-col>
                                 <el-col :offset="4" style="border: 1px solid silver;width: 1px;height: 97px"></el-col>
@@ -73,18 +73,32 @@
                                 </el-tab-pane>
                                 <el-tab-pane label="夜归考勤" name="second" style="background-color: #F6F4FF;">
                                     <div style="height: 500px;overflow:auto" id="div1">
-                                        <ul style="margin-top: 10px">
+                                        <ul style="margin-top: 10px;margin-left: -10px">
                                             <li v-for="i in count">
                                                 <el-card class="box-card">
                                                     <div>
-                                                        <img src="../assets/img/18973492613_张三.jpg" width="60px"
-                                                             height="60px" style="border-radius: 50%;margin-top: -10px">
+                                                        <el-row>
+                                                            <el-col :span="2">
+                                                                <img src="../assets/img/18973492613_张三.jpg" width="60px"
+                                                                     height="60px"
+                                                                     style="border-radius: 50%;margin-top: -10px">
+                                                            </el-col>
+                                                            <el-col :span="5" :offset="3">
+                                                                <span>张三</span><br/><span>高三(2)班</span>
+                                                            </el-col>
+                                                            <el-col :span="18" :offset="10" style="margin-top: -40px">
+                                                                <span>2019-7-13 23:22:59</span><span
+                                                                    style="margin-left: 10px">【彻夜未归】</span>
+                                                            </el-col>
+
+
+                                                        </el-row>
+
+
                                                         <p style="margin-left: 80px;margin-top: -50px">
-                                                            <span>张三</span><br/><span>高三(2)班</span>
+
                                                         </p>
-                                                        <p style="margin-left: 160px;margin-top: -40px">
-                                                            <span>2019-7-13 23:22:59</span><span style="margin-left: 10px">【彻夜未归】</span>
-                                                        </p>
+
 
                                                     </div>
                                                 </el-card>
@@ -106,10 +120,10 @@
                                 <el-col :span="8" :offset="3">
                                     <p>
                                         <label style="font-size: 23px;">宿管</label> <span
-                                            style="font-size: 25px; margin-left: 20px">张三</span>
+                                            style="font-size: 25px; margin-left: 20px">{{userInfo.name}}</span>
                                     </p>
                                     <p>
-                                        <label>电话:</label><span>18152771754</span>
+                                        <label>电话:</label><span>{{userInfo.phone}}</span>
                                     </p>
                                 </el-col>
                             </div>
@@ -173,17 +187,22 @@
                 infoManage: 'first',
                 number: [2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500],
                 count: 10,
-                userInfo:"",
+                userInfo: "",
                 pageSize: EveryPageNum,//每一页的num
                 currentPage: 1,
-                deviceId:[],
-                accessList:[]
+                deviceId: [],
+                accessList: [],
+                attendanceNumList: {
+                    attendanceNum: 0,
+                    inDormitory: 0,
+                    outDormitory: 0
+                }
             };
         },
         methods: {
             handleClick(tab, event) {
                 console.log(tab, event);
-                _this.count=10;
+                _this.count = 10;
                 $(".mes").html("")
                 $(".count").html("")
             },
@@ -252,57 +271,69 @@
                 if (scrollTop + windowHeight == scrollHeight) {
                     if (_this.count == 20) {
                         $(".mes").html("已无更多数据")
-                        $(".count").html("总数："+_this.count)
+                        $(".count").html("总数：" + _this.count)
                         return
                     }
                     _this.count += 1;
                 }
 
             },
-            fetchAccess(floorNo){
-                let params=new URLSearchParams();
-                params.append("page",_this.currentPage)
-                params.append("size",_this.pageSize)
-                params.append("floorDevice",floorNo)
+            fetchAccess(floorNo) {
+                let params = new URLSearchParams();
+                params.append("page", _this.currentPage)
+                params.append("size", _this.pageSize)
+                params.append("floorDevice", floorNo)
                 request({
-                    url:HOST+"/access/list",
+                    url: HOST + "/access/list",
                     method: "post",
-                    data:params
-                }).then(res=>{
-                    if (res.data.code==200){
-                        _this.accessList=res.data.data.list;
-                    }else {
-                        showMessage(_this,"获取通行记录失败",0)
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        _this.accessList = res.data.data.list;
+                    } else {
+                        showMessage(_this, "获取通行记录失败", 0)
                     }
-                }).catch(error=>{
-                    showMessage(_this,error,0)
+                }).catch(error => {
+                    showMessage(_this, error, 0)
+                })
+            },
+            fetchAttendanceAndInOrOut(floorNo) {
+                let params = new URLSearchParams();
+                params.append("floorDevice", floorNo)
+                request({
+                    url: HOST + "access/attendanceCount",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        _this.attendanceNumList.attendanceNum = res.data.attendanceNum
+                        _this.attendanceNumList.inDormitory = res.data.inDormitory
+                        _this.attendanceNumList.outDormitory = res.data.outDormitory
+                    }
                 })
             }
 
         },
-        created(){
-            this.userInfo=JSON.parse(sessionStorage.getItem("user"))
-            let params=new URLSearchParams();
-            params.append("floorNo",_this.userInfo.floorNo)
+        created() {
+            this.userInfo = JSON.parse(sessionStorage.getItem("user"))
+            let params = new URLSearchParams();
+            params.append("floorNo", _this.userInfo.floorNo)
             request({
-                url:HOST+"floor/device/getDevice",
-                method:"post",
-                data:params
-            }).then(res=>{
-                if (res.data.code==200){
-                    let floorDevice=res.data.data;
-
-                    for (let i=0;i<floorDevice.length;i++){
-                        console.log("所有楼层设备数据:"+floorDevice[i].deviceId)
+                url: HOST + "floor/device/getDevice",
+                method: "post",
+                data: params
+            }).then(res => {
+                if (res.data.code == 200) {
+                    let floorDevice = res.data.data;
+                    for (let i = 0; i < floorDevice.length; i++) {
                         _this.deviceId.push(floorDevice[i].deviceId)
                     }
-
                     _this.fetchAccess(_this.deviceId)
-                }else {
-                    showMessage(_this,'设备信息获取失败',0)
+                } else {
+                    showMessage(_this, '设备信息获取失败', 0)
                 }
-            }).catch(error=>{
-                showMessage(_this,error,0)
+            }).catch(error => {
+                showMessage(_this, error, 0)
             })
 
         },

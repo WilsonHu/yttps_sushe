@@ -121,7 +121,7 @@ public class AccessService {
     }
 
 
-    public int querySignInCount(Long startTime,Long queryEndTime){
+    public int querySignInCount(Long startTime,Long queryEndTime,List<String> deviceIds){
         if (token == null) {
             token = tokenService.getToken();
         }
@@ -132,6 +132,7 @@ public class AccessService {
 //        ///考勤记录查询结束时间
             postParameters.put("end_timestamp", queryEndTime);
 
+            postParameters.put("device_id_list",deviceIds);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
             headers.add(HttpHeaders.AUTHORIZATION, token);
@@ -153,7 +154,7 @@ public class AccessService {
                 if (exception.getStatusCode().value() == ResponseCode.TOKEN_INVALID) {
                     //token失效,重新获取token后再进行数据请求
                     token = tokenService.getToken();
-                   return querySignInCount(startTime,queryEndTime);
+                   return querySignInCount(startTime,queryEndTime,deviceIds);
                 }
                 exception.printStackTrace();
                 logger.error(exception.getMessage());
@@ -166,7 +167,7 @@ public class AccessService {
      */
     private Long  getRedisTime(){
 
-        Iterator iterator = redisUtil.sGet("access_set").iterator();
+        Iterator iterator = redisUtil.zGet("access_set",0,redisUtil.zSize("access_set")).iterator();
         long time = 0L;
         while (iterator.hasNext()) {
             AccessRecordModel accessRecord = (AccessRecordModel)iterator.next();
