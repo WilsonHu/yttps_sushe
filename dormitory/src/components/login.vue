@@ -142,7 +142,7 @@
         height: 100%;
         /*background: url(assets/bg1.jpg) center !important;
         background-size: cover;*/
-        background-image: url("../assets/img/login_bg_pic.png");
+        background-image: url("../assets/img/login_dormitory.jpg");
         filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
         -moz-background-size: 100% 100%;
         background-size: 100% 100%;

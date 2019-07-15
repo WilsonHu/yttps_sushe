@@ -162,6 +162,7 @@
 <script>
     let _this;
     import echarts from 'echarts'
+    import request from '../api/request'
 
     export default {
         name: "dormitory",
@@ -171,12 +172,20 @@
                 activeName: 'second',
                 infoManage: 'first',
                 number: [2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500],
-                count: 10
+                count: 10,
+                userInfo:"",
+                pageSize: EveryPageNum,//每一页的num
+                currentPage: 1,
+                deviceId:[],
+                accessList:[]
             };
         },
         methods: {
             handleClick(tab, event) {
                 console.log(tab, event);
+                _this.count=10;
+                $(".mes").html("")
+                $(".count").html("")
             },
             SetEchart() {
                 let myChart = echarts.init(document.getElementById('myChart'))
@@ -250,6 +259,51 @@
                 }
 
             },
+            fetchAccess(floorNo){
+                let params=new URLSearchParams();
+                params.append("page",_this.currentPage)
+                params.append("size",_this.pageSize)
+                params.append("floorDevice",floorNo)
+                request({
+                    url:HOST+"/access/list",
+                    method: "post",
+                    data:params
+                }).then(res=>{
+                    if (res.data.code==200){
+                        _this.accessList=res.data.data.list;
+                    }else {
+                        showMessage(_this,"获取通行记录失败",0)
+                    }
+                }).catch(error=>{
+                    showMessage(_this,error,0)
+                })
+            }
+
+        },
+        created(){
+            this.userInfo=JSON.parse(sessionStorage.getItem("user"))
+            let params=new URLSearchParams();
+            params.append("floorNo",_this.userInfo.floorNo)
+            request({
+                url:HOST+"floor/device/getDevice",
+                method:"post",
+                data:params
+            }).then(res=>{
+                if (res.data.code==200){
+                    let floorDevice=res.data.data;
+
+                    for (let i=0;i<floorDevice.length;i++){
+                        console.log("所有楼层设备数据:"+floorDevice[i].deviceId)
+                        _this.deviceId.push(floorDevice[i].deviceId)
+                    }
+
+                    _this.fetchAccess(_this.deviceId)
+                }else {
+                    showMessage(_this,'设备信息获取失败',0)
+                }
+            }).catch(error=>{
+                showMessage(_this,error,0)
+            })
 
         },
         mounted() {

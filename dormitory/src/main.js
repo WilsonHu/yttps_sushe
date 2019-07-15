@@ -21,7 +21,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     //NProgress.start();
-   /* if (to.path == '/login') {
+    if (to.path == '/login') {
         //sessionStorage.removeItem('user');
     }
     let user = JSON.parse(sessionStorage.getItem('user'));
@@ -34,8 +34,8 @@ router.beforeEach((to, from, next) => {
         } else {
             next(false);
         }
-    }*/
-   next();
+    }
+  // next();
 })
 new Vue({
   router,
