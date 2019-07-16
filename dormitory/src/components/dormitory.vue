@@ -165,20 +165,22 @@
                         </div>
                         <div style="height: 810px; width:85% ;background-color:transparent;margin-left:60px "
                              class="well well-lg">
-                            <el-tabs v-model="activeName" @tab-click="handleClick">
-                                <el-tab-pane label="全部" name="first">
+                            <el-tabs v-model="activeName" @tab-click="handleClick" class="right">
+                                <el-tab-pane label="全部" name="first" >
                                     <div style="overflow: auto;height: 700px" class="dd" id="div2">
                                         <el-row :gutter="20">
                                             <el-col :span="20" style="margin-top: 10px" v-for="i in accessList">
-                                                <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 80px;border-radius: 20px">
+                                                <el-card :body-style="{ padding: '0px ' }"
+                                                         style="height: 70px;border-radius: 20px">
                                                     <div>
-                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                        <img style=" height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0;align-items: center;justify-content: center;
+                                                             overflow: hidden; "
                                                              :src="require('../assets/img/'+(i.type=='进'?'in':(i.type=='未注册'?'unregistered':(i.type=='黑名单'?'blacklist':'forbid')))+'.png')"/>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
-                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <!--<span  pattern=" HH:mm:ss">{{i.pass_time}}</span>-->
+                                                            <span>{{i.pass_time.split(" ")[1]}}</span>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
+                                                             overflow: hidden;margin-left: 20px"
+                                                             :src="i.headImag"/>
                                                         <span style="margin-left: 10px">{{i.name}}</span>
                                                         <span>{{i.classes}}</span>
                                                         <span style="padding-left: 90px;" :style="{color:(i.type=='进'?'green':(i.type=='未注册'?'orange':(i.type=='黑名单'?'red':'blue')))}">{{i.type}}</span>
@@ -197,14 +199,15 @@
                                         <el-row :gutter="20">
                                             <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='进'">
                                                 <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 80px;border-radius: 20px">
+                                                         style="height: 70px;border-radius: 20px">
                                                     <div>
-                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                        <img style=" height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0 ;align-items: center;justify-content: center;
+                                                             overflow: hidden; "
                                                              :src="require('../assets/img/'+'in'+'.png')"/>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
-                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span>{{i.pass_time.split(" ")[1]}}</span>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
+                                                              overflow: hidden; margin-left: 20px"
+                                                             :src="i.headImag"/>
                                                         <span style="margin-left: 10px">{{i.name}}</span>
                                                         <span>{{i.classes}}</span>
                                                         <span style="padding-left: 90px; color: green " >{{i.type}}</span>
@@ -222,14 +225,15 @@
                                         <el-row :gutter="20">
                                             <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='未注册'">
                                                 <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 80px;border-radius: 20px">
+                                                         style="height: 70px;border-radius: 20px">
                                                     <div>
-                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                        <img style="  height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0;align-items: center;justify-content: center;
+                                                             overflow: hidden;"
                                                              :src="require('../assets/img/'+'unregistered'+'.png')"/>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
-                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span>{{i.pass_time.split(" ")[1]}}</span>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
+                                                              overflow: hidden;margin-left: 20px"
+                                                             :src="i.headImag"/>
                                                         <span style="margin-left: 10px">{{i.name}}</span>
                                                         <span>{{i.classes}}</span>
                                                         <span style="padding-left: 90px; color: orange " >{{i.type}}</span>
@@ -247,14 +251,15 @@
                                         <el-row :gutter="20">
                                             <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='禁止'">
                                                 <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 80px;border-radius: 20px">
+                                                         style="height: 70px;border-radius: 20px">
                                                     <div>
-                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                        <img style=" height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0;align-items: center;justify-content: center;
+                                                             overflow: hidden; "
                                                              :src="require('../assets/img/'+'forbid'+'.png')"/>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
-                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span>{{i.pass_time.split(" ")[1]}}</span>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
+                                                              overflow: hidden; margin-left: 20px"
+                                                             :src="i.headImag"/>
                                                         <span style="margin-left: 10px">{{i.name}}</span>
                                                         <span>{{i.classes}}</span>
                                                         <span style="padding-left: 90px; color: blue " >{{i.type}}</span>
@@ -272,14 +277,15 @@
                                         <el-row :gutter="20">
                                             <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='黑名单'">
                                                 <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 80px;border-radius: 20px">
+                                                         style="height: 70px;border-radius: 20px">
                                                     <div>
-                                                        <img style=" height: 35px;width:35px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                                             overflow: hidden; margin-top: 10px ;padding-left: -10px"
+                                                        <img style=" height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0;align-items: center;justify-content: center;
+                                                             overflow: hidden;"
                                                              :src="require('../assets/img/'+'blacklist'+'.png')"/>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px lightskyblue; border-radius: 50%;align-items: center;justify-content: center;
-                                    overflow: hidden; margin-top: 10px;margin-left: 20px"
-                                                             src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"/>
+                                                        <span>{{i.pass_time.split(" ")[1]}}</span>
+                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
+                                                             overflow: hidden;margin-left: 20px"
+                                                             :src="i.headImag"/>
                                                         <span style="margin-left: 10px">{{i.name}}</span>
                                                         <span>{{i.classes}}</span>
                                                         <span style="padding-left: 90px; color: red " >{{i.type}}</span>
@@ -329,6 +335,7 @@
                 accesscount: 0,
                 picName: '',
                 totalRecords: 0,
+                headImag:''
             };
         },
         methods: {
@@ -336,6 +343,7 @@
                 console.log(tab, event);
                 _this.count = 10;
                 $(".mes").html("")
+                $(".mess").html("")
                 $(".count").html("")
             },
             SetEchart() {
@@ -425,7 +433,15 @@
                         _this.accessList = res.data.data.list;
                         _this.totalRecords = res.data.data.total;
                         _this.accesscount = _this.accessList.length;
-
+                        let list = res.data.data.list
+                        for (let i=0;i<list.length;i++) {
+                            list[i].headImag = '';
+                        }
+                        for (let i=0;i<list.length;i++) {
+                            var item = list[i]
+                            var imageId = item.imageId;
+                            _this.getImage(imageId, item)
+                        }
                     } else {
                         showMessage(_this, "获取通行记录失败", 0)
                     }
@@ -478,6 +494,15 @@
                             for (let i = 0; i < list.length; i++) {
                                 _this.accessList.push(list[i]);
                             }
+                            for (let i=0;i<list.length;i++) {
+                                list[i].headImag = '';
+                            }
+                            for (let i=0;i<list.length;i++) {
+                                var item = list[i]
+                                var imageId = item.imageId;
+                                _this.getImage(imageId, item)
+                            }
+
                             _this.accesscount = _this.accessList.length;
                         } else {
                             showMessage(_this, "获取查询数据失败！");
@@ -488,6 +513,26 @@
                     })
 
                 }
+
+            },
+            getImage(id, item) {
+                request({
+                    url: HOST + 'image/' + id,
+                    async: false,
+                    method: 'post'
+
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        item.headImag = 'data:image/jpg;base64,' + res.data.data;
+
+                        console.log('fef'+item.headImag)
+                    } else {
+                        showMessage("没有查到图片");
+                    }
+
+                }).catch(error => {
+                    console.log(error);
+                })
 
             },
         },
