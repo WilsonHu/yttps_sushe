@@ -14,10 +14,7 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author HT
@@ -191,5 +188,20 @@ public class Util {
             logger.warn("Park's IP: " + host + " and port: " + port + " are not ready! message : {}",e.getMessage());
         }
         return false;
+    }
+
+    public static List pagingQuery(int page, int size, List list){
+        List accessPolicyList = new ArrayList<>();
+        if(page>0&&size>0) {
+            int start = (page - 1) * size;
+            int end = start + size;
+            int index = list.size();
+            for (int i = start; i < end && i < index; i++) {
+                accessPolicyList.add(list.get(i));
+            }
+        }else {
+            accessPolicyList=list;
+        }
+        return accessPolicyList;
     }
 }

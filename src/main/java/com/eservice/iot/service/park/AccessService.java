@@ -5,14 +5,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.iot.model.ResponseCode;
 import com.eservice.iot.model.ResponseModel;
-import com.eservice.iot.model.floor_device.FloorDevice;
 import com.eservice.iot.model.park.AccessRecord;
 import com.eservice.iot.model.web.AccessRecordModel;
-import com.eservice.iot.service.DormService;
-import com.eservice.iot.service.FloorDeviceService;
+import com.eservice.iot.service.ParkToRedisService;
+import com.eservice.iot.util.Constant;
 import com.eservice.iot.util.RedisUtil;
 import com.eservice.iot.util.Util;
-import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +43,8 @@ public class AccessService {
     private RestTemplate restTemplate;
     @Resource
     private RedisUtil redisUtil;
-    @Resource
-    private DormService dormService;
+    @Autowired
+    private ParkToRedisService parkToRedisService;
 
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
@@ -101,7 +99,7 @@ public class AccessService {
                         if (responseModel != null && responseModel.getResult() != null) {
                             ArrayList<AccessRecord> tempList = (ArrayList<AccessRecord>) JSONArray.parseArray(responseModel.getResult(), AccessRecord.class);
                             if (tempList != null && tempList.size() > 0) {
-                                dormService.processStaffSign(tempList);
+                                parkToRedisService.processStaffSign(tempList);
                                 //本次结束时间的前一秒作为下次开始的时间
                                 queryStartTime = queryEndTime - 1;
                             }
@@ -121,7 +119,7 @@ public class AccessService {
     }
 
 
-    public int querySignInCount(Long startTime,Long queryEndTime,List<String> deviceIds){
+    public ArrayList<AccessRecord> querySignInCount(Long startTime,Long queryEndTime){
         if (token == null) {
             token = tokenService.getToken();
         }
@@ -131,22 +129,25 @@ public class AccessService {
             postParameters.put("start_timestamp", startTime);
 //        ///考勤记录查询结束时间
             postParameters.put("end_timestamp", queryEndTime);
-
-            postParameters.put("device_id_list",deviceIds);
+            //只获取员工数据
+            ArrayList<String> identity = new ArrayList<>();
+            identity.add(Constant.STAFF);
+            postParameters.put("identity_list", identity);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
             headers.add(HttpHeaders.AUTHORIZATION, token);
             HttpEntity httpEntity = new HttpEntity<>(JSON.toJSONString(postParameters), headers);
             try {
-                ResponseEntity<String> responseEntity = restTemplate.postForEntity(PARK_BASE_URL + "/access/record/count", httpEntity, String.class);
+                ResponseEntity<String> responseEntity = restTemplate.postForEntity(PARK_BASE_URL + "/access/record", httpEntity, String.class);
                 if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
                     String body = responseEntity.getBody();
                     if (body != null) {
                         ResponseModel responseModel = JSONObject.parseObject(body, ResponseModel.class);
-                        try {
-                            return Integer.parseInt(responseModel.getResult());
-                        }catch (Exception e){
-                            logger.error("Result: {}, Massage: {}",responseModel.getResult(),responseModel.getMessage());
+                        if (responseModel != null && responseModel.getResult() != null) {
+                            ArrayList<AccessRecord> tempList = (ArrayList<AccessRecord>) JSONArray.parseArray(responseModel.getResult(), AccessRecord.class);
+                            if (tempList != null && tempList.size() > 0) {
+                                return tempList;
+                            }
                         }
                     }
                 }
@@ -154,13 +155,13 @@ public class AccessService {
                 if (exception.getStatusCode().value() == ResponseCode.TOKEN_INVALID) {
                     //token失效,重新获取token后再进行数据请求
                     token = tokenService.getToken();
-                   return querySignInCount(startTime,queryEndTime,deviceIds);
+                   return querySignInCount(startTime,queryEndTime);
                 }
                 exception.printStackTrace();
                 logger.error(exception.getMessage());
             }
         }
-        return -1;
+        return null;
     }
     /*
      * 获取已记录的通行记录中最晚时间

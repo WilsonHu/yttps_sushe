@@ -58,6 +58,7 @@ public class TagService {
      */
     private List<Tag> staffTagList = new ArrayList<>();
 
+    private List<Tag> floorTags = new ArrayList<>();
     /**
      * 一分钟更新一次TAG
      */
@@ -107,6 +108,9 @@ public class TagService {
                         }
                         if (Constant.STAFF.equals(str)) {
                             staffTagList.add(tag);
+                        }
+                        if(tag.getTag_name().indexOf("号")!=-1){
+                            floorTags.add(tag);
                         }
                     }
                 }
@@ -312,5 +316,9 @@ public class TagService {
 
     public List<Tag> getStaffTagList() {
         return staffTagList;
+    }
+
+    public List<Tag> getFloorTags() {
+        return floorTags;
     }
 }

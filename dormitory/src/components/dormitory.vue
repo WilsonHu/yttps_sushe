@@ -19,7 +19,7 @@
                                 <el-col :span="5" :offset="4">
                                     <p style="margin-left: 20px;margin-top: 20px">
                                         <span>入住总人数</span><br>
-                                        <i style=" font:30px Extra Small;  color: black;">2328</i>
+                                        <i style=" font:30px Extra Small;  color: black;">{{attendanceNumList.total}}</i>
                                     </p>
                                 </el-col>
                             </div>
@@ -35,7 +35,7 @@
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -50px">
                                             <span>当前考勤学生数</span><br/>
-                                            <span style="font-size: 30px;">2132</span>
+                                            <span style="font-size: 30px;">{{attendanceNumList.attendanceNum}}</span>
                                         </el-col>
                                         <el-col :span="8" :offset="7">
                                             <div id="myChart"
@@ -49,7 +49,7 @@
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -50px">
                                             <span>当前在寝学生人数</span><br/>
-                                            <span style="font-size: 30px;">1476</span>
+                                            <span style="font-size: 30px;">{{attendanceNumList.inDormitory}}</span>
 
                                         </el-col>
                                         <el-col :span="8" :offset="7">
@@ -63,7 +63,7 @@
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -50px">
                                             <span>当前外出学生人数</span><br/>
-                                            <span style="font-size: 30px;">656</span>
+                                            <span style="font-size: 30px;">{{attendanceNumList.outDormitory}}</span>
                                         </el-col>
                                         <el-col :span="8" :offset="7">
                                             <div id="outSide"
@@ -74,32 +74,26 @@
                                 <el-tab-pane label="夜归考勤" name="second" style="background-color: #F6F4FF;">
                                     <div style="height: 500px;overflow:auto" id="div1">
                                         <ul style="margin-top: 10px;margin-left: -10px">
-                                            <li v-for="i in count">
+                                            <li v-for="i in nightFallList">
                                                 <el-card class="box-card">
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
-                                                                <img src="../assets/img/18973492613_张三.jpg" width="60px"
+                                                                <img :src="i.headImag" width="60px"
                                                                      height="60px"
                                                                      style="border-radius: 50%;margin-top: -10px">
                                                             </el-col>
                                                             <el-col :span="5" :offset="3">
-                                                                <span>张三</span><br/><span>高三(2)班</span>
+                                                                <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
                                                             </el-col>
                                                             <el-col :span="18" :offset="10" style="margin-top: -40px">
-                                                                <span>2019-7-13 23:22:59</span><span
-                                                                    style="margin-left: 10px">【彻夜未归】</span>
+                                                                <span>{{i.pass_time}}</span><span
+                                                                    style="margin-left: 10px">【{{i.type}}】</span>
                                                             </el-col>
 
-
                                                         </el-row>
-
-
                                                         <p style="margin-left: 80px;margin-top: -50px">
-
                                                         </p>
-
-
                                                     </div>
                                                 </el-card>
                                             </li>
@@ -312,31 +306,41 @@
     import echarts from 'echarts'
     import request from '../api/request'
 
+    var timeOut;
     export default {
         name: "dormitory",
         data() {
             _this = this
             return {
-
+                activeName: 'second',
                 infoManage: 'first',
-                number: [2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500],
+                //2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500
+                attendanceNumber: [],
+                indormitoryNumber: [],
+                outdormitoryNumber: [],
+                attendAndInOrOut: ['', '', '', '', '', '', '', '', '', '', '', ''],
                 count: 10,
                 userInfo: "",
                 pageSize: EveryPageNum,//每一页的num
                 currentPage: 1,
                 deviceId: [],
                 accessList: [],
+                index: 0,
                 attendanceNumList: {
+                    total: 0,
                     attendanceNum: 0,
                     inDormitory: 0,
                     outDormitory: 0
                 },
-                activeName: 'first',
+                nightPage: 1,
+                nightPageSize: 5,
+                nightFallList: [],
+		activeName: 'first',
                 accesscount: 0,
                 picName: '',
                 totalRecords: 0,
                 headImag:''
-            };
+            }
         },
         methods: {
             handleClick(tab, event) {
@@ -366,7 +370,7 @@
                     xAxis: {
                         show: false,
                         type: 'category',
-                        data: ['', '', '', '', '', '', '', '', '', '', '', '']
+                        data: _this.attendAndInOrOut
                     },
                     yAxis: {
                         show: false,
@@ -391,14 +395,106 @@
                             type: 'line',
                             stack: '总量',
                             label: {},
-                            data: _this.number,
+                            data: _this.attendanceNumber,
+                            areaStyle: {normal: {}}
+                        }
+                    ]
+                }
+                var option1 = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                    },
+                    grid: {
+                        left: '4%',
+                        right: '3%',
+                        bottom: '5%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        show: false,
+                        type: 'category',
+                        data: _this.attendAndInOrOut
+                    },
+                    yAxis: {
+                        show: false,
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            type: 'line',
+                            itemStyle: {
+                                normal: {
+                                    barBorderColor: 'rgba(0,0,0,0)',
+                                    color: 'rgba(250,0,24,12)'
+                                },
+                                emphasis: {
+                                    barBorderColor: 'rgba(0,0,0,0)',
+                                    color: 'rgba(0,0,0,0)'
+                                }
+                            },
+                        },
+                        {
+                            name: '人数',
+                            type: 'line',
+                            stack: '总量',
+                            label: {},
+                            data: _this.indormitoryNumber,
+                            areaStyle: {normal: {}}
+                        }
+                    ]
+                }
+                var option2 = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                    },
+                    grid: {
+                        left: '4%',
+                        right: '3%',
+                        bottom: '5%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        show: false,
+                        type: 'category',
+                        data: _this.attendAndInOrOut
+                    },
+                    yAxis: {
+                        show: false,
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            type: 'line',
+                            itemStyle: {
+                                normal: {
+                                    barBorderColor: 'rgba(0,0,0,0)',
+                                    color: 'rgba(250,0,24,12)'
+                                },
+                                emphasis: {
+                                    barBorderColor: 'rgba(0,0,0,0)',
+                                    color: 'rgba(0,0,0,0)'
+                                }
+                            },
+                        },
+                        {
+                            name: '人数',
+                            type: 'line',
+                            stack: '总量',
+                            label: {},
+                            data: _this.outdormitoryNumber,
                             areaStyle: {normal: {}}
                         }
                     ]
                 }
                 myChart.setOption(option);
-                attendace.setOption(option);
-                outSide.setOption(option);
+                attendace.setOption(option1);
+                outSide.setOption(option2);
             },
             handleScroll() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
@@ -418,12 +514,11 @@
                 }
 
             },
-            fetchAccess(floorNo) {
-                console.log('fsd' + floorNo)
+            fetchAccess(floorDevice) {
                 let params = new URLSearchParams();
                 params.append("page", _this.currentPage)
                 params.append("size", _this.pageSize)
-                params.append("floorDevice", floorNo)
+                params.append("floorDevice", floorDevice)
                 request({
                     url: HOST + "/access/list",
                     method: "post",
@@ -450,20 +545,35 @@
                     showMessage(_this, error, 0)
                 })
             },
-            fetchAttendanceAndInOrOut(floorNo) {
-                let params = new URLSearchParams();
-                params.append("floorDevice", floorNo)
+            fetchAttendanceAndInOrOut() {
                 request({
                     url: HOST + "access/attendanceCount",
                     method: "post",
-                    data: params
                 }).then(res => {
                     if (res.data.code == 200) {
-                        _this.attendanceNumList.attendanceNum = res.data.attendanceNum
-                        _this.attendanceNumList.inDormitory = res.data.inDormitory
-                        _this.attendanceNumList.outDormitory = res.data.outDormitory
+                        _this.attendanceNumList.attendanceNum = res.data.data.attendanceNum
+                        _this.attendanceNumList.inDormitory = res.data.data.inDormitory
+                        _this.attendanceNumList.outDormitory = res.data.data.outDormitory
+
+                    } else {
+                        showMessage(_this, "获取进出记录失败", 0)
                     }
+                }).catch(error => {
+                    showMessage(_this, error, 0)
                 })
+            },
+	    handleTotal() {
+                if (_this.attendanceNumber.length != _this.attendAndInOrOut.length) {
+                    _this.attendanceNumber[_this.index] = _this.attendanceNumList.attendanceNum;
+                }
+                if (_this.indormitoryNumber.length != _this.attendAndInOrOut.length) {
+                    _this.indormitoryNumber[_this.index] = _this.attendanceNumList.inDormitory;
+                }
+                if (_this.outdormitoryNumber.length != _this.attendAndInOrOut.length) {
+                    _this.outdormitoryNumber[_this.index] = _this.attendanceNumList.outDormitory;
+                }
+                _this.index++;
+                _this.SetEchart();
             },
             handleScroll2(floorNo) {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
@@ -515,6 +625,36 @@
                 }
 
             },
+	     fethcNightFall(floorNo) {
+                let parmas = new URLSearchParams();
+                parmas.append("page", _this.nightPage)
+                parmas.append("size", _this.nightPageSize);
+                parmas.append("floorNo", floorNo)
+                request({
+                    url: HOST + "access/getNightfall",
+                    method: "post",
+                    data: parmas
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        _this.nightFallList = res.data.data.list[0].absentees;
+                        for (let i=0;i<_this.nightFallList.length;i++){
+                            _this.getImage(_this.nightFallList[i].imageId,_this.nightFallList[i])
+                        }
+
+                    } else {
+                        showMessage(_this, "晚归考勤查询失败")
+                    }
+                }).catch(error => {
+                    showMessage(_this, error, 0)
+                })
+            },
+            fetchNight() {
+                var date = new Date();
+                let time = date.getHours()
+                if (time==5||time>5){
+                   _this.fethcNightFall(_this.userInfo.floorNo);
+                }
+            },
             getImage(id, item) {
                 request({
                     url: HOST + 'image/' + id,
@@ -563,16 +703,28 @@
             })
 
         },
-
         mounted() {
-            _this.SetEchart();
+            _this.fetchAttendanceAndInOrOut();
+            timeOut = setTimeout(function () {
+                _this.handleTotal();
+            }, 200)
+            /*  setInterval(function () {
+                  _this.fetchAttendanceAndInOrOut();
+              },5000)*/
+          /*  setInterval(function () {
+                _this.fetchAccess(_this.deviceId)
+            },5000)*/
+            setInterval(function () {
+                _this.handleTotal();
+            }, 1000 * 60 * 60)
+            _this.fetchNight()
             document.getElementById("div1").addEventListener("scroll", _this.handleScroll);
             document.getElementById("div2").addEventListener("scroll2", _this.handleScroll2);
         },
         destroyed() {
             document.getElementById("div1").removeEventListener("scroll", _this.handleScroll)
             document.getElementById("div2").removeEventListener("scroll2", _this.handleScroll2)
-
+clearTimeout(timeOut)
         },
 
 
