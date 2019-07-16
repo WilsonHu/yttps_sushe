@@ -157,137 +157,189 @@
                             </el-input>
 
                         </div>
-                        <div style="height: 810px; width:85% ;background-color:transparent;margin-left:60px "
+                        <div style="height: 810px;width:85% ;background-color:transparent;margin-left:60px "
                              class="well well-lg">
-                            <el-tabs v-model="activeName" @tab-click="handleClick" class="right">
-                                <el-tab-pane label="全部" name="first" >
-                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
-                                        <el-row :gutter="20">
-                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList">
-                                                <el-card :body-style="{ padding: '0px ' }"
-                                                         style="height: 70px;border-radius: 20px">
+                            <el-tabs  v-model="activeName" @tab-click="handleClick" class="right" type="card">
+                                <el-tab-pane label="全部" name="first">
+                                    <div style="height: 700px;overflow:auto" id="div2">
+                                        <ul style="margin-top: 10px;margin-left: -10px " >
+                                            <li v-for="i in accessList">
+                                                <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
-                                                        <img style=" height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0;align-items: center;justify-content: center;
-                                                             overflow: hidden; "
-                                                             :src="require('../assets/img/'+(i.type=='进'?'in':(i.type=='未注册'?'unregistered':(i.type=='黑名单'?'blacklist':'forbid')))+'.png')"/>
-                                                        <!--<span  pattern=" HH:mm:ss">{{i.pass_time}}</span>-->
-                                                            <span>{{i.pass_time.split(" ")[1]}}</span>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
-                                                             overflow: hidden;margin-left: 20px"
-                                                             :src="i.headImag"/>
-                                                        <span style="margin-left: 10px">{{i.name}}</span>
-                                                        <span>{{i.classes}}</span>
-                                                        <span style="padding-left: 90px;" :style="{color:(i.type=='进'?'green':(i.type=='未注册'?'orange':(i.type=='黑名单'?'red':'blue')))}">{{i.type}}</span>
-
+                                                        <el-row>
+                                                            <el-col :span="2">
+                                                                <img  :src="require('../assets/img/'+(i.type=='进'?'in':(i.type=='未注册'?'unregistered':(i.type=='黑名单'?'blacklist':'forbid')))+'.png')"
+                                                                     style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="2" :offset="2">
+                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                            </el-col>
+                                                            <el-col :span="2":offset="5">
+                                                                <img  :src="i.headImag" width="60px"
+                                                                      height="60px"
+                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="5" :offset="3">
+                                                                <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
+                                                            </el-col>
+                                                            <el-col :span="18" :offset="10" style="margin-top: -40px">
+                                                                <span style="margin-left: 180px" :style="{color:(i.type=='进'?'green':(i.type=='未注册'?'orange':(i.type=='黑名单'?'red':'blue')))}">{{i.type}}</span>
+                                                            </el-col>
+                                                        </el-row>
+                                                        <p style="margin-left: 80px;margin-top: -50px">
+                                                        </p >
                                                     </div>
                                                 </el-card>
-                                            </el-col>
-                                        </el-row>
+                                            </li>
+                                        </ul>
                                         <span class="mess"></span>
-
                                     </div>
-                                    <span>{{accesscount}}</span>
+
                                 </el-tab-pane>
                                 <el-tab-pane label="通行" name="second">
-                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
-                                        <el-row :gutter="20">
-                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='进'">
-                                                <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 70px;border-radius: 20px">
+                                    <div style="height: 700px;overflow:auto" id="div3">
+                                        <ul style="margin-top: 10px;margin-left: -10px" >
+                                            <li v-for="i in accessList" v-if="i.type=='进'">
+                                                <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
-                                                        <img style=" height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0 ;align-items: center;justify-content: center;
-                                                             overflow: hidden; "
-                                                             :src="require('../assets/img/'+'in'+'.png')"/>
-                                                        <span>{{i.pass_time.split(" ")[1]}}</span>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
-                                                              overflow: hidden; margin-left: 20px"
-                                                             :src="i.headImag"/>
-                                                        <span style="margin-left: 10px">{{i.name}}</span>
-                                                        <span>{{i.classes}}</span>
-                                                        <span style="padding-left: 90px; color: green " >{{i.type}}</span>
-
+                                                        <el-row>
+                                                            <el-col :span="2">
+                                                                <img  :src="require('../assets/img/'+'in'+'.png')"
+                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="2" :offset="2">
+                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                            </el-col>
+                                                            <el-col :span="2":offset="5">
+                                                                <img  :src="i.headImag" width="60px"
+                                                                      height="60px"
+                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="5" :offset="3">
+                                                                <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
+                                                            </el-col>
+                                                            <el-col :span="18" :offset="10" style="margin-top: -40px">
+                                                                <span style="margin-left: 180px;color: green">{{i.type}}</span>
+                                                            </el-col>
+                                                        </el-row>
+                                                        <p style="margin-left: 80px;margin-top: -50px">
+                                                        </p >
                                                     </div>
                                                 </el-card>
-                                            </el-col>
-                                        </el-row>
+                                            </li>
+                                        </ul>
                                         <span class="mess"></span>
-
                                     </div>
+
+
                                 </el-tab-pane>
                                 <el-tab-pane label="未注册" name="third">
-                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
-                                        <el-row :gutter="20">
-                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='未注册'">
-                                                <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 70px;border-radius: 20px">
+                                    <div style="height: 700px;overflow:auto" id="div4">
+                                        <ul style="margin-top: 10px;margin-left: -10px" >
+                                            <li v-for="i in accessList" v-if="i.type=='未注册'">
+                                                <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
-                                                        <img style="  height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0;align-items: center;justify-content: center;
-                                                             overflow: hidden;"
-                                                             :src="require('../assets/img/'+'unregistered'+'.png')"/>
-                                                        <span>{{i.pass_time.split(" ")[1]}}</span>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
-                                                              overflow: hidden;margin-left: 20px"
-                                                             :src="i.headImag"/>
-                                                        <span style="margin-left: 10px">{{i.name}}</span>
-                                                        <span>{{i.classes}}</span>
-                                                        <span style="padding-left: 90px; color: orange " >{{i.type}}</span>
-
+                                                        <el-row>
+                                                            <el-col :span="2">
+                                                                <img  :src="require('../assets/img/'+'unregistered'+'.png')"
+                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="2" :offset="2">
+                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                            </el-col>
+                                                            <el-col :span="2":offset="5">
+                                                                <img  :src="i.headImag" width="60px"
+                                                                      height="60px"
+                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="5" :offset="3">
+                                                                <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
+                                                            </el-col>
+                                                            <el-col :span="18" :offset="10" style="margin-top: -40px">
+                                                                <span style="margin-left: 180px;color: orange">{{i.type}}</span>
+                                                            </el-col>
+                                                        </el-row>
+                                                        <p style="margin-left: 80px;margin-top: -50px">
+                                                        </p >
                                                     </div>
                                                 </el-card>
-                                            </el-col>
-                                        </el-row>
+                                            </li>
+                                        </ul>
                                         <span class="mess"></span>
-
                                     </div>
+
                                 </el-tab-pane>
                                 <el-tab-pane label="禁行" name="fourth">
-                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
-                                        <el-row :gutter="20">
-                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='禁止'">
-                                                <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 70px;border-radius: 20px">
+                                    <div style="overflow: auto;height: 700px"  id="div5">
+                                        <ul style="margin-top: 10px;margin-left: -10px" >
+                                            <li v-for="i in accessList" v-if="i.type=='禁止'">
+                                                <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
-                                                        <img style=" height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0;align-items: center;justify-content: center;
-                                                             overflow: hidden; "
-                                                             :src="require('../assets/img/'+'forbid'+'.png')"/>
-                                                        <span>{{i.pass_time.split(" ")[1]}}</span>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
-                                                              overflow: hidden; margin-left: 20px"
-                                                             :src="i.headImag"/>
-                                                        <span style="margin-left: 10px">{{i.name}}</span>
-                                                        <span>{{i.classes}}</span>
-                                                        <span style="padding-left: 90px; color: blue " >{{i.type}}</span>
-
+                                                        <el-row>
+                                                            <el-col :span="2">
+                                                                <img  :src="require('../assets/img/'+'forbid'+'.png')"
+                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="2" :offset="2">
+                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                            </el-col>
+                                                            <el-col :span="2":offset="5">
+                                                                <img  :src="i.headImag" width="60px"
+                                                                      height="60px"
+                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="5" :offset="3">
+                                                                <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
+                                                            </el-col>
+                                                            <el-col :span="18" :offset="10" style="margin-top: -40px">
+                                                                <span style="margin-left: 180px;color: blue">{{i.type}}</span>
+                                                            </el-col>
+                                                        </el-row>
+                                                        <p style="margin-left: 80px;margin-top: -50px">
+                                                        </p >
                                                     </div>
                                                 </el-card>
-                                            </el-col>
-                                        </el-row>
+                                            </li>
+                                        </ul>
+
                                         <span class="mess"></span>
+
 
                                     </div>
                                 </el-tab-pane>
                                 <el-tab-pane label="警报" name="five">
-                                    <div style="overflow: auto;height: 700px" class="dd" id="div2">
-                                        <el-row :gutter="20">
-                                            <el-col :span="20" style="margin-top: 10px" v-for="i in accessList" v-if="i.type=='黑名单'">
-                                                <el-card :body-style="{ padding: '0px' }"
-                                                         style="height: 70px;border-radius: 20px">
+                                    <div style="overflow: auto;height: 700px" id="div6">
+                                        <ul style="margin-top: 10px;margin-left: -10px" >
+                                            <li v-for="i in accessList" v-if="i.type=='禁止'">
+                                                <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
-                                                        <img style=" height: 70px;width:65px; border:  2px white; border-radius:0 0 0 0;align-items: center;justify-content: center;
-                                                             overflow: hidden;"
-                                                             :src="require('../assets/img/'+'blacklist'+'.png')"/>
-                                                        <span>{{i.pass_time.split(" ")[1]}}</span>
-                                                        <img style=" height: 60px;width:60px; border: solid 2px white; border-radius: 50%;align-items: center;justify-content: center;
-                                                             overflow: hidden;margin-left: 20px"
-                                                             :src="i.headImag"/>
-                                                        <span style="margin-left: 10px">{{i.name}}</span>
-                                                        <span>{{i.classes}}</span>
-                                                        <span style="padding-left: 90px; color: red " >{{i.type}}</span>
-
+                                                        <el-row>
+                                                            <el-col :span="2">
+                                                                <img  :src="require('../assets/img/'+'blacklist'+'.png')"
+                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="2" :offset="2">
+                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                            </el-col>
+                                                            <el-col :span="2":offset="5">
+                                                                <img  :src="i.headImag" width="60px"
+                                                                      height="60px"
+                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            </el-col>
+                                                            <el-col :span="5" :offset="3">
+                                                                <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
+                                                            </el-col>
+                                                            <el-col :span="18" :offset="10" style="margin-top: -40px">
+                                                                <span style="margin-left: 180px;color: red">{{i.type}}</span>
+                                                            </el-col>
+                                                        </el-row>
+                                                        <p style="margin-left: 80px;margin-top: -50px">
+                                                        </p >
                                                     </div>
                                                 </el-card>
-                                            </el-col>
-                                        </el-row>
+                                            </li>
+                                        </ul>
+
                                         <span class="mess"></span>
 
                                     </div>
@@ -306,19 +358,14 @@
     import echarts from 'echarts'
     import request from '../api/request'
 
-    var timeOut;
     export default {
         name: "dormitory",
         data() {
             _this = this
             return {
-                activeName: 'second',
+
                 infoManage: 'first',
-                //2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500
-                attendanceNumber: [],
-                indormitoryNumber: [],
-                outdormitoryNumber: [],
-                attendAndInOrOut: ['', '', '', '', '', '', '', '', '', '', '', ''],
+                number: [2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500],
                 count: 10,
                 userInfo: "",
                 pageSize: EveryPageNum,//每一页的num
@@ -335,12 +382,12 @@
                 nightPage: 1,
                 nightPageSize: 5,
                 nightFallList: [],
-		activeName: 'first',
+                activeName: 'first',
                 accesscount: 0,
                 picName: '',
                 totalRecords: 0,
-                headImag:''
-            }
+                headImag: ''
+            };
         },
         methods: {
             handleClick(tab, event) {
@@ -529,13 +576,8 @@
                         _this.totalRecords = res.data.data.total;
                         _this.accesscount = _this.accessList.length;
                         let list = res.data.data.list
-                        for (let i=0;i<list.length;i++) {
-                            list[i].headImag = '';
-                        }
-                        for (let i=0;i<list.length;i++) {
-                            var item = list[i]
-                            var imageId = item.imageId;
-                            _this.getImage(imageId, item)
+                        for (let i = 0; i < list.length; i++) {
+                            _this.getImage(list[i].imageId, list[i]);
                         }
                     } else {
                         showMessage(_this, "获取通行记录失败", 0)
@@ -562,7 +604,7 @@
                     showMessage(_this, error, 0)
                 })
             },
-	    handleTotal() {
+            handleTotal() {
                 if (_this.attendanceNumber.length != _this.attendAndInOrOut.length) {
                     _this.attendanceNumber[_this.index] = _this.attendanceNumList.attendanceNum;
                 }
@@ -575,7 +617,7 @@
                 _this.index++;
                 _this.SetEchart();
             },
-            handleScroll2(floorNo) {
+            handleScroll2() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
                 var scrollTop2 = document.getElementById("div2").scrollTop
                 //变量windowHeight是可视区的高度
@@ -593,7 +635,7 @@
                     let params = new URLSearchParams();
                     params.append("page", _this.currentPage)
                     params.append("size", _this.pageSize)
-                    params.append("floorDevice", floorNo)
+                    params.append("floorDevice", _this.userInfo.floorNo)
                     request({
                         url: HOST + "/access/list",
                         method: 'post',
@@ -604,13 +646,8 @@
                             for (let i = 0; i < list.length; i++) {
                                 _this.accessList.push(list[i]);
                             }
-                            for (let i=0;i<list.length;i++) {
-                                list[i].headImag = '';
-                            }
-                            for (let i=0;i<list.length;i++) {
-                                var item = list[i]
-                                var imageId = item.imageId;
-                                _this.getImage(imageId, item)
+                            for (let i = 0; i < list.length; i++) {
+                                _this.getImage(list[i].imageId, list[i]);
                             }
 
                             _this.accesscount = _this.accessList.length;
@@ -625,7 +662,187 @@
                 }
 
             },
-	     fethcNightFall(floorNo) {
+            handleScroll3() {
+                //变量scrollTop是滚动条滚动时，距离顶部的距离
+                var scrollTop3 = document.getElementById("div3").scrollTop
+                //变量windowHeight是可视区的高度
+                var windowHeight3 = document.getElementById("div3").clientHeight
+                //变量scrollHeight是滚动条的总高度
+                var scrollHeight3 = document.getElementById("div3").scrollHeight
+                //滚动条到底部的条件
+                if (scrollTop3 + windowHeight3 == scrollHeight3) {
+                    _this.currentPage += 1;
+                    //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
+                    if (_this.accesscount == _this.totalRecords) {
+                        $(".mess").html("无更多数据")
+                        return
+                    }
+                    let params = new URLSearchParams();
+                    params.append("page", _this.currentPage)
+                    params.append("size", _this.pageSize)
+                    params.append("floorDevice", _this.userInfo.floorNo)
+                    request({
+                        url: HOST + "/access/list",
+                        method: 'post',
+                        params: params
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            let list = res.data.data.list
+                            for (let i = 0; i < list.length; i++) {
+                                _this.accessList.push(list[i]);
+                            }
+                            for (let i = 0; i < list.length; i++) {
+                                _this.getImage(list[i].imageId, list[i]);
+                            }
+
+                            _this.accesscount = _this.accessList.length;
+                        } else {
+                            showMessage(_this, "获取查询数据失败！");
+                        }
+                    }).catch(error => {
+                        console.log(error)
+
+                    })
+
+                }
+
+            },
+            handleScroll4() {
+                //变量scrollTop是滚动条滚动时，距离顶部的距离
+                var scrollTop4 = document.getElementById("div4").scrollTop
+                //变量windowHeight是可视区的高度
+                var windowHeight4 = document.getElementById("div4").clientHeight
+                //变量scrollHeight是滚动条的总高度
+                var scrollHeight4 = document.getElementById("div4").scrollHeight
+                //滚动条到底部的条件
+                if (scrollTop4 + windowHeight4 == scrollHeight4) {
+                    _this.currentPage += 1;
+                    //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
+                    if (_this.accesscount == _this.totalRecords) {
+                        $(".mess").html("无更多数据")
+                        return
+                    }
+                    let params = new URLSearchParams();
+                    params.append("page", _this.currentPage)
+                    params.append("size", _this.pageSize)
+                    params.append("floorDevice", _this.userInfo.floorNo)
+                    request({
+                        url: HOST + "/access/list",
+                        method: 'post',
+                        params: params
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            let list = res.data.data.list
+                            for (let i = 0; i < list.length; i++) {
+                                _this.accessList.push(list[i]);
+                            }
+                            for (let i = 0; i < list.length; i++) {
+                                _this.getImage(list[i].imageId, list[i]);
+                            }
+
+                            _this.accesscount = _this.accessList.length;
+                        } else {
+                            showMessage(_this, "获取查询数据失败！");
+                        }
+                    }).catch(error => {
+                        console.log(error)
+
+                    })
+
+                }
+
+            },
+            handleScroll5() {
+                //变量scrollTop是滚动条滚动时，距离顶部的距离
+                var scrollTop5 = document.getElementById("div5").scrollTop
+                //变量windowHeight是可视区的高度
+                var windowHeight5 = document.getElementById("div5").clientHeight
+                //变量scrollHeight是滚动条的总高度
+                var scrollHeight5 = document.getElementById("div5").scrollHeight
+                //滚动条到底部的条件
+                if (scrollTop5 + windowHeight5 == scrollHeight5) {
+                    _this.currentPage += 1;
+                    //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
+                    if (_this.accesscount == _this.totalRecords) {
+                        $(".mess").html("无更多数据")
+                        return
+                    }
+                    let params = new URLSearchParams();
+                    params.append("page", _this.currentPage)
+                    params.append("size", _this.pageSize)
+                    params.append("floorDevice", _this.userInfo.floorNo)
+                    request({
+                        url: HOST + "/access/list",
+                        method: 'post',
+                        params: params
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            let list = res.data.data.list
+                            for (let i = 0; i < list.length; i++) {
+                                _this.accessList.push(list[i]);
+                            }
+                            for (let i = 0; i < list.length; i++) {
+                                _this.getImage(list[i].imageId, list[i]);
+                            }
+                            _this.accesscount = _this.accessList.length;
+                        } else {
+                            showMessage(_this, "获取查询数据失败！");
+                        }
+                    }).catch(error => {
+                        console.log(error)
+
+                    })
+
+                }
+
+            },
+            handleScroll6() {
+                //变量scrollTop是滚动条滚动时，距离顶部的距离
+                var scrollTop6 = document.getElementById("div6").scrollTop
+                //变量windowHeight是可视区的高度
+                var windowHeight6 = document.getElementById("div6").clientHeight
+                //变量scrollHeight是滚动条的总高度
+                var scrollHeight6 = document.getElementById("div6").scrollHeight
+                //滚动条到底部的条件
+                if (scrollTop6 + windowHeight6 == scrollHeight6) {
+
+                    _this.currentPage += 1;
+                    //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
+                    if (_this.accesscount == _this.totalRecords) {
+                        $(".mess").html("无更多数据")
+                        return
+                    }
+                    let params = new URLSearchParams();
+                    params.append("page", _this.currentPage)
+                    params.append("size", _this.pageSize)
+                    params.append("floorDevice", _this.userInfo.floorNo)
+                    request({
+                        url: HOST + "/access/list",
+                        method: 'post',
+                        params: params
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            let list = res.data.data.list
+                            for (let i = 0; i < list.length; i++) {
+                                _this.accessList.push(list[i]);
+                            }
+                            for (let i = 0; i < list.length; i++) {
+                                _this.getImage(list[i].imageId, list[i]);
+                            }
+
+                            _this.accesscount = _this.accessList.length;
+                        } else {
+                            showMessage(_this, "获取查询数据失败！");
+                        }
+                    }).catch(error => {
+                        console.log(error)
+
+                    })
+
+                }
+
+            },
+            fethcNightFall(floorNo) {
                 let parmas = new URLSearchParams();
                 parmas.append("page", _this.nightPage)
                 parmas.append("size", _this.nightPageSize);
@@ -637,8 +854,8 @@
                 }).then(res => {
                     if (res.data.code == 200) {
                         _this.nightFallList = res.data.data.list[0].absentees;
-                        for (let i=0;i<_this.nightFallList.length;i++){
-                            _this.getImage(_this.nightFallList[i].imageId,_this.nightFallList[i])
+                        for (let i = 0; i < _this.nightFallList.length; i++) {
+                            _this.getImage(_this.nightFallList[i].imageId, _this.nightFallList[i])
                         }
 
                     } else {
@@ -651,8 +868,8 @@
             fetchNight() {
                 var date = new Date();
                 let time = date.getHours()
-                if (time==5||time>5){
-                   _this.fethcNightFall(_this.userInfo.floorNo);
+                if (time == 5 || time > 5) {
+                    _this.fethcNightFall(_this.userInfo.floorNo);
                 }
             },
             getImage(id, item) {
@@ -664,8 +881,6 @@
                 }).then(res => {
                     if (res.data.code == 200) {
                         item.headImag = 'data:image/jpg;base64,' + res.data.data;
-
-                        console.log('fef'+item.headImag)
                     } else {
                         showMessage("没有查到图片");
                     }
@@ -694,7 +909,6 @@
                     }
 
                     _this.fetchAccess(_this.deviceId)
-                    _this.handleScroll2(_this.deviceId)
                 } else {
                     showMessage(_this, '设备信息获取失败', 0)
                 }
@@ -705,26 +919,26 @@
         },
         mounted() {
             _this.fetchAttendanceAndInOrOut();
-            timeOut = setTimeout(function () {
-                _this.handleTotal();
-            }, 200)
-            /*  setInterval(function () {
-                  _this.fetchAttendanceAndInOrOut();
-              },5000)*/
-          /*  setInterval(function () {
-                _this.fetchAccess(_this.deviceId)
-            },5000)*/
             setInterval(function () {
                 _this.handleTotal();
             }, 1000 * 60 * 60)
-            _this.fetchNight()
+            _this.fetchNight();
             document.getElementById("div1").addEventListener("scroll", _this.handleScroll);
-            document.getElementById("div2").addEventListener("scroll2", _this.handleScroll2);
+            document.getElementById("div2").addEventListener("scroll", _this.handleScroll2);
+            document.getElementById("div3").addEventListener("scroll", _this.handleScroll3);
+            document.getElementById("div4").addEventListener("scroll", _this.handleScroll4);
+            document.getElementById("div5").addEventListener("scroll", _this.handleScroll5);
+            document.getElementById("div6").addEventListener("scroll", _this.handleScroll6);
+
         },
         destroyed() {
             document.getElementById("div1").removeEventListener("scroll", _this.handleScroll)
-            document.getElementById("div2").removeEventListener("scroll2", _this.handleScroll2)
-clearTimeout(timeOut)
+            document.getElementById("div2").removeEventListener("scroll", _this.handleScroll2)
+            document.getElementById("div3").removeEventListener("scroll", _this.handleScroll3)
+            document.getElementById("div4").removeEventListener("scroll", _this.handleScroll4)
+            document.getElementById("div5").removeEventListener("scroll", _this.handleScroll5)
+            document.getElementById("div6").removeEventListener("scroll", _this.handleScroll6)
+            clearTimeout(this.timeOut)
         },
 
 
@@ -777,35 +991,16 @@ clearTimeout(timeOut)
     }
 
     .box-card {
-        height: 80px;
-        width: 430px;
+        height: 70px;
+        width: 400px;
     }
 
-    /*右边模块*/
-    ::-webkit-scrollbar {
-        width: 7px; /*滚动条宽度*/
-        height: 7px; /*滚动条高度*/
-        background-color: #f6f4ff;
-    }
-
-    .title {
-        font: 25px Extra Small;
-        color: #6a747c;
-        font-weight: bold;
-    }
 
     /*右边选项卡字体*/
     .el-tabs__item {
         color: black;
-        padding: 0 30px;
-        margin-left: 6px;
+        margin-left: 15px;
 
-    }
-
-    /*右边模块 蓝色滑块*/
-    .el-tabs__active-bar {
-        padding: 0 30px;
-       margin-left: 20px;
     }
 
     .bottom {
@@ -813,15 +1008,20 @@ clearTimeout(timeOut)
         line-height: 12px;
     }
 
+    /*右边标签页*/
+    .right .el-tabs__nav-scroll {
+        float: left;
+        margin-left: 20px;
+    }
+
     /*右边全部第一个卡片*/
     .el-col-offset-0 {
         margin-left: 8.33333%;
     }
 
-    /*全部栏位置*/
     .el-col-20 {
-        margin-left: 35px;
-        margin-right: 0px;
+        margin-left: 20px;
+        width: 95.33333%;
     }
 
     .el-row {
@@ -837,12 +1037,8 @@ clearTimeout(timeOut)
         border-radius: 4px;
     }
 
-    .bg-purple-dark {
-        background: #99a9bf;
-    }
-
-    .bg-purple-light {
-        background: #e5e9f2;
+    .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
+        border-bottom-color: #409eff;
     }
 
     .grid-content {
@@ -850,8 +1046,4 @@ clearTimeout(timeOut)
         min-height: 935px;
     }
 
-    .row-bg {
-        padding: 5px 0;
-        background-color: #f9fafc;
-    }
 </style>
