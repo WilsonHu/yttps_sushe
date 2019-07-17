@@ -1,5 +1,6 @@
 package com.eservice.iot.web;
 
+import com.alibaba.fastjson.JSON;
 import com.eservice.iot.core.Result;
 import com.eservice.iot.core.ResultGenerator;
 import com.eservice.iot.model.floor_device.FloorDevice;
@@ -31,7 +32,8 @@ public class FloorDeviceController {
     private FloorDeviceServiceImpl floorDeviceService;
 
     @PostMapping("/add")
-    public Result add(@RequestBody @NotNull FloorDevice floorDevice) {
+    public Result add(String jsonDate) {
+        FloorDevice floorDevice= JSON.parseObject(jsonDate,FloorDevice.class);
         floorDeviceService.save(floorDevice);
         return ResultGenerator.genSuccessResult();
     }
@@ -43,7 +45,8 @@ public class FloorDeviceController {
     }
 
     @PostMapping("/update")
-    public Result update(@RequestBody @NotNull FloorDevice floorDevice) {
+    public Result update(String jsonDate) {
+        FloorDevice floorDevice= JSON.parseObject(jsonDate,FloorDevice.class);
         floorDeviceService.update(floorDevice);
         return ResultGenerator.genSuccessResult();
     }

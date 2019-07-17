@@ -602,7 +602,7 @@ public class RedisUtil {
         }
     }
     /**
-     * 获取指定有序集合长度
+     * 获取指定有序集合
      * @param key
      * @return
      */
@@ -614,4 +614,6 @@ public class RedisUtil {
             return null;
         }
     }
+
+
 }

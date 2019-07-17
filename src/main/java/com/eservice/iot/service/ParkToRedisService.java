@@ -108,14 +108,14 @@ public class ParkToRedisService {
                     default:
                         break;
                 }
-                redisUtil.zSet("access_set", access, index);
+                redisUtil.zSet("access_set", access,index);
             }
         }
 
     }
 
 
-    @Scheduled(cron = "0 0 15 * * ?")
+    @Scheduled(cron = "0 0 5 * * ?")
     public void countNightStaff() {
         try {
             String day = simple.format(new Date()) + " ";

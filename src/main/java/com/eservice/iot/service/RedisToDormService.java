@@ -46,7 +46,7 @@ public class RedisToDormService {
 
     public List<AccessRecordModel> queryAccessRecordList(String floorDevice) {
         String device[] = floorDevice.split(",");
-        Iterator iterator = redisUtil.zGet("access_set",0,redisUtil.zSize("access_set")).iterator();
+        Iterator iterator = redisUtil.zGet("access_set",1,redisUtil.zSize("access_set")).iterator();
         if (accessRecordModelList.size() > 0) {
             accessRecordModelList.clear();
         }

@@ -1,6 +1,8 @@
 package com.eservice.iot.web;
+import com.alibaba.fastjson.JSON;
 import com.eservice.iot.core.Result;
 import com.eservice.iot.core.ResultGenerator;
+import com.eservice.iot.model.floor_device.FloorDevice;
 import com.eservice.iot.model.user.User;
 import com.eservice.iot.service.UserService;
 import com.eservice.iot.service.impl.UserServiceImpl;
@@ -28,7 +30,8 @@ public class UserController {
     private UserServiceImpl userService;
 
     @PostMapping("/add")
-    public Result add(@RequestBody @NotNull User user) {
+    public Result add(String jsonDate) {
+        User user= JSON.parseObject(jsonDate,User.class);
         userService.save(user);
         return ResultGenerator.genSuccessResult();
     }
@@ -40,7 +43,8 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public Result update(@RequestBody @NotNull User user) {
+    public Result update(String jsonDate) {
+        User user= JSON.parseObject(jsonDate,User.class);
         userService.update(user);
         return ResultGenerator.genSuccessResult();
     }

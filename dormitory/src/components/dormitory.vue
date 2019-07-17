@@ -7,7 +7,9 @@
                         <div style="height: 150px; width:85% ;background-color: white;margin-left:60px;margin-top: 20px "
                              class="well well-lg">
                             <i style=" font:20px Extra Small;  color: #6a747c;">宿舍信息</i>
-                            <div style="border: 1px solid silver"></div>
+                            <el-button type="info" plain @click="add" style="float: right;" v-if="userInfo.name=='admin'">添加</el-button>
+                            <el-button type="info" plain @click="floorInfo" style="float: right;" v-if="userInfo.name=='admin'">修改</el-button>
+                            <div style="border: 1px solid silver;margin-top: 15px"></div>
                             <div>
                                 <el-col :span="5" :offset="2">
                                     <p style="margin-left: 20px;margin-top: 20px">
@@ -15,7 +17,7 @@
                                         <i style=" font:30px Extra Small;  color: black;">{{userInfo.floorNo}}</i>
                                     </p>
                                 </el-col>
-                                <el-col :offset="4" style="border: 1px solid silver;width: 1px;height: 97px"></el-col>
+                                <el-col :offset="4" style="border: 1px solid silver;width: 1px;height: 82px"></el-col>
                                 <el-col :span="5" :offset="4">
                                     <p style="margin-left: 20px;margin-top: 20px">
                                         <span>入住总人数</span><br>
@@ -79,7 +81,7 @@
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
-                                                                <img :src="i.headImag" width="60px"
+                                                                <img :src="i.imageId" width="60px"
                                                                      height="60px"
                                                                      style="border-radius: 50%;margin-top: -10px">
                                                             </el-col>
@@ -96,6 +98,7 @@
                                                         </p>
                                                     </div>
                                                 </el-card>
+
                                             </li>
                                         </ul>
                                     </div>
@@ -149,45 +152,48 @@
                         <div style="height: 90px; width:85% ;background-color: transparent;margin-left:60px "
                              class="well well-lg">
                             <i class="title">通行记录</i>
-                            <el-input
-                                    style="width: 200px;margin-left: 150px;margin-top: 15px"
-                                    placeholder="按姓名或宿舍号查询" clearable
-                                    auto-complete="off">
-                                <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                            </el-input>
-
+                            <el-row style="margin-top:-30px;">
+                                <el-input style="width: 200px;margin-left: 150px;border-radius: 20%"
+                                          placeholder="按姓名或宿舍号查询" clearable
+                                          auto-complete="off" v-model="name">
+                                    <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                                </el-input>
+                                <el-button type="info" plain @click="search">搜索</el-button>
+                            </el-row>
                         </div>
+
                         <div style="height: 810px;width:85% ;background-color:transparent;margin-left:60px "
                              class="well well-lg">
-                            <el-tabs  v-model="activeName" @tab-click="handleClick" class="right" type="card">
+                            <el-tabs v-model="activeName" @tab-click="handleClick" class="right" type="card">
                                 <el-tab-pane label="全部" name="first">
                                     <div style="height: 700px;overflow:auto" id="div2">
-                                        <ul style="margin-top: 10px;margin-left: -10px " >
+                                        <ul style="margin-top: 10px;margin-left: -10px ">
                                             <li v-for="i in accessList">
                                                 <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
-                                                                <img  :src="require('../assets/img/'+(i.type=='进'?'in':(i.type=='未注册'?'unregistered':(i.type=='黑名单'?'blacklist':'forbid')))+'.png')"
+                                                                <img :src="require('../assets/img/'+(i.type=='进'?'in':(i.type=='未注册'?'unregistered':(i.type=='黑名单'?'blacklist':'forbid')))+'.png')"
                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="2" :offset="2">
-                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                                <span>{{i.pass_time.split(" ")[1]}}</span>
                                                             </el-col>
-                                                            <el-col :span="2":offset="5">
-                                                                <img  :src="i.headImag" width="60px"
-                                                                      height="60px"
-                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            <el-col :span="2" :offset="5">
+                                                                <img :src="i.imageId" width="60px"
+                                                                     height="60px"
+                                                                     style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="5" :offset="3">
                                                                 <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
                                                             </el-col>
                                                             <el-col :span="18" :offset="10" style="margin-top: -40px">
-                                                                <span style="margin-left: 180px" :style="{color:(i.type=='进'?'green':(i.type=='未注册'?'orange':(i.type=='黑名单'?'red':'blue')))}">{{i.type}}</span>
+                                                                <span style="margin-left: 180px"
+                                                                      :style="{color:(i.type=='进'?'green':(i.type=='未注册'?'orange':(i.type=='黑名单'?'red':'blue')))}">{{i.type}}</span>
                                                             </el-col>
                                                         </el-row>
                                                         <p style="margin-left: 80px;margin-top: -50px">
-                                                        </p >
+                                                        </p>
                                                     </div>
                                                 </el-card>
                                             </li>
@@ -198,22 +204,22 @@
                                 </el-tab-pane>
                                 <el-tab-pane label="通行" name="second">
                                     <div style="height: 700px;overflow:auto" id="div3">
-                                        <ul style="margin-top: 10px;margin-left: -10px" >
+                                        <ul style="margin-top: 10px;margin-left: -10px">
                                             <li v-for="i in accessList" v-if="i.type=='进'">
                                                 <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
-                                                                <img  :src="require('../assets/img/'+'in'+'.png')"
-                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                <img :src="require('../assets/img/'+'in'+'.png')"
+                                                                     style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="2" :offset="2">
-                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                                <span>{{i.pass_time.split(" ")[1]}}</span>
                                                             </el-col>
-                                                            <el-col :span="2":offset="5">
-                                                                <img  :src="i.headImag" width="60px"
-                                                                      height="60px"
-                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            <el-col :span="2" :offset="5">
+                                                                <img :src="i.imageId" width="60px"
+                                                                     height="60px"
+                                                                     style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="5" :offset="3">
                                                                 <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
@@ -223,7 +229,7 @@
                                                             </el-col>
                                                         </el-row>
                                                         <p style="margin-left: 80px;margin-top: -50px">
-                                                        </p >
+                                                        </p>
                                                     </div>
                                                 </el-card>
                                             </li>
@@ -235,22 +241,22 @@
                                 </el-tab-pane>
                                 <el-tab-pane label="未注册" name="third">
                                     <div style="height: 700px;overflow:auto" id="div4">
-                                        <ul style="margin-top: 10px;margin-left: -10px" >
+                                        <ul style="margin-top: 10px;margin-left: -10px">
                                             <li v-for="i in accessList" v-if="i.type=='未注册'">
                                                 <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
-                                                                <img  :src="require('../assets/img/'+'unregistered'+'.png')"
-                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                <img :src="require('../assets/img/'+'unregistered'+'.png')"
+                                                                     style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="2" :offset="2">
-                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                                <span>{{i.pass_time.split(" ")[1]}}</span>
                                                             </el-col>
-                                                            <el-col :span="2":offset="5">
-                                                                <img  :src="i.headImag" width="60px"
-                                                                      height="60px"
-                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            <el-col :span="2" :offset="5">
+                                                                <img :src="i.imageId" width="60px"
+                                                                     height="60px"
+                                                                     style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="5" :offset="3">
                                                                 <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
@@ -260,7 +266,7 @@
                                                             </el-col>
                                                         </el-row>
                                                         <p style="margin-left: 80px;margin-top: -50px">
-                                                        </p >
+                                                        </p>
                                                     </div>
                                                 </el-card>
                                             </li>
@@ -270,23 +276,23 @@
 
                                 </el-tab-pane>
                                 <el-tab-pane label="禁行" name="fourth">
-                                    <div style="overflow: auto;height: 700px"  id="div5">
-                                        <ul style="margin-top: 10px;margin-left: -10px" >
+                                    <div style="overflow: auto;height: 700px" id="div5">
+                                        <ul style="margin-top: 10px;margin-left: -10px">
                                             <li v-for="i in accessList" v-if="i.type=='禁止'">
                                                 <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
-                                                                <img  :src="require('../assets/img/'+'forbid'+'.png')"
-                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                <img :src="require('../assets/img/'+'forbid'+'.png')"
+                                                                     style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="2" :offset="2">
-                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                                <span>{{i.pass_time.split(" ")[1]}}</span>
                                                             </el-col>
-                                                            <el-col :span="2":offset="5">
-                                                                <img  :src="i.headImag" width="60px"
-                                                                      height="60px"
-                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            <el-col :span="2" :offset="5">
+                                                                <img :src="i.imageId" width="60px"
+                                                                     height="60px"
+                                                                     style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="5" :offset="3">
                                                                 <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
@@ -296,7 +302,7 @@
                                                             </el-col>
                                                         </el-row>
                                                         <p style="margin-left: 80px;margin-top: -50px">
-                                                        </p >
+                                                        </p>
                                                     </div>
                                                 </el-card>
                                             </li>
@@ -309,22 +315,22 @@
                                 </el-tab-pane>
                                 <el-tab-pane label="警报" name="five">
                                     <div style="overflow: auto;height: 700px" id="div6">
-                                        <ul style="margin-top: 10px;margin-left: -10px" >
+                                        <ul style="margin-top: 10px;margin-left: -10px">
                                             <li v-for="i in accessList" v-if="i.type=='禁止'">
                                                 <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
-                                                                <img  :src="require('../assets/img/'+'blacklist'+'.png')"
-                                                                      style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                <img :src="require('../assets/img/'+'blacklist'+'.png')"
+                                                                     style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="2" :offset="2">
-                                                                <span >{{i.pass_time.split(" ")[1]}}</span>
+                                                                <span>{{i.pass_time.split(" ")[1]}}</span>
                                                             </el-col>
-                                                            <el-col :span="2":offset="5">
-                                                                <img  :src="i.headImag" width="60px"
-                                                                      height="60px"
-                                                                      style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                            <el-col :span="2" :offset="5">
+                                                                <img :src="i.imageId" width="60px"
+                                                                     height="60px"
+                                                                     style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="5" :offset="3">
                                                                 <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
@@ -334,7 +340,7 @@
                                                             </el-col>
                                                         </el-row>
                                                         <p style="margin-left: 80px;margin-top: -50px">
-                                                        </p >
+                                                        </p>
                                                     </div>
                                                 </el-card>
                                             </li>
@@ -350,6 +356,138 @@
                 </div>
             </el-col>
         </el-row>
+
+        <el-dialog :visible.sync="viewDialogVisible" width="65%" title="楼栋对应设备">
+            <el-table
+                    :data="tableData"
+                    border
+                    highlight-current-row
+                    empty-text="暂无数据..."
+                    style="width: 100%;"
+                    height="579px">
+                <el-table-column
+                        align="center"
+                        prop="floorNo"
+                        label="楼栋">
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        prop="deviceId"
+                        label="设备名">
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        prop="type"
+                        label="进出类型">
+                    <template scope="scope">
+                        <el-tag type="success" v-if="scope.row.type=='0'">进</el-tag>
+                        <el-tag type="danger" v-if="scope.row.type=='1'">出</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        width="200"
+                        label="操作">
+                    <template scope="scope">
+                        <el-button
+                                class="btn_confirm"
+                                size="small"
+                                icon="el-icon-edit"
+                                type="primary"
+                                @click="editDevice(scope.row)">修改
+                        </el-button>
+                        <el-button
+                                :offset="1"
+                                size="small"
+                                icon="el-icon-tickets"
+                                type="danger"
+                                @click="deleteDevice(scope.row)">删除
+
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <div class="block" style="text-align: center; margin-top: 20px">
+                <el-pagination
+                        background
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-size="pageSize"
+                        layout="total, prev, pager, next, jumper"
+                        :total="tableDataTotal">
+                </el-pagination>
+            </div>
+
+        </el-dialog>
+
+        <el-dialog :visible.sync="adddeviceDialogVisible" title="添加设备" :show-close="true">
+            <el-row justify="center">
+                <el-form label-position="right" label-width="100px" :model="form" style="margin-left: 150px">
+                    <el-row>
+                        <el-form-item label="楼栋号">
+                            <el-col>
+                                <el-input type="text" v-model="form.floorNo" style="width: 85%"></el-input>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                    <el-row>
+                        <el-form-item label="设备Id">
+                            <el-input type="text" v-model="form.deviceId" style="width: 85%"></el-input>
+                        </el-form-item>
+                    </el-row>
+                    <el-row>
+                        <el-form-item label="进出校状态">
+                            <el-radio v-model="form.type" label="0">进楼设备</el-radio>
+                            <el-radio v-model="form.type" label="1">出楼设备</el-radio>
+                        </el-form-item>
+                    </el-row>
+                </el-form>
+                <el-row type="flex" justify="center">
+                    <el-col :span="3" :offset="1">
+                        <el-button type="primary" v-on:click="onAdd()">添加</el-button>
+                    </el-col>
+                    <el-col :span="3" :offset="1">
+                        <el-button v-on:click="deviceExit()" type="danger">取消</el-button>
+                    </el-col>
+                </el-row>
+            </el-row>
+        </el-dialog>
+
+        <el-dialog :visible.sync="modifydeviceDialogVisible" title="修改设备信息" :show-close="true">
+            <el-row justify="center">
+                <el-form label-position="right" label-width="100px" :model="deviceForm" style="margin-left: 150px">
+                    <el-row>
+                        <el-form-item label="楼栋">
+                            <el-col>
+                                <el-input type="text" v-model="deviceForm.flooorNo" style="width: 85%"></el-input>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                    <el-row>
+                        <el-form-item label="设备Id">
+                            <el-input type="text" v-model="deviceForm.deviceId" style="width: 85%"></el-input>
+                        </el-form-item>
+                    </el-row>
+                    <el-row>
+                        <el-form-item label="进出校状态">
+                            <el-radio v-model="deviceForm.type" label="0">进校设备</el-radio>
+                            <el-radio v-model="deviceForm.type" label="1">出校设备</el-radio>
+                        </el-form-item>
+                    </el-row>
+                </el-form>
+                <el-row type="flex" justify="center">
+                    <el-col :span="3" :offset="1">
+                        <el-button type="primary" v-on:click="onEdit()">修改</el-button>
+                    </el-col>
+                    <el-col :span="3" :offset="1">
+                        <el-button v-on:click="modifydeviceDialogVisible=false" type="danger">取消</el-button>
+                    </el-col>
+                </el-row>
+            </el-row>
+        </el-dialog>
+
+
     </div>
 </template>
 
@@ -358,18 +496,30 @@
     import echarts from 'echarts'
     import request from '../api/request'
 
+    var timeOut;
+    var timeFetchAccess;
     export default {
         name: "dormitory",
         data() {
             _this = this
             return {
-
                 infoManage: 'first',
-                number: [2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500],
+                //2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500
+                attendanceNumber: [],
+                indormitoryNumber: [],
+                outdormitoryNumber: [],
+                attendAndInOrOut: ['', '', '', '', '', '', '', '', '', '', '', ''],
                 count: 10,
                 userInfo: "",
                 pageSize: EveryPageNum,//每一页的num
                 currentPage: 1,
+                accessPageOrSize: {
+                    AllcurrentPage: 1,
+                    passCurrentPage: 0,
+                    regisCurrentPage: 0,
+                    warnCurrentPage: 0,
+                    alarmCurrentPage: 0
+                },
                 deviceId: [],
                 accessList: [],
                 index: 0,
@@ -379,23 +529,169 @@
                     inDormitory: 0,
                     outDormitory: 0
                 },
+                tableData: [],
+                tableDataTotal: 0,
                 nightPage: 1,
                 nightPageSize: 5,
                 nightFallList: [],
+                passAccessList: [],
+                passTotal: 0,
+                passCount: 0,
+                nightFallListLength: 0,
+                nightTotal: 0,
                 activeName: 'first',
                 accesscount: 0,
                 picName: '',
                 totalRecords: 0,
-                headImag: ''
-            };
+                imageId: '',
+                name: "",
+                viewDialogVisible: false,
+                modifydeviceDialogVisible: false,
+                adddeviceDialogVisible:false,
+                deviceForm: {
+                    id: 0,
+                    flooorNo: '',
+                    deviceId: '',
+                    type: ''
+                },
+                form: {
+                    id:'',
+                    floorNo: '',
+                    deviceId: '',
+                    type: ''
+                },
+            }
         },
         methods: {
             handleClick(tab, event) {
-                console.log(tab, event);
-                _this.count = 10;
+                switch (_this.activeName) {
+                    case "first":
+                        _this.handleScroll2();
+                        break;
+                    case "second":
+                        _this.handleScroll3();
+                        break;
+                    case "third":
+                        _this.handleScroll4();
+                        break;
+                    case "fourth":
+                        _this.handleScroll5();
+                        break;
+                    case "five":
+                        _this.handleScroll6();
+                        break;
+                }
                 $(".mes").html("")
                 $(".mess").html("")
                 $(".count").html("")
+            },
+            search() {
+
+            },
+            floorInfo() {
+                _this.viewDialogVisible = true
+                _this.fetchFloorDevice();
+            },
+            add(){
+                _this.adddeviceDialogVisible=true;
+            },
+            editDevice(item) {
+                _this.modifydeviceDialogVisible = true;
+                _this.deviceForm.id = item.id;
+                _this.deviceForm.flooorNo = item.floorNo;
+                _this.deviceForm.deviceId = item.deviceId;
+                _this.deviceForm.type = item.type.toString();
+            },
+            deleteDevice(item) {
+                let params = new URLSearchParams();
+                params.append("id", item.id)
+                request({
+                    url: HOST + 'floor/device/delete',
+                    method: 'post',
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        showMessage(_this, '删除成功', 1)
+                        _this.getFloorDevice(item.flooorNo)
+                        _this.fetchFloorDevice();
+                    } else {
+                        showMessage(_this, '删除失败', 0)
+                    }
+                }).catch(error => {
+                    showMessage(_this, error, 0)
+                })
+            },
+            onAdd(){
+                let params = new URLSearchParams();
+                if (_this.verifyForm(_this.form)) {
+                    params.append("jsonDate", JSON.stringify(_this.form))
+                    request({
+                        url: HOST + "floor/device/add",
+                        method: 'post',
+                        data: params
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            _this.adddeviceDialogVisible = false;
+                            showMessage(_this, '添加成功', 1)
+                            _this.fetchStudentCount();
+                            _this.fetchDevice();
+                        } else {
+                            showMessage(_this, '添加失败', 0)
+                            _this.deviceExit()
+                        }
+                    }).catch(error => {
+                        showMessage(_this, error, 0)
+                        _this.deviceExit()
+                    })
+                }
+            },
+            deviceExit() {
+                _this.adddeviceDialogVisible = false
+                _this.form = {}
+            },
+            onEdit(item) {
+                let params = new URLSearchParams();
+                params.append("jsonDate", JSON.stringify(_this.deviceForm))
+                request({
+                    url: HOST + 'floor/device/update',
+                    method: 'post',
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        _this.modifydeviceDialogVisible = false;
+                        showMessage(_this, '修改成功', 1)
+                        _this.getFloorDevice(_this.deviceForm.flooorNo)
+                        _this.fetchFloorDevice();
+
+                    } else {
+                        _this.modifydeviceDialogVisible = false;
+                        showMessage(_this, '修改失败', 0)
+                    }
+                }).catch(error => {
+                    showMessage(_this, error, 0)
+                })
+            },
+            fetchFloorDevice() {
+                let params = new URLSearchParams();
+                params.append("page", _this.currentPage)
+                params.append("size", _this.pageSize)
+                request({
+                    url: HOST + "floor/device/list",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        _this.tableData = res.data.data.list;
+                        _this.tableDataTotal = res.data.data.total;
+                    } else {
+                        showMessage(_this, "获取通行记录失败", 0)
+                    }
+                }).catch(error => {
+                    showMessage(_this, error, 0)
+                })
+            },
+            handleCurrentChange(val) {
+                _this.currentPage = val
             },
             SetEchart() {
                 let myChart = echarts.init(document.getElementById('myChart'))
@@ -552,20 +848,23 @@
                 var scrollHeight = document.getElementById("div1").scrollHeight
                 //滚动条到底部的条件
                 if (scrollTop + windowHeight == scrollHeight) {
-                    if (_this.count == 20) {
+                    if (_this.nightFallListLength == _this.nightTotal) {
                         $(".mes").html("已无更多数据")
-                        $(".count").html("总数：" + _this.count)
+                        $(".count").html("总数：" + _this.nightFallListLength)
                         return
                     }
-                    _this.count += 1;
+                    _this.nightPage += 1;
+                    _this.fethcNightFall(_this.userInfo.floorNo, 1)
                 }
-
             },
-            fetchAccess(floorDevice) {
+            fetchAccess(floorDevice, name) {
                 let params = new URLSearchParams();
                 params.append("page", _this.currentPage)
                 params.append("size", _this.pageSize)
                 params.append("floorDevice", floorDevice)
+                if (name != null || name != "") {
+                    params.append("name", name)
+                }
                 request({
                     url: HOST + "/access/list",
                     method: "post",
@@ -620,20 +919,30 @@
             handleScroll2() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
                 var scrollTop2 = document.getElementById("div2").scrollTop
+                if (scrollTop2 > 1) {
+                    clearInterval(timeFetchAccess)
+                } else {
+                    clearInterval(timeFetchAccess)
+                    _this.accessPageOrSize.AllcurrentPage = 1;
+                    timeFetchAccess = setInterval(function () {
+                        _this.fetchAccess(_this.deviceId, "")
+                    }, 3000)
+                }
                 //变量windowHeight是可视区的高度
                 var windowHeight2 = document.getElementById("div2").clientHeight
                 //变量scrollHeight是滚动条的总高度
                 var scrollHeight2 = document.getElementById("div2").scrollHeight
                 //滚动条到底部的条件
                 if (scrollTop2 + windowHeight2 == scrollHeight2) {
-                    _this.currentPage += 1;
+
                     //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
                     if (_this.accesscount == _this.totalRecords) {
                         $(".mess").html("无更多数据")
                         return
                     }
+                    _this.accessPageOrSize.AllcurrentPage += 1;
                     let params = new URLSearchParams();
-                    params.append("page", _this.currentPage)
+                    params.append("page", _this.accessPageOrSize.AllcurrentPage)
                     params.append("size", _this.pageSize)
                     params.append("floorDevice", _this.userInfo.floorNo)
                     request({
@@ -665,20 +974,26 @@
             handleScroll3() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
                 var scrollTop3 = document.getElementById("div3").scrollTop
+                if (scrollTop3 > 1) {
+                    clearInterval(timeFetchAccess)
+                } else {
+                    _this.accessPageOrSize.passCurrentPage = 1;
+                }
                 //变量windowHeight是可视区的高度
                 var windowHeight3 = document.getElementById("div3").clientHeight
                 //变量scrollHeight是滚动条的总高度
                 var scrollHeight3 = document.getElementById("div3").scrollHeight
                 //滚动条到底部的条件
                 if (scrollTop3 + windowHeight3 == scrollHeight3) {
-                    _this.currentPage += 1;
+
                     //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
                     if (_this.accesscount == _this.totalRecords) {
                         $(".mess").html("无更多数据")
                         return
                     }
+                    _this.accessPageOrSize.passCurrentPage += 1;
                     let params = new URLSearchParams();
-                    params.append("page", _this.currentPage)
+                    params.append("page", _this.accessPageOrSize.passCurrentPage)
                     params.append("size", _this.pageSize)
                     params.append("floorDevice", _this.userInfo.floorNo)
                     request({
@@ -710,20 +1025,21 @@
             handleScroll4() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
                 var scrollTop4 = document.getElementById("div4").scrollTop
+                clearInterval(timeFetchAccess)
                 //变量windowHeight是可视区的高度
                 var windowHeight4 = document.getElementById("div4").clientHeight
                 //变量scrollHeight是滚动条的总高度
                 var scrollHeight4 = document.getElementById("div4").scrollHeight
                 //滚动条到底部的条件
                 if (scrollTop4 + windowHeight4 == scrollHeight4) {
-                    _this.currentPage += 1;
                     //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
                     if (_this.accesscount == _this.totalRecords) {
                         $(".mess").html("无更多数据")
                         return
                     }
+                    _this.accessPageOrSize.regisCurrentPage += 1;
                     let params = new URLSearchParams();
-                    params.append("page", _this.currentPage)
+                    params.append("page", _this.accessPageOrSize.regisCurrentPage)
                     params.append("size", _this.pageSize)
                     params.append("floorDevice", _this.userInfo.floorNo)
                     request({
@@ -739,7 +1055,6 @@
                             for (let i = 0; i < list.length; i++) {
                                 _this.getImage(list[i].imageId, list[i]);
                             }
-
                             _this.accesscount = _this.accessList.length;
                         } else {
                             showMessage(_this, "获取查询数据失败！");
@@ -755,20 +1070,26 @@
             handleScroll5() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
                 var scrollTop5 = document.getElementById("div5").scrollTop
+                if (scrollTop5 > 1) {
+                    clearInterval(timeFetchAccess)
+                } else {
+                    _this.accessPageOrSize.warnCurrentPage = 1;
+                }
                 //变量windowHeight是可视区的高度
                 var windowHeight5 = document.getElementById("div5").clientHeight
                 //变量scrollHeight是滚动条的总高度
                 var scrollHeight5 = document.getElementById("div5").scrollHeight
                 //滚动条到底部的条件
                 if (scrollTop5 + windowHeight5 == scrollHeight5) {
-                    _this.currentPage += 1;
+
                     //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
                     if (_this.accesscount == _this.totalRecords) {
                         $(".mess").html("无更多数据")
                         return
                     }
+                    _this.accessPageOrSize.warnCurrentPage += 1;
                     let params = new URLSearchParams();
-                    params.append("page", _this.currentPage)
+                    params.append("page", _this.accessPageOrSize.warnCurrentPage)
                     params.append("size", _this.pageSize)
                     params.append("floorDevice", _this.userInfo.floorNo)
                     request({
@@ -799,6 +1120,11 @@
             handleScroll6() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
                 var scrollTop6 = document.getElementById("div6").scrollTop
+                if (scrollTop6 > 1) {
+                    clearInterval(timeFetchAccess)
+                } else {
+                    _this.accessPageOrSize.alarmCurrentPage = 1;
+                }
                 //变量windowHeight是可视区的高度
                 var windowHeight6 = document.getElementById("div6").clientHeight
                 //变量scrollHeight是滚动条的总高度
@@ -806,14 +1132,14 @@
                 //滚动条到底部的条件
                 if (scrollTop6 + windowHeight6 == scrollHeight6) {
 
-                    _this.currentPage += 1;
                     //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
                     if (_this.accesscount == _this.totalRecords) {
                         $(".mess").html("无更多数据")
                         return
                     }
+                    _this.accessPageOrSize.alarmCurrentPage += 1;
                     let params = new URLSearchParams();
-                    params.append("page", _this.currentPage)
+                    params.append("page", _this.accessPageOrSize.alarmCurrentPage)
                     params.append("size", _this.pageSize)
                     params.append("floorDevice", _this.userInfo.floorNo)
                     request({
@@ -842,7 +1168,8 @@
                 }
 
             },
-            fethcNightFall(floorNo) {
+            fethcNightFall(floorNo, statu) {
+
                 let parmas = new URLSearchParams();
                 parmas.append("page", _this.nightPage)
                 parmas.append("size", _this.nightPageSize);
@@ -853,7 +1180,16 @@
                     data: parmas
                 }).then(res => {
                     if (res.data.code == 200) {
-                        _this.nightFallList = res.data.data.list[0].absentees;
+                        if (statu == 0) {
+                            _this.nightFallList = res.data.data.list[0].absentees;
+                            _this.nightTotal = res.data.data.total;
+                        } else {
+                            let list = res.data.data.list[0].absentees;
+                            for (let j = 0; j < list.length; j++) {
+                                _this.nightFallList.push(list[i])
+                            }
+                        }
+                        _this.nightFallListLength = _this.nightFallList.length;
                         for (let i = 0; i < _this.nightFallList.length; i++) {
                             _this.getImage(_this.nightFallList[i].imageId, _this.nightFallList[i])
                         }
@@ -869,7 +1205,7 @@
                 var date = new Date();
                 let time = date.getHours()
                 if (time == 5 || time > 5) {
-                    _this.fethcNightFall(_this.userInfo.floorNo);
+                    _this.fethcNightFall(_this.userInfo.floorNo, 0);
                 }
             },
             getImage(id, item) {
@@ -877,10 +1213,9 @@
                     url: HOST + 'image/' + id,
                     async: false,
                     method: 'post'
-
                 }).then(res => {
                     if (res.data.code == 200) {
-                        item.headImag = 'data:image/jpg;base64,' + res.data.data;
+                        item.imageId = 'data:image/jpg;base64,' + res.data.data;
                     } else {
                         showMessage("没有查到图片");
                     }
@@ -890,35 +1225,82 @@
                 })
 
             },
+            passAccessRecord(type, currentPage) {
+                let params = new URLSearchParams();
+                params.append("page", currentPage)
+                params.append("size", _this.pageSize)
+                params.append("floorDevice", _this.deviceId)
+                params.append("type", type)
+                request({
+                    url: HOST + "/access/getAccess",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        _this.passAccessList = res.data.data.list;
+                        _this.passTotal = res.data.data.total;
+                        _this.passCount = _this.accessList.length;
+                        let list = res.data.data.list
+                        for (let i = 0; i < list.length; i++) {
+                            _this.getImage(list[i].imageId, list[i]);
+                        }
+                    } else {
+                        showMessage(_this, "获取通行记录失败", 0)
+                    }
+
+                }).catch(error => {
+                    showMessage(_this, error, 0)
+                })
+            },
+            getFloorDevice(floorNo) {
+                let params = new URLSearchParams();
+                params.append("floorNo", floorNo)
+                request({
+                    url: HOST + "floor/device/getDevice",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        let floorDevice = res.data.data;
+                        for (let i = 0; i < floorDevice.length; i++) {
+                            _this.deviceId.push(floorDevice[i].deviceId)
+                        }
+                        _this.fetchAccess(_this.deviceId, "")
+                    } else {
+                        showMessage(_this, '设备信息获取失败', 0)
+                    }
+                }).catch(error => {
+                    showMessage(_this, error, 0)
+                })
+            },
+            verifyForm(formObj) {
+                let result = true;
+                if (formObj.deviceId == null || formObj.deviceId == "") {
+                    showMessage(_this, "设备id不能为空", 0)
+                    result = false;
+                } else if (formObj.floorNo == null || formObj.floorNo == "") {
+                    showMessage(_this, "设备名称不能为空", 0)
+                    result = false;
+                }
+
+                return result;
+            },
         },
 
 
         created() {
             this.userInfo = JSON.parse(sessionStorage.getItem("user"))
-            let params = new URLSearchParams();
-            params.append("floorNo", _this.userInfo.floorNo)
-            request({
-                url: HOST + "floor/device/getDevice",
-                method: "post",
-                data: params
-            }).then(res => {
-                if (res.data.code == 200) {
-                    let floorDevice = res.data.data;
-                    for (let i = 0; i < floorDevice.length; i++) {
-                        _this.deviceId.push(floorDevice[i].deviceId)
-                    }
-
-                    _this.fetchAccess(_this.deviceId)
-                } else {
-                    showMessage(_this, '设备信息获取失败', 0)
-                }
-            }).catch(error => {
-                showMessage(_this, error, 0)
-            })
+            _this.getFloorDevice(_this.userInfo.floorNo);
 
         },
         mounted() {
             _this.fetchAttendanceAndInOrOut();
+            timeOut = setTimeout(function () {
+                _this.handleTotal()
+            }, 200)
+            timeFetchAccess = setInterval(function () {
+                _this.fetchAccess(_this.deviceId, "")
+            }, 3000)
             setInterval(function () {
                 _this.handleTotal();
             }, 1000 * 60 * 60)
@@ -939,6 +1321,7 @@
             document.getElementById("div5").removeEventListener("scroll", _this.handleScroll5)
             document.getElementById("div6").removeEventListener("scroll", _this.handleScroll6)
             clearTimeout(this.timeOut)
+            clearInterval(timeFetchAccess)
         },
 
 
