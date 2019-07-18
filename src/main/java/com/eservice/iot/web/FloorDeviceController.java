@@ -32,8 +32,8 @@ public class FloorDeviceController {
     private FloorDeviceServiceImpl floorDeviceService;
 
     @PostMapping("/add")
-    public Result add(String jsonDate) {
-        FloorDevice floorDevice= JSON.parseObject(jsonDate,FloorDevice.class);
+    public Result add(String jsonData) {
+        FloorDevice floorDevice= JSON.parseObject(jsonData,FloorDevice.class);
         floorDeviceService.save(floorDevice);
         return ResultGenerator.genSuccessResult();
     }
@@ -45,8 +45,8 @@ public class FloorDeviceController {
     }
 
     @PostMapping("/update")
-    public Result update(String jsonDate) {
-        FloorDevice floorDevice= JSON.parseObject(jsonDate,FloorDevice.class);
+    public Result update(String jsonData) {
+        FloorDevice floorDevice= JSON.parseObject(jsonData,FloorDevice.class);
         floorDeviceService.update(floorDevice);
         return ResultGenerator.genSuccessResult();
     }

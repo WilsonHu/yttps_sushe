@@ -65,8 +65,7 @@ public class StaffService {
             headers.add(HttpHeaders.AUTHORIZATION, token);
             HttpEntity entity = new HttpEntity(headers);
             try {
-                String url = PARK_BASE_URL + "/staffs?";
-                url += "page=0&size=0";
+                String url = PARK_BASE_URL + "/staffs";
                 ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
                 if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
                     String body = responseEntity.getBody();

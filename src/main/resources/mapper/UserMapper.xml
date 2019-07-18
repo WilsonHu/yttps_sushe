@@ -11,6 +11,7 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="floor_no" jdbcType="INTEGER" property="floorNo" />
+    <result column="floor_name" jdbcType="VARCHAR" property="floorName" />
   </resultMap>
   <select id="requestLogin" resultMap="BaseResultMap">
     SELECT u.*

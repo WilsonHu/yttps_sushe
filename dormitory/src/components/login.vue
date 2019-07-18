@@ -38,6 +38,8 @@
     import request from '../api/request'
     import {setToken, getToken} from '../api/auth'
 
+
+
     export default {
         data() {
             _this = this;
@@ -58,11 +60,11 @@
             validateForm() {
                 this.errorMsg = '';
                 var iserror = false;
-                if (isStringEmpty(this.ruleForm2.account)) {
+                if (this.ruleForm2.account==null) {
                     iserror = true;
                     this.errorMsg = '账号不能为空';
                 }
-                if (!iserror && isStringEmpty(this.ruleForm2.password)) {
+                if (!iserror && this.ruleForm2.password==null) {
                     iserror = true;
                     this.errorMsg = '密码不能为空';
                 }

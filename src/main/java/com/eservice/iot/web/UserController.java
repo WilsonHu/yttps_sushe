@@ -30,8 +30,8 @@ public class UserController {
     private UserServiceImpl userService;
 
     @PostMapping("/add")
-    public Result add(String jsonDate) {
-        User user= JSON.parseObject(jsonDate,User.class);
+    public Result add(String jsonData) {
+        User user= JSON.parseObject(jsonData,User.class);
         userService.save(user);
         return ResultGenerator.genSuccessResult();
     }
@@ -43,8 +43,8 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public Result update(String jsonDate) {
-        User user= JSON.parseObject(jsonDate,User.class);
+    public Result update(String jsonData) {
+        User user= JSON.parseObject(jsonData,User.class);
         userService.update(user);
         return ResultGenerator.genSuccessResult();
     }
@@ -76,7 +76,6 @@ public class UserController {
             if(user == null) {
                 return ResultGenerator.genFailResult("账号或密码不正确！");
             }else {
-                user.setPassword("");
                 return ResultGenerator.genSuccessResult(user);
             }
         }

@@ -1,4 +1,4 @@
-package com.eservice.iot.util;
+package com.eservice.iot.model;
 
 /**
  * Class Description:
@@ -11,5 +11,5 @@ public class Constant {
     public static final String STAFF = "STAFF";
     public static final String STRANGER = "STRANGER";
     public static final String VIP = "VIP";
-
+    public static final String BLACKLIST = "BLACKLIST";
 }

@@ -4,7 +4,14 @@ import App from './App.vue'
 import Element from 'element-ui'
 import Echarts from 'echarts'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'babel-polyfill'
+import 'url-search-params-polyfill'
 Vue.use(Element)
+
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+
+Vue.use(MintUI)
 // 引用路由
 import VueRouter from 'vue-router'
 // 光引用不成，还得使用

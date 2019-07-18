@@ -1,5 +1,6 @@
 package com.eservice.iot.web;
 
+import com.alibaba.fastjson.JSON;
 import com.eservice.iot.core.Result;
 import com.eservice.iot.core.ResultGenerator;
 import com.eservice.iot.model.park.Staff;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class Description: xxx
@@ -56,7 +58,7 @@ public class StaffController {
             if (tagService == null) {
                 return ResultGenerator.genFailResult("标签服务没有启动！");
             } else {
-                ArrayList<Tag> allTagList = tagService.getAllTagList();
+                List<Tag> allTagList = tagService.getAllTagList();
                 String targetTagId = null;
                 for (Tag item : allTagList) {
                     if (item.getTag_name().equals(name)) {
@@ -182,4 +184,18 @@ public class StaffController {
         return result;
     }
 
+    @RequestMapping("/add")
+    public Result add(String info) {
+        Map map=(Map) JSON.parseObject(info);
+        List list= JSON.parseArray(map.get("tag").toString());
+        String []tagNameList=new String[list.size()];
+        list.toArray(tagNameList);
+        List<String> idList= tagService.getStaffId(tagNameList);
+        List imageList= JSON.parseArray(map.get("image").toString());
+        map.put("image",imageList);
+        map.put("tag",idList);
+		map.put("birthday","");
+        return ResultGenerator.genSuccessResult(
+                staffService.createStaff(map));
+    }
 }

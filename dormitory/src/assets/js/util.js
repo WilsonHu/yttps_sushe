@@ -7,7 +7,7 @@ function getGradeList() {
     for (let i = 0; i < 12; i++) {
         list.push({
             id: i + 1,
-            name: i < 9 ? `${i + 1}年级` : `高${(i - 9) + 1}年级`
+            name: i < 9 ? "${i + 1}年级" : "高${(i - 9) + 1}年级"
         })
     }
     return list;
@@ -19,7 +19,7 @@ function getClassList() {
     for (let i = 0; i < 20; i++) {
         list.push({
             id: i + 1,
-            name: `${i + 1}班`
+            name: "${i + 1}班"
         })
     }
     return list;
@@ -41,7 +41,7 @@ Date.prototype.toJSON = function () {
 function resetObject(obj) {
     if (obj == null || obj.length == 0) {
         return;
-    }
+    };
     for (let k of Object.keys(obj)) {
         let typeName = typeof(obj[k]);
         switch (typeName) {

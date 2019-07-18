@@ -34,6 +34,20 @@ public class User {
     private Integer floorNo;
 
     /**
+     * 楼栋名
+     */
+    @Column(name = "floor_Name")
+    private String floorName;
+
+    public String getFloorName() {
+        return floorName;
+    }
+
+    public void setFloorName(String floorName) {
+        this.floorName = floorName;
+    }
+
+    /**
      * @return id
      */
     public Integer getId() {

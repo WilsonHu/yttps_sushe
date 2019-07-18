@@ -2,6 +2,7 @@ package com.eservice.iot.model.web;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @program:yttps_sushe
@@ -9,7 +10,7 @@ import java.util.Date;
  * @author:yuhan_xie
  * @create:2019/7/13:11:55
  */
-public class AccessRecordModel implements Serializable {
+public class AccessRecordModel {
 
     // 姓名
     private String name;
@@ -25,6 +26,16 @@ public class AccessRecordModel implements Serializable {
     private String deviceId;
 
     private String personId;
+
+    private List<String> tagIds;
+
+    public List<String> getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(List<String> tagIds) {
+        this.tagIds = tagIds;
+    }
 
     public String getPersonId() {
         return personId;

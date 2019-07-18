@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.eservice.iot.model.ResponseModel;
 import com.eservice.iot.model.park.Tag;
 import com.eservice.iot.model.ResponseCode;
-import com.eservice.iot.util.Constant;
+import com.eservice.iot.model.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class TagService {
     /**
      * 全部tag列表
      */
-    private ArrayList<Tag> allTagList = new ArrayList<>();
+    private List<Tag> allTagList = new ArrayList<>();
 
     /**
      * 访客tag
@@ -58,7 +58,7 @@ public class TagService {
      */
     private List<Tag> staffTagList = new ArrayList<>();
 
-    private List<Tag> floorTags = new ArrayList<>();
+    private List<Tag> floorTagList = new ArrayList<>();
     /**
      * 一分钟更新一次TAG
      */
@@ -101,6 +101,7 @@ public class TagService {
             if (tmpList != null &&tmpList.size()>0) {
                 ArrayList<Tag> visitorTagList = new ArrayList<>();
                 ArrayList<Tag> staffTagList = new ArrayList<>();
+                ArrayList<Tag> floorTagList = new ArrayList<>();
                 for (Tag tag : tmpList) {
                     for (String str : tag.getVisible_identity()) {
                         if (Constant.VISITOR.equals(str)) {
@@ -110,16 +111,18 @@ public class TagService {
                             staffTagList.add(tag);
                         }
                         if(tag.getTag_name().indexOf("号")!=-1){
-                            floorTags.add(tag);
+                            floorTagList.add(tag);
                         }
                     }
                 }
                 if (this.allTagList.size() != tmpList.size()) {
                     logger.info("The number of allTagList：{} ==> {}", this.allTagList.size(), tmpList.size());
+                    logger.info("The number of floorTagList：{} ==> {}", this.floorTagList.size(), floorTagList.size());
                     logger.info("The number of staffTagList：{} ==> {}", this.staffTagList.size(), staffTagList.size());
                     logger.info("The number of visitorTagList：{} ==> {}", this.visitorTagList.size(), visitorTagList.size());
                 }
                 this.allTagList = tmpList;
+                this.floorTagList=floorTagList;
                 this.staffTagList = staffTagList;
                 this.visitorTagList = visitorTagList;
             }
@@ -150,33 +153,8 @@ public class TagService {
             headers.add(HttpHeaders.AUTHORIZATION, tokenService.getToken());
             HttpEntity httpEntity = new HttpEntity<>(JSON.toJSONString(postParameters), headers);
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(PARK_BASE_URL + "/tags", httpEntity, String.class);
-        /*
-{
-  "message": "string",
-  "result": [
-    {
-      "message": "string",
-      "result": {
-        "count": 0,
-        "create_time": 0,
-        "meta": {
-          "additionalProp1": {},
-          "additionalProp2": {},
-          "additionalProp3": {}
-        },
-        "tag_id": "string",
-        "tag_name": "string",
-        "visible_identity": [
-          "STAFF"
-        ]
-      },
-      "rtn": 0
-    }
-  ],
-  "rtn": 0
-}
-       */
             if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
+                fetchTags();
                 return true;
             }
         }
@@ -194,14 +172,9 @@ public class TagService {
             HttpEntity entity = new HttpEntity(headers);
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(PARK_BASE_URL + "/tags/" + id, HttpMethod.DELETE, entity, String.class);
-        /*
-{
-  "message": "string",
-  "result": {},
-  "rtn": 0
-}
-         */
+
             if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
+                fetchTags();
                 return true;
             }
         }
@@ -214,11 +187,11 @@ public class TagService {
      * @param tagNames
      * @return
      */
-    public ArrayList<String> getDepartmentId(String[] tagNames) {
+    public ArrayList<String> getStaffId(String[] tagNames) {
         ArrayList<String> idList = new ArrayList<>();
         for (String str : tagNames) {
             isExistStaff(str);//判断标签是否存在，不存在则先新增
-            for (Tag tag : visitorTagList) {
+            for (Tag tag : staffTagList) {
                 if (str.equals(tag.getTag_name())) {
                     idList.add(tag.getTag_id());
                 }
@@ -255,7 +228,6 @@ public class TagService {
         }
         if (!isExist) {
             createTag(tagName, Constant.STAFF,null);
-            fetchTags();
         }
     }
 
@@ -268,7 +240,6 @@ public class TagService {
         }
         if (!isExist) {
             createTag(tagName, Constant.VISITOR,null);
-            fetchTags();
         }
     }
 
@@ -306,7 +277,7 @@ public class TagService {
         return tagNames;
     }
 
-    public ArrayList<Tag> getAllTagList() {
+    public List<Tag> getAllTagList() {
         return allTagList;
     }
 
@@ -318,7 +289,7 @@ public class TagService {
         return staffTagList;
     }
 
-    public List<Tag> getFloorTags() {
-        return floorTags;
+    public List<Tag> getFloorTagList() {
+        return floorTagList;
     }
 }

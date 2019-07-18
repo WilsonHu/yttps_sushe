@@ -1,12 +1,14 @@
 package com.eservice.iot.model.web;
 
+import java.io.Serializable;
+
 /**
  * @program: yttps_sushe
- * @description: 总人数 考勤人数，在寝人数，外出人数
+ * @description: 总人数, 考勤人数，在寝人数，外出人数
  * @author: yuhan_xie
  * @create: 2019/7/13:12:02
  */
-public class AttendanceNumber {
+public class AttendanceNumber  implements Serializable {
 
     private int total;
     private int attendanceNum;
@@ -43,5 +45,9 @@ public class AttendanceNumber {
 
     public void setOutDormitory(int outDormitory) {
         this.outDormitory = outDormitory;
+    }
+
+    public String show(){
+        return String.format("total : %s , attendanceNum : %s , inDormitory : %s , outDormitory : %s ",total,attendanceNum,inDormitory,outDormitory);
     }
 }
