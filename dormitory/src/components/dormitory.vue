@@ -1,11 +1,10 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
-    <div style="width: 100%;height: 100%;background-color: #F6F4FF">
-        <el-row :gutter="0">
+    <div style="width: 100%;height: 100%;background-color: #F6F4FF;">
+        <el-row :gutter="0" style="padding-top: 50px">
             <el-col :span="8">
                 <div class="grid-content bg-purple">
                     <!--页面左方三个div-->
-                    <div style="height: 930px">
-
+                    <div style="height: 100%">
                         <div style="height: 150px; width:85% ;background-color: white;margin-left:60px;margin-top: 10px "
                              class="well well-lg">
                             <el-col style="font-size: 20px;color: #6a747c; font-weight: bold;margin-top: -5px">
@@ -19,7 +18,7 @@
                                         <i style=" font:30px Extra Small;  color: black;">{{userInfo.floorNo}}</i>
                                     </p>
                                 </el-col>
-                                <el-col :offset="4" style="border: 1px solid silver;width: 1px;height: 100px"></el-col>
+                                <el-col :offset="4" style="border: 1px solid silver;width: 1px;height: 8rem"></el-col>
                                 <el-col :span="5" :offset="4">
                                     <p style="margin-left: 20px;margin-top: 20px">
                                         <span>入住总人数</span><br>
@@ -36,7 +35,7 @@
                                 <el-tab-pane label="当前" name="first">
                                     <el-row style="margin-top: 30px;">
                                         <el-col>
-                                            <img src="../assets/img/person.png" width="50px" height="50px"/>
+                                            <img src="../assets/img/ic_check.png" width="50px" height="50px"/>
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -50px">
                                             <span>当前考勤学生数</span><br/>
@@ -50,7 +49,7 @@
                                     </el-row>
                                     <el-row style="margin-top: 60px">
                                         <el-col>
-                                            <img src="../assets/img/house.png" width="50px" height="50px"/>
+                                            <img src="../assets/img/ic_inroom.png" width="50px" height="50px"/>
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -50px">
                                             <span>当前在寝学生数</span><br/>
@@ -64,7 +63,7 @@
                                     </el-row>
                                     <el-row style="margin-top: 60px">
                                         <el-col>
-                                            <img src="../assets/img/out.png" width="50px" height="50px"/>
+                                            <img src="../assets/img/ic_outdoor.png" width="50px" height="50px"/>
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -50px">
                                             <span>当前外出学生数</span><br/>
@@ -78,9 +77,9 @@
                                 </el-tab-pane>
                                 <el-tab-pane label="夜归考勤" name="second" style="background-color: #F6F4FF;">
                                     <div style="height: 500px;overflow:auto" id="div1">
-                                        <ul style="margin-top: 10px;margin-left: -25px">
+                                        <ul style="margin-top: 10px;margin-left: -30px">
                                             <li v-for="i in nightFallList">
-                                                <el-card style="height: 80px;width: 470px;border-radius: 20px">
+                                                <el-card style="height: 80px;width: 450px;border-radius: 20px">
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
@@ -139,21 +138,22 @@
             </el-col>
 
             <el-col :span="8">
-                <div class="grid-content bg-purples">
-                    <!--<el-tabs v-model="activeName" @tab-click="handleClick" class="middle">
-                        <el-tab-pane label="用户管理" name="first">
-                            用户管理
-                        </el-tab-pane>
-                        <el-tab-pane label="配置管理" name="second">
-                            配置管理
-                        </el-tab-pane>
-                        <el-tab-pane label="角色管理" name="third">
-                            角色管理
-                        </el-tab-pane>
-                        <el-tab-pane label="定时任务补偿" name="fourth">
-                            定时任务补偿
-                        </el-tab-pane>
-                    </el-tabs>-->
+                <div class="grid-content" style="background-color: #585F79">
+                    <div style="height: 500px;width: 400px;">
+                        <object type='application/x-vlc-plugin' id='vlc' events='True'
+                                classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921'
+                                codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
+                                width="587" height="340" style="margin-top: 50px;margin-left: 30px">
+                            <param name='mrl' value='rtsp://admin:admin123@10.250.62.134:554/h264/ch33/main/av_stream'/>
+                            <param name='volume' value='50'/>
+                            <param name='autoplay' value='true'/>
+                            <param name="enablefullscreen controls" value="1">
+                            <param name="windowlessVideo" value="0">
+                            <param name='loop' value='false'/>
+                            <param name='fullscreen' value='false'/>
+                            <param name="height" value="600">
+                        </object>
+                    </div>
                 </div>
             </el-col>
 
@@ -176,8 +176,7 @@
                                     <mt-tab-item id="1">全部</mt-tab-item>
                                     <mt-tab-item id="2">通行</mt-tab-item>
                                     <mt-tab-item id="3">未注册</mt-tab-item>
-                                    <mt-tab-item id="4">禁行</mt-tab-item>
-                                    <mt-tab-item id="5">警报</mt-tab-item>
+                                    <mt-tab-item id="4">警报</mt-tab-item>
                                 </mt-navbar>
                                 <!-- tab-container -->
                                 <mt-tab-container v-model="selected">
@@ -222,7 +221,7 @@
                                     <mt-tab-container-item id="2">
                                         <div style="height: 780px;overflow:auto" id="div3">
                                             <ul style="margin-top: 10px;margin-left: -10px ">
-                                                <li v-for="i in accessList"
+                                                <li v-for="i in accessByPassList"
                                                     v-if="i.type.split('_')[0]=='进' ||i.type.split('_')[0]=='出'">
                                                     <el-card
                                                             style="border-radius: 10px;width:460px;height: 80px;margin-left: -30px">
@@ -258,34 +257,36 @@
                                         </div>
                                     </mt-tab-container-item>
                                     <mt-tab-container-item id="3">
+
                                         <div style="height: 780px;overflow:auto" id="div4">
-                                            <ul style="margin-top: 10px;margin-left: -10px">
+                                            <ul style="margin-top: 10px;margin-left: -10px ">
                                                 <li v-for="i in accessList" v-if="i.type=='未注册'">
-                                                    <el-card class="box-card" style="border-radius: 20px;width:430px ">
+                                                    <el-card
+                                                            style="border-radius: 10px;width:460px;height: 80px;margin-left: -30px">
                                                         <div>
                                                             <el-row>
                                                                 <el-col :span="2">
                                                                     <img :src="require('../assets/img/'+'unregistered'+'.png')"
-                                                                         style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                         style=" height: 80px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                                 </el-col>
-                                                                <el-col :span="2" :offset="2">
+                                                                <el-col :span="2" :offset="2"
+                                                                        style="margin-top: 8px;font-size: 15px;">
                                                                     <span>{{i.pass_time.split(" ")[1]}}</span>
                                                                 </el-col>
-                                                                <el-col :span="2" :offset="5">
-                                                                    <img :src="i.imageId" width="60px"
-                                                                         height="60px"
-                                                                         style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
+                                                                <el-col :span="2" :offset="3">
+                                                                    <img :src="i.imageId" width="70px"
+                                                                         height="70px"
+                                                                         style="border-radius: 50%;margin-top: -16px;">
                                                                 </el-col>
-                                                                <el-col :span="5" :offset="3">
+                                                                <el-col :span="5" :offset="4" style="font-size: 15px;">
                                                                     <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
                                                                 </el-col>
-                                                                <el-col :span="18" :offset="10"
-                                                                        style="margin-top: -40px">
-                                                                    <span style="margin-left: 180px;color: orange">{{i.type}}</span>
+                                                                <el-col :span="3" :offset="20"
+                                                                        style="margin-top: -50px;font-size: 15px;">
+                                                                    <span style="color: orange;">{{i.type}}</span>
                                                                 </el-col>
                                                             </el-row>
-                                                            <p style="margin-left: 80px;margin-top: -50px">
-                                                            </p>
+
                                                         </div>
                                                     </el-card>
                                                 </li>
@@ -294,48 +295,9 @@
                                         </div>
                                     </mt-tab-container-item>
                                     <mt-tab-container-item id="4">
-                                        <div style="overflow: auto;height: 780px" id="div5">
-                                            <ul style="margin-top: 10px;margin-left: -10px">
-                                                <li v-for="i in accessList" v-if="i.type=='禁止'">
-                                                    <el-card class="box-card" style="border-radius: 20px;width:430px ">
-                                                        <div>
-                                                            <el-row>
-                                                                <el-col :span="2">
-                                                                    <img :src="require('../assets/img/'+'forbid'+'.png')"
-                                                                         style=" height: 70px;width:65px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
-                                                                </el-col>
-                                                                <el-col :span="2" :offset="2">
-                                                                    <span>{{i.pass_time.split(" ")[1]}}</span>
-                                                                </el-col>
-                                                                <el-col :span="2" :offset="5">
-                                                                    <img :src="i.imageId" width="60px"
-                                                                         height="60px"
-                                                                         style="height: 60px;width:60px;border-radius: 50%;margin-top: -16px;margin-left: -20px">
-                                                                </el-col>
-                                                                <el-col :span="5" :offset="3">
-                                                                    <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
-                                                                </el-col>
-                                                                <el-col :span="18" :offset="10"
-                                                                        style="margin-top: -40px">
-                                                                    <span style="margin-left: 180px;color: blue">{{i.type}}</span>
-                                                                </el-col>
-                                                            </el-row>
-                                                            <p style="margin-left: 80px;margin-top: -50px">
-                                                            </p>
-                                                        </div>
-                                                    </el-card>
-                                                </li>
-                                            </ul>
-
-                                            <span class="mess"></span>
-
-
-                                        </div>
-                                    </mt-tab-container-item>
-                                    <mt-tab-container-item id="5">
                                         <div style="overflow: auto;height: 780px" id="div6">
                                             <ul style="margin-top: 10px;margin-left: -10px">
-                                                <li v-for="i in accessList" v-if="i.type=='禁止'">
+                                                <li v-for="i in accessList" v-if="i.type=='黑名单'">
                                                     <el-card class="box-card" style="border-radius: 20px;width:430px ">
                                                         <div>
                                                             <el-row>
@@ -392,6 +354,9 @@
     var timeOut;
     var timeFetchAccess;
     var timeFetchNight
+    var timeFetchAccessByPass
+    var timeFetchAccessByName
+    var timeFetchAccessByIdentity
     export default {
         name: "dormitory",
         data() {
@@ -416,6 +381,9 @@
                 },
                 deviceId: [],
                 accessList: [],
+                accessByPassList: [],
+                accessByNamesList: [],
+                accessByIdentityList: [],
                 index: 0,
                 attendanceNumList: {
                     total: 0,
@@ -423,10 +391,8 @@
                     inDormitory: 0,
                     outDormitory: 0
                 },
-                tableData: [],
-                tableDataTotal: 0,
                 nightPage: 1,
-                nightPageSize: 5,
+                nightPageSize: 10,
                 nightFallList: [],
                 passAccessList: [],
                 passTotal: 0,
@@ -456,8 +422,23 @@
             },
 
             search() {
-                clearInterval(timeFetchAccess)
-              _this.fetchAccessList(_this.deviceId,"",_this.name);
+                _this.accessList=[]
+
+                if (_this.name!=""&&_this.name!=null){
+                    clearInterval(timeFetchAccess)
+                    _this.selected = "1"
+                    _this.fetchNewestAccessRecordListByName(_this.deviceId, _this.name)
+                } else {
+                    clearInterval(timeFetchAccess)
+                    //保证点击"全部"时，页面立即加载数据
+                    _this.fetchNewestAccessRecordList(_this.deviceId);
+                    timeFetchAccess = setInterval(function () {
+                        _this.fetchNewestAccessRecordList(_this.deviceId)
+                    }, 3000)
+
+                }
+
+
             },
             floorInfo() {
                 _this.viewDialogVisible = true
@@ -487,8 +468,6 @@
                 _this.currentPage = val
             },
             getFloorDevice(floorNo) {
-
-
                 let params = new URLSearchParams();
                 params.append("floorNo", floorNo)
                 request({
@@ -501,7 +480,7 @@
                         for (let i = 0; i < floorDevice.length; i++) {
                             _this.deviceId.push(floorDevice[i].deviceId)
                         }
-                        _this.fetchAccessList(_this.deviceId, "","")
+                        _this.fetchNewestAccessRecordList(_this.deviceId);
                         _this.fethcNightFall(_this.deviceId)
                     } else {
                         showMessage(_this, '设备信息获取失败', 0)
@@ -511,18 +490,173 @@
                 })
             },
 
-
             //通行记录
-            fetchAccess(floorDevice, type,name) {
+
+            fetchNewestAccessRecordList(floorDevice) {
                 let params = new URLSearchParams();
-                let legth = _this.accessList.length - 1;
-                params.append("startTime", _this.accessList[legth].pass_time);
                 params.append("size", _this.pageSize);
-                params.append("deviceList", floorDevice);
-                params.append("type", type);
-                params.append("name",name);
+                params.append("deviceId", floorDevice);
                 request({
-                    url: HOST + "access/list",
+                    url: HOST + "dorm/getNewestAccessRecordList",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            if (_this.accessList == null || _this.accessList == "") {
+                                _this.accessList = res.data.data;
+                                for (let i = 0; i < _this.accessList.length; i++) {
+                                    _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
+                                }
+                            } else {
+                                let list = res.data.data;
+                                let size = _this.accessList.length;
+                                for (let i = 0; i < list.length; i++) {
+                                    _this.getImage(list[i].imageId, list[i]);
+                                }
+                                setTimeout(function () {
+                                    _this.accessList = list;
+                                }, 200)
+                            }
+                        } else {
+                            showMessage(_this, "获取最新通行记录失败", 0)
+                        }
+                    }
+                ).catch(error => {
+                    showMessage(_this, "fetchNewestAccessRecordList===>:{}" + error, 0)
+                })
+
+            },
+            fetchNewestAccessRecordListByPass(floorDevice, pass) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                params.append("pass", pass)
+                request({
+                    url: HOST + "dorm/getNewestAccessRecordListByPass",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            if (_this.accessByPassList == null || _this.accessByPassList == "") {
+                                _this.accessByPassList = res.data.data;
+                                for (let i = 0; i < _this.accessByPassList.length; i++) {
+                                    _this.getImage(_this.accessByPassList[i].imageId, _this.accessByPassList[i]);
+                                }
+                            } else {
+                                let list = res.data.data;
+                                let size = _this.accessByPassList.length;
+                                for (let i = 0; i < list.length; i++) {
+                                    _this.getImage(list[i].imageId, list[i]);
+                                }
+                                setTimeout(function () {
+                                    _this.accessByPassList = list;
+                                }, 500)
+                            }
+                        } else {
+                            showMessage(_this, "获取最新通行记录失败==>ByPass", 0)
+                        }
+                    }
+                ).catch(error => {
+                    showMessage(_this, "fetchNewestAccessRecordListByPass===>:{}" + error, 0)
+                })
+
+            },
+            fetchNewestAccessRecordListByName(floorDevice, name) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                params.append("name", name)
+                request({
+                    url: HOST + "dorm/getNewestAccessRecordListByName",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            if (_this.accessList == null || _this.accessList == "") {
+                                if (res.data.data!=null){
+                                    _this.accessList = res.data.data;
+                                    _this.totalRecords = res.data.data.length;
+                                    _this.accesscount = _this.accessList.length;
+                                    for (let i = 0; i < _this.accessList.length; i++) {
+                                        _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
+                                    }
+                                } else {
+                                    showMessage(_this,"数据为空",0)
+                                }
+
+                            } else {
+                                let list = res.data.data;
+                                let size = _this.accessList.length;
+                                for (let i = 0; i < list.length; i++) {
+                                    _this.getImage(list[i].imageId, list[i]);
+                                }
+                                setTimeout(function () {
+                                    _this.accessList = list;
+                                }, 200)
+                            }
+                        } else {
+                            showMessage(_this, "获取最新通行记录失败==>ByName", 0)
+                        }
+                    }
+                ).catch(error => {
+                    showMessage(_this, "fetchNewestAccessRecordListByName===>:{}" + error, 0)
+                })
+
+            },
+            fetchNewestAccessRecordListByIdentity(floorDevice, identity) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                params.append("identity", identity)
+                request({
+                    url: HOST + "dorm/getNewestAccessRecordListByIdentity",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            if (_this.accessList == null || _this.accessList == "") {
+                                if (res.data.data!=null){
+                                    _this.accessList = res.data.data;
+                                    for (let i = 0; i < _this.accessList.length; i++) {
+                                        _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
+                                    }
+                                } else {
+                                    showMessage(_this,"无警报信息",0)
+                                }
+                            } else {
+                                let list = res.data.data;
+                                let size = _this.accessList.length;
+                                for (let i = 0; i < list.length; i++) {
+                                    _this.getImage(list[i].imageId, list[i]);
+                                }
+                                setTimeout(function () {
+                                    _this.accessList = list;
+                                }, 200)
+                            }
+                        } else {
+                            showMessage(_this, "获取最新通行记录失败==>ByIdentity", 0)
+                        }
+                    }
+                ).catch(error => {
+                    showMessage(_this, "fetchNewestAccessRecordListByIdentity===>:{}" + error, 0)
+                })
+
+            },
+
+            //分页查询所有数据
+            getAccessRecordList(floorDevice) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                if (_this.accessList != null) {
+                    let legth = _this.accessList.length - 1;
+                    let time = _this.accessList[legth].pass_time
+                    params.append("time", time);
+                } else {
+                    params.append("time", "");
+                }
+                request({
+                    url: HOST + "dorm/getAccessRecordList",
                     method: "post",
                     data: params
                 }).then(res => {
@@ -535,56 +669,125 @@
                                 _this.getImage(list[i].imageId, list[i]);
                             }
                             _this.accesscount = _this.accessList.length;
+                        } else {
+                            showMessage(_this, "获取最新通行记录失败", 0)
+                        }
+                    }
+                ).catch(error => {
+                    showMessage(_this, "getAccessRecordList===>:{}" + error, 0)
+                })
+
+            },
+            getAccessRecordListByPass(floorDevice, pass) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                if (_this.accessList != null) {
+                    let legth = _this.accessList.length - 1;
+                    params.append("time", _this.accessList[legth].pass_time);
+                } else {
+                    params.append("time", "");
+                }
+
+                params.append("pass", pass)
+                request({
+                    url: HOST + "dorm/getAccessRecordListByPass",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            let list = res.data.data
+                            for (let i = 0; i < list.length; i++) {
+                                _this.accessByPassList.push(list[i]);
+                            }
+                            for (let i = 0; i < list.length; i++) {
+                                _this.getImage(list[i].imageId, list[i]);
+                            }
+                            _this.accesscount = _this.accessByPassList.length;
 
                         } else {
                             showMessage(_this, "获取通行记录失败", 0)
                         }
                     }
                 ).catch(error => {
-                    showMessage(_this, error, 0)
+                    showMessage(_this, "getAccessRecordListByPass===>:{}" + error, 0)
                 })
 
             },
-            fetchAccessList(floorDevice, type,name) {
-                  let params = new URLSearchParams();
-                  params.append("page", _this.currentPage);
-                  params.append("size", _this.pageSize);
-                  params.append("deviceList", floorDevice);
-                  params.append("type", type);
-                  params.append("name",name);
-                  request({
-                      url: HOST + "access/getAccess",
-                      method: "post",
-                      data: params
-                  }).then(res => {
-                          if (res.data.code == 200) {
-                              if (_this.accessList == null || _this.accessList == "") {
-                                  _this.accessList = res.data.data;
-                                  _this.totalRecords = res.data.data.length;
-                                  _this.accesscount = _this.accessList.length;
-                                  for (let i = 0; i < _this.accessList.length; i++) {
-                                      _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
-                                  }
-                              } else {
-                                  let list = res.data.data;
-                                  let size = _this.accessList.length;
-                                  for (let i = 0; i < list.length; i++) {
-                                      _this.getImage(list[i].imageId, list[i]);
-                                  }
-                                  setTimeout(function () {
-                                      _this.accessList = list;
-                                  }, 200)
-                              }
+            getAccessRecordListByName(floorDevice, name) {
+                let params = new URLSearchParams();
+                let legth = _this.accessList.length - 1;
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                if (_this.accessList != null) {
+                    let legth = _this.accessList.length-1;
+                    params.append("time", _this.accessList[legth].pass_time);
+                } else {
+                    params.append("time", "");
+                }
+                params.append("name", name)
+                request({
+                    url: HOST + "dorm/getAccessRecordListByName",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            let list = res.data.data
+                            for (let i = 0; i < list.length; i++) {
+                                _this.accessList.push(list[i]);
+                            }
+                            for (let i = 0; i < list.length; i++) {
+                                _this.getImage(list[i].imageId, list[i]);
+                            }
+                        } else {
+                            showMessage(_this, "获取通行记录失败", 0)
+                        }
+                    }
+                ).catch(error => {
+                    showMessage(_this, "getAccessRecordListByName===>:{}" + error, 0)
+                })
 
-                          } else {
-                              showMessage(_this, "获取通行记录失败", 0)
-                          }
-
-                      }
-                  ).catch(error => {
-                      showMessage(_this, "fetchAccessList==>"+error, 0)
-                  })
             },
+            getAccessRecordListByIdentity(floorDevice, identity) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                if (_this.accessList != null) {
+                    let legth = _this.accessList.length-1;
+                    params.append("time", _this.accessList[legth].pass_time);
+                } else {
+                    params.append("time", "");
+                }
+                params.append("identity", identity)
+                request({
+                    url: HOST + "dorm/getAccessRecordListByIdentity",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            if (res.data.data!=null){
+                                let list = res.data.data;
+                                for (let i = 0; i < list.length; i++) {
+                                    _this.accessList.push(list[i]);
+                                }
+                                for (let i = 0; i < list.length; i++) {
+                                    _this.getImage(list[i].imageId, list[i]);
+                                }
+                            } else {
+                                showMessage(_this,"已显示所有数据",1)
+                            }
+
+                        } else {
+                            showMessage(_this, "获取通行记录失败", 0)
+                        }
+                    }
+                ).catch(error => {
+                    showMessage(_this, "getAccessRecordListByIdentity===>:{}" + error, 0)
+                })
+
+            },
+
+
             fethcNightFall(floorNo) {
                 let parmas = new URLSearchParams();
                 parmas.append("page", _this.nightPage)
@@ -597,25 +800,21 @@
                 }).then(res => {
                     if (res.data.code == 200) {
                         if (_this.nightFallList == null || _this.nightFallList == "") {
-                            let nightList = res.data.data.list;
+                            _this.nightFallList = res.data.data.list;
                             _this.nightTotal = res.data.data.total;
-                            for (let i = 0; i < nightList.length; i++) {
-                                _this.getImage(nightList[i].imageId, nightList[i]);
+                            for (let i = 0; i < _this.nightFallList.length; i++) {
+                                _this.getImage(_this.nightFallList[i].imageId, _this.nightFallList[i]);
                             }
-                            timeFetchNight = setTimeout(function () {
-                                _this.nightFallList = nightList;
-                            }, 200)
-
                         } else {
                             let list = res.data.data.list;
-                            let size = _this.nightFallList.length;
                             for (let i = 0; i < list.length; i++) {
                                 _this.getImage(list[i].imageId, list[i]);
+                                _this.nightFallList.push(list[i])
                             }
-                            setTimeout(function () {
-                                _this.nightFallList = list
-                            }, 200)
+
+                            _this.nightFallListLength = _this.nightFallList.length
                         }
+
                     } else {
                         showMessage(_this, "晚归考勤查询失败")
                     }
@@ -670,7 +869,6 @@
                 })
             },
 
-
             SetEchart() {
                 let myChart = echarts.init(document.getElementById('myChart'))
                 let attendace = echarts.init(document.getElementById('attendace'))
@@ -699,28 +897,78 @@
                     },
                     series: [
                         {
-                            type: 'line',
-                            itemStyle: {
-                                normal: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(250,0,24,12)'
-                                },
-                                emphasis: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(0,0,0,0)'
-                                }
-                            },
-                        },
-                        {
                             name: '人数',
                             type: 'line',
                             stack: '总量',
-                            label: {},
-                            data: _this.attendanceNumber,
-                            areaStyle: {normal: {}}
+                            //_this.attendanceNumber
+                            data: [10,20,50,60,80,10,95,25,10,62,48,15,10],
+                            areaStyle : {
+                                normal : {
+                                    color : new echarts.graphic.LinearGradient(0,0,0,1,[
+                                        {
+                                            offset : 0,
+                                            color : 'rgba(0, 136, 212, 0.3)'
+                                        },
+                                        {
+                                            offset : 0.8,
+                                            color : 'rgba(0, 136, 212, 0)'
+                                        } ], false),
+                                    shadowColor : 'rgba(0, 0, 0, 0.1)',
+                                    shadowBlur : 10
+                                }
+                            },
+                            //控制线条的颜色
+                            itemStyle : {
+                                normal : {
+                                    color : 'rgb(0,136,212)',
+                                    borderColor : 'rgba(0,136,212,0.2)',
+                                    borderWidth : 12
+                                }
+                            },
+                            //数据显示
+
+                            type : 'line',
+                            smooth : 0.5, //折线图的弧度(0-1之间)
+                            //设置折线图中表示每个坐标点的符号 emptycircle：空心圆；
+                            //emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形
+                            //symbol : 'emptydiamond',
+                            //stack : '总量',
+                            symbol : 'none',
+                        },
+                        { //系列列表
+                            //控制线条下面区域面积的颜色
+                            areaStyle : {
+                                normal : {
+                                    color : new echarts.graphic.LinearGradient(0,0,0,1,[
+                                        {
+                                            offset : 0,
+                                            color : 'rgba(137, 189, 27, 0.3)'
+                                        },
+                                        {
+                                            offset : 0.8,
+                                            color : 'rgba(137, 189, 27, 0)'
+                                        } ], false),
+                                    shadowColor : 'rgba(0, 0, 0, 0.1)',
+                                    shadowBlur : 10
+                                }
+                            },
+                            //控制线条的颜色
+                            itemStyle : {
+                                normal : {
+                                    color : 'rgb(137,189,27)',
+                                    borderColor : 'rgba(137,189,2,0.27)',
+                                    borderWidth : 12
+
+                                }
+                            },
+                            //数据显示
+                            type : 'line',
+                            symbol : 'none',
+                            //stack : '总量', //数据堆叠
                         }
                     ]
                 }
+
                 var option1 = {
                     tooltip: {
                         trigger: 'axis',
@@ -745,26 +993,46 @@
                     },
                     series: [
                         {
-                            type: 'line',
-                            itemStyle: {
-                                normal: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(250,0,24,12)'
-                                },
-                                emphasis: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(0,0,0,0)'
-                                }
-                            },
-                        },
-                        {
                             name: '人数',
                             type: 'line',
                             stack: '总量',
                             label: {},
+                            symbol : 'none',
                             data: _this.indormitoryNumber,
-                            areaStyle: {normal: {}}
+                            areaStyle : {
+                                normal : {
+                                    color : new echarts.graphic.LinearGradient(0,0,0,1,[
+                                        {
+                                            offset : 0,
+                                            color : 'rgba(0, 136, 212, 0.3)'
+                                        },
+                                        {
+                                            offset : 0.8,
+                                            color : 'rgba(0, 136, 212, 0)'
+                                        } ], false),
+                                    shadowColor : 'rgba(0, 0, 0, 0.1)',
+                                    shadowBlur : 10
+                                }
+                            },
+                            //控制线条的颜色
+                            itemStyle : {
+                                normal : {
+                                    color : 'rgb(0,136,212)',
+                                    borderColor : 'rgba(0,136,212,0.2)',
+                                    borderWidth : 12
+                                }
+                            },
+                            //数据显示
+
+                            type : 'line',
+                            smooth : 0.5, //折线图的弧度(0-1之间)
+                            //设置折线图中表示每个坐标点的符号 emptycircle：空心圆；
+                            //emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形
+                            //symbol : 'emptydiamond',
+                            //stack : '总量',
+                            symbol : 'none',
                         }
+
                     ]
                 }
                 var option2 = {
@@ -791,25 +1059,44 @@
                     },
                     series: [
                         {
-                            type: 'line',
-                            itemStyle: {
-                                normal: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(250,0,24,12)'
-                                },
-                                emphasis: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(0,0,0,0)'
-                                }
-                            },
-                        },
-                        {
                             name: '人数',
                             type: 'line',
                             stack: '总量',
                             label: {},
-                            data: _this.outdormitoryNumber,
-                            areaStyle: {normal: {}}
+                            //_this.outdormitoryNumber
+                            data:[10,26,58,26,49,51,26,59,14,45] ,
+                            areaStyle : {
+                                normal : {
+                                    color : new echarts.graphic.LinearGradient(0,0,0,1,[
+                                        {
+                                            offset : 0,
+                                            color : 'rgba(0, 136, 212, 0.3)'
+                                        },
+                                        {
+                                            offset : 0.8,
+                                            color : 'rgba(0, 136, 212, 0)'
+                                        } ], false),
+                                    shadowColor : 'rgba(0, 0, 0, 0.1)',
+                                    shadowBlur : 10
+                                }
+                            },
+                            //控制线条的颜色
+                            itemStyle : {
+                                normal : {
+                                    color : 'rgb(0,136,212)',
+                                    borderColor : 'rgba(0,136,212,0.2)',
+                                    borderWidth : 12
+                                }
+                            },
+                            //数据显示
+
+                            type : 'line',
+                            smooth : 0.5, //折线图的弧度(0-1之间)
+                            //设置折线图中表示每个坐标点的符号 emptycircle：空心圆；
+                            //emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形
+                            //symbol : 'emptydiamond',
+                            //stack : '总量',
+                            symbol : 'none',
                         }
                     ]
                 }
@@ -840,15 +1127,16 @@
                 var scrollTop2 = document.getElementById("div2").scrollTop
                 if (scrollTop2 > 1) {
                     clearInterval(timeFetchAccess)
-                } else {
+                }
+                if (scrollTop2 == 0) {
                     clearInterval(timeFetchAccess)
-                    if (_this.name!=""){
+                    if (_this.name!=""&&_this.name!=null){
                         timeFetchAccess = setInterval(function () {
-                            _this.fetchAccessList(_this.deviceId, "",name)
+                            _this.fetchNewestAccessRecordListByName(_this.deviceId,_this.name)
                         }, 3000)
                     } else {
                         timeFetchAccess = setInterval(function () {
-                            _this.fetchAccessList(_this.deviceId, "","")
+                            _this.fetchNewestAccessRecordList(_this.deviceId)
                         }, 3000)
                     }
 
@@ -860,10 +1148,10 @@
                 //滚动条到底部的条件
                 if (scrollTop2 + windowHeight2 == scrollHeight2) {
                     //判断查询出来的数据长度是否等于总数量，如果不等于，则继续查，如果等于，则return出去，不再继续查
-                    if (_this.name!=""){
-                        _this.fetchAccess(_this.deviceId, "",_this.name)
-                    } else {
-                        _this.fetchAccess(_this.deviceId, "","")
+                    if (_this.name!=""&&_this.name!=null){
+                        _this.getAccessRecordListByName(_this.deviceId, _this.name)
+                    }else {
+                        _this.getAccessRecordList(_this.deviceId)
                     }
 
                 }
@@ -874,10 +1162,10 @@
                 var scrollTop3 = document.getElementById("div3").scrollTop
                 if (scrollTop3 > 1) {
                     clearInterval(timeFetchAccess)
-                } else {
-                    clearInterval(timeFetchAccess)
+                }
+                if (scrollTop3 == 0) {
                     timeFetchAccess = setInterval(function () {
-                        _this.fetchAccessList(_this.deviceId, "pass","")
+                        _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS")
                     }, 3000)
                 }
                 //变量windowHeight是可视区的高度
@@ -886,8 +1174,7 @@
                 var scrollHeight3 = document.getElementById("div3").scrollHeight
                 //滚动条到底部的条件
                 if (scrollTop3 + windowHeight3 == scrollHeight3) {
-
-                    _this.fetchAccess(_this.deviceId, "pass")
+                    _this.getAccessRecordListByPass(_this.deviceId, "PASS")
                 }
 
             },
@@ -895,59 +1182,40 @@
                 var scrollTop4 = document.getElementById("div4").scrollTop
                 if (scrollTop4 > 1) {
                     clearInterval(timeFetchAccess)
-                } else {
+                }
+                if (scrollTop4 == 0) {
                     clearInterval(timeFetchAccess)
                     timeFetchAccess = setInterval(function () {
-                        _this.fetchAccessList(_this.deviceId, "未注册","")
+                        _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "STRANGER")
                     }, 3000)
                 }
-
                 var windowHeight4 = document.getElementById("div4").clientHeight
 
                 var scrollHeight4 = document.getElementById("div4").scrollHeight
 
                 if (scrollTop4 + windowHeight4 == scrollHeight4) {
-                    _this.fetchAccess(_this.deviceId, "未注册")
-                }
-
-            },
-            handleScrollStop() {
-                var scrollTop5 = document.getElementById("div5").scrollTop
-                if (scrollTop5 > 1) {
-                    clearInterval(timeFetchAccess)
-                } else {
-                    clearInterval(timeFetchAccess)
-                    timeFetchAccess = setInterval(function () {
-                        _this.fetchAccessList(_this.deviceId, "禁止","")
-                    }, 3000)
-                }
-
-                var windowHeight5 = document.getElementById("div5").clientHeight
-
-                var scrollHeight5 = document.getElementById("div5").scrollHeight
-
-                if (scrollTop5 + windowHeight5 == scrollHeight5) {
-                    _this.fetchAccess(_this.deviceId, "禁止")
+                    _this.getAccessRecordListByIdentity(_this.deviceId, "STRANGER")
                 }
 
             },
             handleScrollBlack() {
-
                 var scrollTop6 = document.getElementById("div6").scrollTop
                 if (scrollTop6 > 1) {
                     clearInterval(timeFetchAccess)
-                } else {
+                }
+                if (scrollTop6 == 0) {
                     clearInterval(timeFetchAccess)
                     timeFetchAccess = setInterval(function () {
-                        _this.fetchAccessList(_this.deviceId, "黑名单","")
+                        _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "BLACKLIST")
                     }, 3000)
                 }
                 var windowHeight6 = document.getElementById("div6").clientHeight
 
+
                 var scrollHeight6 = document.getElementById("div6").scrollHeight
 
                 if (scrollTop6 + windowHeight6 == scrollHeight6) {
-                    _this.fetchAccess(_this.deviceId, "黑名单")
+                    _this.getAccessRecordListByIdentity(_this.deviceId, "BLACKLIST")
                 }
 
             },
@@ -987,65 +1255,64 @@
                 document.getElementById("div2").addEventListener("scroll", _this.handleScrollAccessAll);
                 document.getElementById("div3").addEventListener("scroll", _this.handleScrollAccessPass);
                 document.getElementById("div4").addEventListener("scroll", _this.handleScrollUnregistered);
-                document.getElementById("div5").addEventListener("scroll", _this.handleScrollStop);
                 document.getElementById("div6").addEventListener("scroll", _this.handleScrollBlack);
+            },
+
+            handleClearTime(time) {
+
+                clearInterval(timeFetchAccess);
+                clearInterval(timeFetchAccessByPass)
+                clearInterval(timeFetchAccessByIdentity)
+                clearInterval(timeFetchAccessByName)
             }
-
         },
-
-
         created() {
             this.userInfo = JSON.parse(sessionStorage.getItem("user"))
             _this.getFloorDevice(_this.userInfo.floorNo);
 
-        }
-        ,
+        },
         mounted() {
             _this.fetchAttendanceAndInOrOut(_this.userInfo.floorName);
             _this.fetchNumbers(_this.userInfo.floorName)
             timeFetchAccess = setInterval(function () {
-                _this.fetchAccessList(_this.deviceId, "","")
+                _this.fetchNewestAccessRecordList(_this.deviceId)
             }, 3000)
             _this.SetEchart();
             _this.handleSelectScroll();
 
-        }
-        ,
+        },
         destroyed() {
             _this.handleSelectScroll();
             clearTimeout(timeOut, timeFetchNight)
             clearInterval(timeFetchAccess)
         },
+
         watch: {
             selected: function (val, oldval) {
                 switch (val) {
                     case "1":
-                        _this.accessList = []
-                        _this.fetchAccessList(_this.deviceId, "","")
-                        break
+                        _this.accessList = [];
+                        clearInterval(timeFetchAccess)
+                        _this.fetchNewestAccessRecordList(_this.deviceId);
+                        break;
                     case "2":
-                        _this.accessList = []
-                        _this.fetchAccessList(_this.deviceId, "pass","")
-                        break
+                        clearInterval(timeFetchAccess)
+                        _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS");
+                        break;
                     case "3":
-                        _this.accessList = []
-                        _this.fetchAccessList(_this.deviceId, "未注册","")
-                        break
+                        clearInterval(timeFetchAccess)
+                        _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "STRANGER");
+                        break;
                     case "4":
-                        _this.accessList = []
-                        _this.fetchAccessList(_this.deviceId, "禁止","")
-                        break
-                    case "5":
-                        _this.accessList = []
-                        _this.fetchAccessList(_this.deviceId, "黑名单","")
-                        break
+                        clearInterval(timeFetchAccess)
+                        _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "BLACKLIST");
+                        break;
                 }
 
             }
         }
 
     }
-
 </script>
 
 <style>

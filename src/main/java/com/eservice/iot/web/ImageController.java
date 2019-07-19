@@ -28,11 +28,7 @@ public class ImageController {
    public static List<String> images=new ArrayList<>();
     @PostMapping("/image/{icNumber}")
     public Result query(@PathVariable String icNumber){
-        byte[] data=imageService.getImageById(icNumber);
-        //对字节数组Base64编码
-        BASE64Encoder encoder = new BASE64Encoder();
-        //返回Base64编码过的字节数组字符串
-        return ResultGenerator.genSuccessResult(encoder.encode(data));
+        return ResultGenerator.genSuccessResult(imageService.getImageById(icNumber));
     }
 
 

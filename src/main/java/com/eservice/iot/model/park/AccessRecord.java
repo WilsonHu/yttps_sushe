@@ -1,8 +1,5 @@
 package com.eservice.iot.model.park;
 
-import com.eservice.iot.model.park.Person;
-import com.eservice.iot.model.park.VisitRecord;
-
 import java.util.List;
 
 

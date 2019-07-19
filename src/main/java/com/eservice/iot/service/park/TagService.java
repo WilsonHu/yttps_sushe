@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.eservice.iot.model.ResponseModel;
 import com.eservice.iot.model.park.Tag;
 import com.eservice.iot.model.ResponseCode;
-import com.eservice.iot.model.Constant;
+import com.eservice.iot.core.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

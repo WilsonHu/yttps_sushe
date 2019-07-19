@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import sun.misc.BASE64Encoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class ImageService {
      * @param imageId
      * @return base64 Or null
      */
-    public byte[] getImageById(String imageId) {
+    public String getImageById(String imageId) {
         if (token == null && tokenService != null) {
             token = tokenService.getToken();
         }
@@ -102,14 +103,19 @@ public class ImageService {
                 if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
                     byte[] body = responseEntity.getBody();
                     if (body != null) {
-                        return  body;
+                        //对字节数组Base64编码
+                        BASE64Encoder encoder = new BASE64Encoder();
+                        String imageBase64 = encoder.encode(body);
+                        if (imageBase64 != null&&!"".equals(imageBase64)) {
+                            return imageBase64.replaceAll("[\\s*\t\n\r]", "");
+                        }
                     }
                 }
             } catch (HttpClientErrorException exception) {
                 if (exception.getStatusCode().value() == ResponseCode.TOKEN_INVALID) {
                     token = tokenService.getToken();
                     if (token != null) {
-                        getImageById(imageId);
+                        return getImageById(imageId);
                     }
                 }
             }
