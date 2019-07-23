@@ -374,7 +374,7 @@ function showMessage(obj, msg, msgType = 0) {
         message: msg,
         type: dialogType,
     });
-}
+};
 
 
 function downloadFile(document, url) {

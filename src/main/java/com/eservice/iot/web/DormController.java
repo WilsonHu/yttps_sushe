@@ -87,9 +87,11 @@ public class DormController {
         Long endTime = 0L;
         if (time!=""){
             try {
+                logger.info("time:{}",time);
                 endTime = formatter.parse(time).getTime() / 1000L-1;
             } catch (ParseException e) {
                 e.printStackTrace();
+                endTime=System.currentTimeMillis()/1000L;
             }
         }
         ArrayList<AccessRecordModel> accessRecordModelList = dormService.getVisitRecord(size, deviceIdList,endTime);
@@ -100,7 +102,7 @@ public class DormController {
     public Result getAccessRecordListByPass(@RequestParam(defaultValue = "10") Integer size, String deviceId,String time,String pass) {
         String deviceIdList[] = deviceId.split(",");
         ArrayList<AccessRecordModel> accessRecordModelList=new ArrayList<>();
-        Long endTime = 0L;
+        Long endTime = System.currentTimeMillis()/1000L;
         if (time!=""){
             try {
                 endTime = formatter.parse(time).getTime() / 1000L-1;
@@ -116,7 +118,7 @@ public class DormController {
     @PostMapping("/getAccessRecordListByName")
     public Result getAccessRecordListByName(@RequestParam(defaultValue = "10") Integer size, String deviceId, String time,String name) {
         String deviceIdList[] = deviceId.split(",");
-        Long endTime = 0L;
+        Long endTime = System.currentTimeMillis()/1000L;
         if (time!=""){
             try {
                 endTime = formatter.parse(time).getTime() / 1000L-1;
@@ -131,7 +133,7 @@ public class DormController {
     @PostMapping("/getAccessRecordListByIdentity")
     public Result getAccessRecordListByIdentity(@RequestParam(defaultValue = "10") Integer size, String deviceId, String time,String identity) {
         String deviceIdList[] = deviceId.split(",");
-        Long endTime = 0L;
+        Long endTime =System.currentTimeMillis()/1000L;
         if (time!=""){
             try {
                 endTime = formatter.parse(time).getTime() / 1000L-1;

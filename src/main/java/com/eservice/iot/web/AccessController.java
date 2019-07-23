@@ -61,9 +61,12 @@ public class AccessController {
         String[] deviceIds = deviceList.split(",");
         List<AccessRecordModel> nightFallModelList = dormService.getNightAccessRecord(deviceIds);
         PageInfo pageInfo = new PageInfo();
-        pageInfo.setTotal(nightFallModelList.size());
-        pageInfo.setList(Util.pagingQuery(page, size, nightFallModelList));
-        return ResultGenerator.genSuccessResult(pageInfo);
+        if (nightFallModelList!=null){
+            pageInfo.setTotal(nightFallModelList.size());
+            pageInfo.setList(Util.pagingQuery(page, size, nightFallModelList));
+            return ResultGenerator.genSuccessResult(pageInfo);
+        }
+        return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/getNumber")
