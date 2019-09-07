@@ -1,6 +1,6 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <div style="width: 100%;height: 100%;background-color: #F6F4FF;">
-        <el-row :gutter="0" style="padding-top: 55px">
+        <el-row :gutter="0">
             <el-col :span="8">
                 <div class="grid-content bg-purple">
                     <!--页面左方三个div-->
@@ -15,7 +15,7 @@
                                 <el-col :span="5" :offset="2">
                                     <p style="margin-left: 20px;margin-top: 20px">
                                         <span>楼号</span><br>
-                                        <i style=" font:30px Extra Small;  color: black;">{{userInfo.floorNo}}</i>
+                                        <i style=" font:36px PingFangSC-Semibold;  color: #525252;">{{userInfo.floorNo}}</i>
                                     </p>
                                 </el-col>
                                 <el-col :offset="4" style="border: 1px solid silver;width: 1px;height: 9.5rem"></el-col>
@@ -23,7 +23,7 @@
                                     <p style="margin-left: 20px;margin-top: 20px">
                                         <span>入住总人数</span><br>
                                         <!---->
-                                        <i style=" font:30px Extra Small;  color: black;">{{attendanceNumList.total}}</i>
+                                        <i style="font:36px PingFangSC-Semibold;  color: #525252;">{{attendanceNumList.total}}</i>
                                     </p>
                                 </el-col>
                             </div>
@@ -32,7 +32,8 @@
                         <div class="well well-lg"
                              style="height: 610px;margin-left:60px; width:85%;background: #FFFFFF;box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);border-radius: 10px; ">
                             <i style=" font:20px Extra Small; font-weight: bold;color: #6a747c;">出入信息统计</i>
-                            <el-tabs v-model="infoManage" @tab-click="handleClick" style="margin-top: -20px">
+                            <el-tabs v-model="infoManage" @tab-click="handleClick" class="a"
+                                     style="margin-top: -20px;">
                                 <el-tab-pane label="当前" name="first">
                                     <el-row style="margin-top: 30px;">
                                         <el-col>
@@ -40,7 +41,7 @@
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -40px">
                                             <span>当前考勤学生数</span><br/>
-                                            <span style="font-size: 30px;">{{attendanceNumList.attendanceNum}}</span>
+                                            <span style="font-size: 40px;font-family: PingFangSC-Semibold;color: #525252">{{attendanceNumList.attendanceNum}}</span>
                                         </el-col>
                                         <el-col :span="8" :offset="7">
                                             <div id="myChart"
@@ -54,7 +55,7 @@
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -40px">
                                             <span>当前在寝学生数</span><br/>
-                                            <span style="font-size: 30px;">{{attendanceNumList.inDormitory}}</span>
+                                            <span style="font-size: 40px;font-family: PingFangSC-Semibold;color: #525252">{{attendanceNumList.inDormitory}}</span>
 
                                         </el-col>
                                         <el-col :span="8" :offset="7">
@@ -68,7 +69,7 @@
                                         </el-col>
                                         <el-col :offset="4" style="margin-top: -40px">
                                             <span>当前外出学生数</span><br/>
-                                            <span style="font-size: 30px;">{{attendanceNumList.outDormitory}}</span>
+                                            <span style="font-size: 40px;font-family: PingFangSC-Semibold;color: #525252">{{attendanceNumList.outDormitory}}</span>
                                         </el-col>
                                         <el-col :span="8" :offset="7">
                                             <div id="outSide"
@@ -76,7 +77,8 @@
                                         </el-col>
                                     </el-row>
                                 </el-tab-pane>
-                                <el-tab-pane label="夜归考勤" name="second" style="background-color: #F6F4FF;">
+                                <el-tab-pane label="夜归考勤" name="second" class="revisiDiv"
+                                             style="background-color: #F6F4FF;">
                                     <div style="height: 500px;overflow:auto" id="div1">
                                         <ul style="margin-top: 10px;margin-left: -30px">
                                             <li v-for="i in nightFallList">
@@ -84,7 +86,7 @@
                                                     <div>
                                                         <el-row>
                                                             <el-col :span="2">
-                                                                <img :src="require('../assets/img/'+(i.type.split('_')[0]=='进'? 'in':'forbid')+'.png')"
+                                                                <img :src="require('../assets/img/'+(i.type.split('_')[0]=='进'? 'info_pass':'info_forbid')+'.png')"
                                                                      style=" height: 78px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                             </el-col>
                                                             <el-col :span="2" :offset="2">
@@ -116,7 +118,7 @@
                         </div>
 
                         <div style="height: 100px; width:85% ;margin-left:60px;background: #FFFFFF;box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);border-radius: 10px; "
-                             class="well well-lg">
+                             class="well well-lg" @click="loginOut">
                             <div>
                                 <el-col :span="3">
                                     <img src="../assets/img/person.png" width="70px" height="70px"
@@ -141,39 +143,42 @@
             <el-col :span="8">
                 <div class="grid-content"
                      style="background-image: linear-gradient(135deg, #676F8C 0%, #0C101D 100%);box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);">
-                    <div style="height: 500px;width: 400px;">
-                        <span style="position: relative;top: 40px;left:25px;font-size: 18px;color: white">1号机位</span>
-                        <object type='application/x-vlc-plugin' id='vlc' events='True'
-                                classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921'
-                                codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
-                                width="587" height="340" style="margin-top: 50px;margin-left: 30px">
-                            <param name='mrl' value='rtsp://admin:admin123@10.250.62.134:554/h264/ch33/main/av_stream'/>
-                            <param name='volume' value='50'/>
-                            <param name='autoplay' value='true'/>
-                            <param name="enablefullscreen controls" value="1">
-                            <param name="windowlessVideo" value="0">
-                            <param name='loop' value='false'/>
-                            <param name='fullscreen' value='false'/>
-                            <param name="height" value="600">
-                        </object>
+                    <div id='vlc'>
+                        <div style="height: 470px;width: 400px;" v-for="i in deviceRtsp" >
+                            <span style="position: relative;top: 20px;left:25px;font-size: 18px;color: white">1号机位</span>
+                            <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/"
+                                    class="vlc"
+                                    events='false'
+                                    classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921'
+                                    codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
+                                    width="587" height="340" style="margin-top: 50px;margin-left: 30px">
+                                <param name='mrl' :value='i'/>
+                                <param name='volume' value='50'/>
+                                <param name='autoplay' value='true'/>
+                                <param name="enablefullscreen controls" value="1">
+                                <param name="windowlessVideo" value="0">
+                                <param name='loop' value='false'/>
+                                <param name='fullscreen' value='false'/>
+                                <param name="height" value="600">
+                            </object>
+                        </div>
                     </div>
-
-                    <div style="height: 500px;width: 400px;margin-top: -100px">
-                        <span style="position: relative;top: 40px;left:25px;font-size: 18px;color: white">2号机位</span>
-                        <object type='application/x-vlc-plugin' id='vlc1' events='True'
-                                classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921'
-                                codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
-                                width="587" height="340" style="margin-top: 50px;margin-left: 30px">
-                            <param name='mrl' value='rtsp://admin:admin123@10.250.62.134:554/h264/ch33/main/av_stream'/>
-                            <param name='volume' value='50'/>
-                            <param name='autoplay' value='true'/>
-                            <param name="enablefullscreen controls" value="1">
-                            <param name="windowlessVideo" value="0">
-                            <param name='loop' value='false'/>
-                            <param name='fullscreen' value='false'/>
-                            <param name="height" value="600">
-                        </object>
-                    </div>
+                    <!--  <div style="height: 500px;width: 400px;margin-top: -100px">
+                          <span style="position: relative;top: 40px;left:25px;font-size: 18px;color: white">2号机位</span>
+                          <object type='application/x-vlc-plugin' id='vlc1' events='True'
+                                  classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921'
+                                  codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
+                                  width="587" height="340" style="margin-top: 50px;margin-left: 30px">
+                              <param name='mrl' value='rtsp://admin:admin123@10.250.62.134:554/h264/ch33/main/av_stream'/>
+                              <param name='volume' value='50'/>
+                              <param name='autoplay' value='true'/>
+                              <param name="enablefullscreen controls" value="1">
+                              <param name="windowlessVideo" value="0">
+                              <param name='loop' value='false'/>
+                              <param name='fullscreen' value='false'/>
+                              <param name="height" value="600">
+                          </object>
+                      </div>-->
                 </div>
             </el-col>
 
@@ -184,39 +189,34 @@
                              class="">
                             <i class="title">通行记录</i>
                             <el-row style="margin-top:-30px;margin-left: 50px">
-                                <el-input style="width: 200px;margin-left: 150px;border-radius: 20%"
+                                <el-input style="width: 230px;margin-left: 150px;border-radius: 40%"
                                           placeholder="按姓名查询" clearable
-                                          auto-complete="off" v-model="name">
+                                          auto-complete="off" v-model="name" @keyup.enter.native="search">
                                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
                                 </el-input>
-                                <el-button type="info" plain @click="search">搜索</el-button>
                             </el-row>
                             <el-row>
-                                <mt-navbar v-model="selected" style="background-color: #F6F4FF;">
-                                    <mt-tab-item id="1">全部</mt-tab-item>
-                                    <mt-tab-item id="2">通行</mt-tab-item>
-                                    <mt-tab-item id="3">未注册</mt-tab-item>
-                                    <mt-tab-item id="4">警报</mt-tab-item>
-                                </mt-navbar>
-                                <!-- tab-container -->
-                                <mt-tab-container v-model="selected">
-                                    <mt-tab-container-item id="1">
-                                        <div style="height: 800px;overflow:auto;" id="revisiDiv">
+                                <el-tabs v-model="selected" stretch @tab-click="handleAccess" class="b">
+                                    <el-tab-pane label="全部" name="first">
+                                        <div style="height: 800px;overflow:auto;" class="revisiDiv" id="accessAll">
                                             <ul style="margin-top: 10px;margin-left: -10px ">
                                                 <li v-for="i in accessList">
                                                     <el-card
-                                                            style="border-radius: 10px;width:460px;height: 80px;margin-left: -30px">
+                                                            style="border-radius: 10px;width:462px;height: 80px;margin-left: -20px">
                                                         <div>
                                                             <el-row>
                                                                 <el-col :span="2">
                                                                     <img :src="require('../assets/img/'+(i.type.split('_')[0]=='进'?'info_pass':(i.type=='未注册'?'info_attention':(i.type=='黑名单'?'info_warning':'info_forbidden')))+'.png')"
-                                                                         style=" height: 80px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                         style=" height: 78px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                                 </el-col>
                                                                 <el-col :span="2" :offset="2"
                                                                         style="margin-top: 8px;font-size: 15px;">
                                                                     <span>{{i.pass_time.split(" ")[1]}}</span>
                                                                 </el-col>
                                                                 <el-col :span="2" :offset="3">
+                                                                    <img v-if="i.imageId==''|| i.imageId==null"
+                                                                         src="../assets/img/avator.png">
+
                                                                     <img :src="i.imageId" width="70px"
                                                                          height="70px"
                                                                          style="border-radius: 50%;margin-top: -16px;position: relative;z-index: 5"
@@ -226,7 +226,7 @@
                                                                         style="font-family: PingFangSC-Semibold;color:  #282828">
                                                                     <span style="font-size: 18px;font-weight:bold">{{i.name}}</span><br/><span>{{i.classes}}</span>
                                                                 </el-col>
-                                                                <el-col :span="5" :offset="21"
+                                                                <el-col :span="5" :offset="20"
                                                                         style="margin-top: -50px;font-size: 15px;">
                                                                     <span :style="{color:(i.type.split('_')[0]=='进'?'#9FD36B':(i.type=='未注册'?'#F3A32B':(i.type=='黑名单'?'#C42E3B':'blue')))}">【{{i.type.split('_')[0]}}】</span>
                                                                 </el-col>
@@ -236,22 +236,26 @@
                                                     </el-card>
                                                 </li>
                                             </ul>
-                                            <span class="mess"></span>
+                                            <span class="mess" style="margin-left: 15rem;color: #2aabd2"
+                                                  @click="handleMoreAccess"></span>
                                         </div>
-
-                                    </mt-tab-container-item>
-                                    <mt-tab-container-item id="2">
-                                        <div style="height: 780px;overflow:auto" id="passDiv">
+                                    </el-tab-pane>
+                                    <el-tab-pane label="通行" name="second">
+                                        <div style="height: 780px;overflow:auto" class="revisiDiv" id="accessPass">
                                             <ul style="margin-top: 10px;margin-left: -10px ">
                                                 <li v-for="i in accessByPassList"
                                                     v-if="i.type.split('_')[0]=='进' ||i.type.split('_')[0]=='出'">
+                                                    <!--  <el-col :span="2" style="margin-top: -19px">
+                                                          <img :src="require('../assets/img/'+(i.type.split('_')[0]=='进'? 'info_pass':'info_forbidden')+'.png')"
+                                                               style=" height: 52px;width:50px;border-radius:50%;margin-top: -41px;margin-left: -6px;position: relative;top: 69px;left: -21px">
+                                                      </el-col>-->
                                                     <el-card
-                                                            style="border-radius: 10px;width:460px;height: 80px;margin-left: -30px">
+                                                            style="border-radius: 10px;width:462px;height: 80px;margin-left: -20px">
                                                         <div>
                                                             <el-row>
                                                                 <el-col :span="2">
                                                                     <img :src="require('../assets/img/'+(i.type.split('_')[0]=='进'? 'info_pass':'info_forbidden')+'.png')"
-                                                                         style=" height: 80px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                         style=" height: 78px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                                 </el-col>
                                                                 <el-col :span="2" :offset="2"
                                                                         style="margin-top: 8px;font-size: 15px;">
@@ -276,20 +280,21 @@
                                                     </el-card>
                                                 </li>
                                             </ul>
-                                            <span class="mess"></span>
+                                            <span class="mess" style="margin-left: 15rem;color: #2aabd2"
+                                                  @click="handleMoreAccess('PASS')">+ 点击查看更多数据</span>
                                         </div>
-                                    </mt-tab-container-item>
-                                    <mt-tab-container-item id="3">
-                                        <div style="height: 780px;overflow:auto" id="attentionDiv">
+                                    </el-tab-pane>
+                                    <el-tab-pane label="未注册" name="third">
+                                        <div style="height: 780px;overflow:auto" class="revisiDiv" id="accessRegis">
                                             <ul style="margin-top: 10px;margin-left: -10px ">
                                                 <li v-for="i in accessList" v-if="i.type=='未注册'">
                                                     <el-card
-                                                            style="border-radius: 10px;width:460px;height: 80px;margin-left: -30px">
+                                                            style="border-radius: 10px;width:462px;height: 80px;margin-left: -20px">
                                                         <div>
                                                             <el-row>
                                                                 <el-col :span="2">
                                                                     <img :src="require('../assets/img/'+'info_attention'+'.png')"
-                                                                         style=" height: 80px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                         style=" height: 78px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
                                                                 </el-col>
                                                                 <el-col :span="2" :offset="2"
                                                                         style="margin-top: 8px;font-size: 15px;">
@@ -314,21 +319,23 @@
                                                     </el-card>
                                                 </li>
                                             </ul>
-                                            <span class="mess"></span>
+                                            <span class="mess" style="margin-left: 15rem;color: #2aabd2"
+                                                  @click="handleMoreAccess('STRANGER')">+ 点击查看更多数据</span>
                                         </div>
-                                    </mt-tab-container-item>
-                                    <mt-tab-container-item id="4">
-                                        <div style="height: 780px;overflow:auto" id="blackDiv">
+                                    </el-tab-pane>
+                                    <el-tab-pane label="警报" name="fourth">
+                                        <div style="height: 780px;overflow:auto" class="revisiDiv" id="accessBlack">
                                             <ul style="margin-top: 10px;margin-left: -10px ">
                                                 <li v-for="i in accessList" v-if="i.type=='黑名单'">
+                                                    <el-col :span="2" style="margin-top: -19px">
+                                                        <img :src="require('../assets/img/'+'info_warning'+'.png')"
+                                                             style=" height: 52px;width:50px;border-radius:50%;margin-top: -41px;margin-left: -6px;position: relative;top: 69px;left: -21px">
+                                                    </el-col>
                                                     <el-card
-                                                            style="border-radius: 10px;width:460px;height: 80px;margin-left: -30px">
+                                                            style="border-radius: 10px;width:432px;height: 80px;margin-left: -2px">
                                                         <div>
                                                             <el-row>
-                                                                <el-col :span="2">
-                                                                    <img :src="require('../assets/img/'+'info_warning'+'.png')"
-                                                                         style=" height: 80px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
-                                                                </el-col>
+
                                                                 <el-col :span="2" :offset="2"
                                                                         style="margin-top: 8px;font-size: 15px;">
                                                                     <span>{{i.pass_time.split(" ")[1]}}</span>
@@ -352,10 +359,12 @@
                                                     </el-card>
                                                 </li>
                                             </ul>
-                                            <span class="mess"></span>
+                                            <span class="mess" style="margin-left: 15rem;color: #2aabd2"
+                                                  @click="handleMoreAccess('BLACKLIST')">+ 点击查看更多数据</span>
                                         </div>
-                                    </mt-tab-container-item>
-                                </mt-tab-container>
+                                    </el-tab-pane>
+                                </el-tabs>
+
                             </el-row>
                         </div>
                     </div>
@@ -366,6 +375,71 @@
             <el-row>
                 <img :src="bigImg" width="680px" height="700px" style="margin-left: 20px"/>
             </el-row>
+        </el-dialog>
+        <el-dialog title="通行记录" :visible.sync="accessDialogVisble" width="60%">
+            <el-row style="width: 20rem">
+                <el-date-picker
+                        v-model="beginTime"
+                        type="datetimerange"
+                        align="left"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        unlink-panels
+                        range-separator="—"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                </el-date-picker>
+            </el-row>
+            <el-row>
+                <div style="height: 500px;overflow:auto;" class="revisiDiv">
+                    <ul class="accesDialog" style="margin-top: 5px;margin-left: -10px ">
+                        <li v-for="i in moreAccessList">
+                            <el-card
+                                    style="border-radius: 10px;width:462px;height: 80px;margin-left: -20px">
+                                <div>
+                                    <el-row>
+                                        <el-col :span="2">
+                                            <img :src="require('../assets/img/'+(i.type.split('_')[0]=='进'?'info_pass':(i.type=='未注册'?'info_attention':(i.type=='黑名单'?'info_warning':'info_forbidden')))+'.png')"
+                                                 style=" height: 78px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                        </el-col>
+                                        <el-col :span="4" :offset="2"
+                                                style="margin-top: 8px;font-size: 15px;">
+                                            <span>{{i.pass_time.split(" ")[1]}}</span>
+                                        </el-col>
+                                        <el-col :span="2" :offset="1">
+                                            <img v-if="i.imageId==''|| i.imageId==null"
+                                                 src="../assets/img/avator.png">
+                                            <img :src="i.imageId" width="70px"
+                                                 height="70px"
+                                                 style="border-radius: 50%;margin-top: -16px;position: relative;z-index: 5"
+                                                 @click="big(i)">
+                                        </el-col>
+                                        <el-col :span="5" :offset="4"
+                                                style="font-family: PingFangSC-Semibold;color:  #282828">
+                                            <span style="font-size: 18px;font-weight:bold">{{i.name}}</span><br/><span>{{i.classes}}</span>
+                                        </el-col>
+                                        <el-col :span="5" :offset="21"
+                                                style="margin-top: -50px;font-size: 15px;">
+                                            <span :style="{color:(i.type.split('_')[0]=='进'?'#9FD36B':(i.type=='未注册'?'#F3A32B':(i.type=='黑名单'?'#C42E3B':'blue')))}">【{{i.type.split('_')[0]}}】</span>
+                                        </el-col>
+                                    </el-row>
+
+                                </div>
+                            </el-card>
+                        </li>
+                    </ul>
+                </div>
+            </el-row>
+            <div class="block" style="text-align: center; margin-top: 20px">
+                <el-pagination
+                        background
+                        @current-change="handleCurrentChange"
+                        :current-page="accessPage"
+                        :page-size="accessSize"
+                        layout="total, prev, pager, next, jumper"
+                        :total="totalRecords">
+                </el-pagination>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -384,16 +458,18 @@
         data() {
             _this = this
             return {
-                selected: "1",
+                selected: "first",
                 infoManage: 'first',
-                //2100, 800, 500, 200, 2000, 2100, 780, 200, 500, 800, 1900, 500
                 attendanceNumber: [],
                 indormitoryNumber: [],
                 outdormitoryNumber: [],
                 attendAndInOrOut: ['', '', '', '', '', '', '', '', '', '', '', ''],
                 userInfo: "",
                 pageSize: EveryPageNum,//每一页的num
-                currentPage: 1,
+                accessSize: 10,
+                currentPage: 0,
+                accessPage: 0,
+                totalRecords: 0,
                 accessPageOrSize: {
                     passCurrentPage: 1,
                     regisCurrentPage: 1,
@@ -416,27 +492,31 @@
                 passAccessList: [],
                 nightFallListLength: 0,
                 imgDialogVisible: false,
+                accessDialogVisble: false,
                 nightTotal: 0,
                 bigImg: "",
                 activeName: 'first',
                 imageId: '',
                 name: "",
                 top: 0,
-
+                moreAccessList: [],
+                beginTime: [],
+                submitUrl: "dorm/getAccessRecordList",
+                deviceRtsp: [],
 
             }
         },
         methods: {
             big(item) {
                 document.getElementById("vlc").style.display = "none";
-                document.getElementById("vlc1").style.display = "none"
+                //document.getElementById("vlc1").style.display = "none"
                 _this.imgDialogVisible = true;
                 _this.bigImg = item.imageId
             },
             handleClick(tab, event) {
                 switch (_this.infoManage) {
                     case "second":
-                        _this.firstLoad=true;
+                        _this.firstLoad = true;
                         _this.nightFallList = []
                         _this.fethcNightFall(_this.deviceId)
                         break;
@@ -445,13 +525,47 @@
                 $(".mess").html("")
                 $(".count").html("")
             },
+            handleAccess() {
+                switch (_this.selected) {
+                    case "first":
+                        clearInterval(timeFetchAccess)
+                        _this.firstLoad = true;
+                        _this.fetchNewestAccessRecordList(_this.deviceId)
+                        timeFetchAccess = setInterval(function () {
+                            _this.fetchNewestAccessRecordList(_this.deviceId);
+                        }, 3000)
+                        _this.submitUrl = "dorm/getAccessRecordList";
+                        break;
+                    case "second":
+                        clearInterval(timeFetchAccess)
+                        _this.firstLoad = true;
+                        _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS");
+                        timeFetchAccess = setInterval(function () {
+                            _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS");
+                        }, 3000)
+                        _this.submitUrl = "dorm/getAccessRecordListByPass"
+                        break;
+                    case "third":
+                        clearInterval(timeFetchAccess)
+                        _this.firstLoad = true;
+                        _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "STRANGER");
+                        _this.submitUrl = "dorm/getAccessRecordListByIdentity";
+                        break;
+                    case "fourth":
+                        clearInterval(timeFetchAccess)
+                        _this.firstLoad = true;
+                        _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "BLACKLIST");
+                        _this.submitUrl = "dorm/getAccessRecordListByIdentity";
+                        break;
 
+                }
+            },
             search() {
                 _this.accessList = []
 
                 if (_this.name != "" && _this.name != null) {
                     clearInterval(timeFetchAccess)
-                    _this.selected = "1"
+                    _this.selected = "first"
                     _this.fetchNewestAccessRecordListByName(_this.deviceId, _this.name)
                 } else {
                     clearInterval(timeFetchAccess)
@@ -477,8 +591,14 @@
                         let floorDevice = res.data.data;
                         for (let i = 0; i < floorDevice.length; i++) {
                             _this.deviceId.push(floorDevice[i].deviceId)
+                            if (floorDevice[i].deviceRtsp != null && floorDevice[i].deviceRtsp != "") {
+                                _this.deviceRtsp.push(floorDevice[i].deviceRtsp);
+                            }
                         }
                         _this.fetchNewestAccessRecordList(_this.deviceId);
+                        timeFetchAccess = setInterval(function () {
+                            _this.fetchNewestAccessRecordList(_this.deviceId)
+                        }, 3000)
                     } else {
                         showMessage(_this, '设备信息获取失败', 0)
                     }
@@ -486,9 +606,18 @@
                     showMessage(_this, error, 0)
                 })
             },
+            defaultDate() {
+                let date = new Date()
+                let year = date.getFullYear().toString()
+                let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString()
+                let da = date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString()
+                let end = year + '-' + month + '-' + da + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                let beg = year + '-' + month + '-01' + " 00:00:00";
+                console.log("当天:" + beg)
+                _this.beginTime = [beg, end]
+            },
 
             //通行记录
-
             fetchNewestAccessRecordList(floorDevice) {
                 let params = new URLSearchParams();
                 params.append("size", _this.pageSize);
@@ -499,21 +628,10 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            if (_this.accessList == null || _this.accessList == "") {
-                                _this.accessList = res.data.data;
-                                for (let i = 0; i < _this.accessList.length; i++) {
-                                    _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
-                                }
-                            } else {
-                                let list = res.data.data;
-                                let size = _this.accessList.length;
-                                for (let i = 0; i < list.length; i++) {
-                                    _this.getImage(list[i].imageId, list[i]);
-                                }
-                                setTimeout(function () {
-                                    _this.accessList = list;
-                                }, 200)
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
                             }
+                            _this.accessList = res.data.data;
                         } else {
                             showMessage(_this, "获取最新通行记录失败", 0)
                         }
@@ -534,21 +652,10 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            if (_this.accessByPassList == null || _this.accessByPassList == "") {
-                                _this.accessByPassList = res.data.data;
-                                for (let i = 0; i < _this.accessByPassList.length; i++) {
-                                    _this.getImage(_this.accessByPassList[i].imageId, _this.accessByPassList[i]);
-                                }
-                            } else {
-                                let list = res.data.data;
-                                let size = _this.accessByPassList.length;
-                                for (let i = 0; i < list.length; i++) {
-                                    _this.getImage(list[i].imageId, list[i]);
-                                }
-                                setTimeout(function () {
-                                    _this.accessByPassList = list;
-                                }, 500)
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
                             }
+                            _this.accessByPassList = res.data.data;
                         } else {
                             showMessage(_this, "获取最新通行记录失败==>ByPass", 0)
                         }
@@ -569,25 +676,29 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            if (_this.accessList == null || _this.accessList == "") {
-                                if (res.data.data != null) {
-                                    _this.accessList = res.data.data;
-                                    for (let i = 0; i < _this.accessList.length; i++) {
-                                        _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
-                                    }
-                                } else {
-                                    showMessage(_this, "数据为空", 0)
-                                }
+                            /* if (_this.accessList == null || _this.accessList == "") {
+                                 if (res.data.data != null) {
+                                     _this.accessList = res.data.data;
+                                     for (let i = 0; i < _this.accessList.length; i++) {
+                                         _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
+                                     }
+                                 } else {
+                                     showMessage(_this, "数据为空", 0)
+                                 }
 
-                            } else {
-                                let list = res.data.data;
-                                for (let i = 0; i < list.length; i++) {
-                                    _this.getImage(list[i].imageId, list[i]);
-                                }
-                                setTimeout(function () {
-                                    _this.accessList = list;
-                                }, 200)
+                             } else {
+                                 let list = res.data.data;
+                                 for (let i = 0; i < list.length; i++) {
+                                     _this.getImage(list[i].imageId, list[i]);
+                                 }
+                                 setTimeout(function () {
+                                     _this.accessList = list;
+                                 }, 200)
+                             }*/
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
                             }
+                            _this.accessList = res.data.data;
                         } else {
                             showMessage(_this, "获取最新通行记录失败==>ByName", 0)
                         }
@@ -608,25 +719,10 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            if (_this.accessList == null || _this.accessList == "") {
-                                if (res.data.data != null) {
-                                    _this.accessList = res.data.data;
-                                    for (let i = 0; i < _this.accessList.length; i++) {
-                                        _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
-                                    }
-                                } else {
-                                    showMessage(_this, "无警报信息", 0)
-                                }
-                            } else {
-                                let list = res.data.data;
-                                let size = _this.accessList.length;
-                                for (let i = 0; i < list.length; i++) {
-                                    _this.getImage(list[i].imageId, list[i]);
-                                }
-                                setTimeout(function () {
-                                    _this.accessList = list;
-                                }, 200)
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
                             }
+                            _this.accessList = res.data.data;
                         } else {
                             showMessage(_this, "获取最新通行记录失败==>ByIdentity", 0)
                         }
@@ -636,152 +732,6 @@
                 })
 
             },
-
-            //分页查询所有数据
-            getAccessRecordList(floorDevice) {
-                let params = new URLSearchParams();
-                params.append("size", _this.pageSize);
-                params.append("deviceId", floorDevice);
-                if (_this.accessList != null) {
-                    let legth = _this.accessList.length - 1;
-                    let time = _this.accessList[legth].pass_time
-                    params.append("time", time);
-                } else {
-                    params.append("time", "");
-                }
-                request({
-                    url: HOST + "dorm/getAccessRecordList",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                        if (res.data.code == 200) {
-                            let list = res.data.data
-                            for (let i = 0; i < list.length; i++) {
-                                _this.accessList.push(list[i]);
-                            }
-                            for (let i = 0; i < list.length; i++) {
-                                _this.getImage(list[i].imageId, list[i]);
-                            }
-                            _this.firstLoad=true;
-                        } else {
-                            showMessage(_this, "获取最新通行记录失败", 0)
-                        }
-                    }
-                ).catch(error => {
-                    showMessage(_this, "getAccessRecordList===>:{}" + error, 0)
-                })
-
-            },
-            getAccessRecordListByPass(floorDevice, pass) {
-                let params = new URLSearchParams();
-                params.append("size", _this.pageSize);
-                params.append("deviceId", floorDevice);
-                if (_this.accessList != null) {
-                    let legth = _this.accessList.length - 1;
-                    params.append("time", _this.accessList[legth].pass_time);
-                } else {
-                    params.append("time", "");
-                }
-
-                params.append("pass", pass)
-                request({
-                    url: HOST + "dorm/getAccessRecordListByPass",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                        if (res.data.code == 200) {
-                            let list = res.data.data
-                            for (let i = 0; i < list.length; i++) {
-                                _this.accessByPassList.push(list[i]);
-                            }
-                            for (let i = 0; i < list.length; i++) {
-                                _this.getImage(list[i].imageId, list[i]);
-                            }
-                            _this.firstLoad=true;
-                        } else {
-                            showMessage(_this, "获取通行记录失败", 0)
-                        }
-                    }
-                ).catch(error => {
-                    showMessage(_this, "getAccessRecordListByPass===>:{}" + error, 0)
-                })
-
-            },
-            getAccessRecordListByName(floorDevice, name) {
-                let params = new URLSearchParams();
-                let legth = _this.accessList.length - 1;
-                params.append("size", _this.pageSize);
-                params.append("deviceId", floorDevice);
-                if (_this.accessList != null) {
-                    let legth = _this.accessList.length - 1;
-                    params.append("time", _this.accessList[legth].pass_time);
-                } else {
-                    params.append("time", "");
-                }
-                params.append("name", name)
-                request({
-                    url: HOST + "dorm/getAccessRecordListByName",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                        if (res.data.code == 200) {
-                            let list = res.data.data
-                            for (let i = 0; i < list.length; i++) {
-                                _this.accessList.push(list[i]);
-                            }
-                            for (let i = 0; i < list.length; i++) {
-                                _this.getImage(list[i].imageId, list[i]);
-                            }
-                            _this.firstLoad=true;
-                        } else {
-                            showMessage(_this, "获取通行记录失败", 0)
-                        }
-                    }
-                ).catch(error => {
-                    showMessage(_this, "getAccessRecordListByName===>:{}" + error, 0)
-                })
-
-            },
-            getAccessRecordListByIdentity(floorDevice, identity) {
-                let params = new URLSearchParams();
-                params.append("size", _this.pageSize);
-                params.append("deviceId", floorDevice);
-                if (_this.accessList != null) {
-                    let legth = _this.accessList.length - 1;
-                    params.append("time", _this.accessList[legth].pass_time);
-                } else {
-                    params.append("time", "");
-                }
-                params.append("identity", identity)
-                request({
-                    url: HOST + "dorm/getAccessRecordListByIdentity",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                        if (res.data.code == 200) {
-                            if (res.data.data != null) {
-                                let list = res.data.data;
-                                for (let i = 0; i < list.length; i++) {
-                                    _this.accessList.push(list[i]);
-                                }
-                                for (let i = 0; i < list.length; i++) {
-                                    _this.getImage(list[i].imageId, list[i]);
-                                }
-                                _this.firstLoad=true;
-                            } else {
-                                showMessage(_this, "已显示所有数据", 1)
-                            }
-
-                        } else {
-                            showMessage(_this, "获取通行记录失败", 0)
-                        }
-                    }
-                ).catch(error => {
-                    showMessage(_this, "getAccessRecordListByIdentity===>:{}" + error, 0)
-                })
-
-            },
-
 
             fethcNightFall(floorNo) {
                 let parmas = new URLSearchParams();
@@ -794,14 +744,14 @@
                     data: parmas
                 }).then(res => {
                     if (res.data.code == 200) {
-                        if (_this.nightFallList == null || _this.nightFallList == "") {
+                        /*if (_this.nightFallList == null || _this.nightFallList == "") {
                             if (res.data.data != null) {
                                 _this.nightFallList = res.data.data.list;
                                 _this.nightTotal = res.data.data.total;
                                 for (let i = 0; i < _this.nightFallList.length; i++) {
                                     _this.getImage(_this.nightFallList[i].imageId, _this.nightFallList[i]);
                                 }
-                                _this.firstLoad=true;
+                                _this.firstLoad = true;
                             } else {
                                 _this.$notify({
                                     showClose: true,
@@ -817,8 +767,15 @@
                             }
 
                             _this.nightFallListLength = _this.nightFallList.length
+                        }*/
+                        if (res.data.data != null) {
+                            for (let i = 0; i < res.data.data.list.length; i++) {
+                                res.data.data.list[i].imageId = IP + "/image/" + res.data.data.list[i].imageId;
+                            }
+                            _this.nightFallList = res.data.data.list;
+                        } else {
+                            showMessage(_this, '当前晚归数据为空', 1)
                         }
-
                     } else {
                         showMessage(_this, "晚归考勤查询失败")
                     }
@@ -1111,7 +1068,7 @@
                 //变量scrollHeight是滚动条的总高度
                 var scrollHeight = document.getElementById("div1").scrollHeight
                 //滚动条到底部的条件
-                if (_this.firstLoad){
+                if (_this.firstLoad) {
                     if (scrollTop + windowHeight == scrollHeight) {
                         if (_this.nightFallListLength == _this.nightTotal) {
                             $(".mes").html("已无更多数据")
@@ -1126,8 +1083,8 @@
             },
             handleScrollAccessAll() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
-                var scrollTop2 = document.getElementById("revisiDiv").scrollTop
-                _this.top = document.getElementById("revisiDiv").scrollTop
+                var scrollTop2 = document.getElementById("accessAll").scrollTop
+                _this.top = document.getElementById("accessAll").scrollTop
                 if (scrollTop2 > 1) {
                     clearInterval(timeFetchAccess)
                 }
@@ -1144,26 +1101,27 @@
                     }
                 }
                 //变量windowHeight是可视区的高度
-                var windowHeight2 = document.getElementById("revisiDiv").clientHeight
+                var windowHeight2 = document.getElementById("accessAll").clientHeight
                 //变量scrollHeight是滚动条的总高度
-                var scrollHeight2 = document.getElementById("revisiDiv").scrollHeight
+                var scrollHeight2 = document.getElementById("accessAll").scrollHeight
                 //滚动条到底部的条件
-
-                if (_this.firstLoad) {
-                    if (scrollTop2 + windowHeight2 == scrollHeight2) {
-                        if (_this.name != "" && _this.name != null) {
-                            _this.getAccessRecordListByName(_this.deviceId, _this.name)
-                        } else {
-                            _this.firstLoad = false;
-                            _this.getAccessRecordList(_this.deviceId)
-                        }
-                    }
+                /* if (_this.firstLoad) {
+                     if (scrollTop2 + windowHeight2 == scrollHeight2) {
+                         if (_this.name != "" && _this.name != null) {
+                             _this.getAccessRecordListByName(_this.deviceId, _this.name)
+                         } else {
+                             _this.firstLoad = false;
+                             _this.getAccessRecordList(_this.deviceId)
+                         }
+                     }
+                 }*/
+                if (scrollTop2 + windowHeight2 == scrollHeight2) {
+                    $(".mess").html("+ 点击查看更多通行记录")
                 }
-
             },
             handleScrollAccessPass() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
-                var scrollTop3 = document.getElementById("passDiv").scrollTop
+                var scrollTop3 = document.getElementById("accessPass").scrollTop
                 if (scrollTop3 > 1) {
                     clearInterval(timeFetchAccess)
                 }
@@ -1173,20 +1131,14 @@
                     }, 3000)
                 }
                 //变量windowHeight是可视区的高度
-                var windowHeight3 = document.getElementById("passDiv").clientHeight
+                var windowHeight3 = document.getElementById("accessPass").clientHeight
                 //变量scrollHeight是滚动条的总高度
-                var scrollHeight3 = document.getElementById("passDiv").scrollHeight
-                //滚动条到底部的条件
-                if (_this.firstLoad){
-                    if (scrollTop3 + windowHeight3 == scrollHeight3) {
-                        _this.firstLoad = false;
-                        _this.getAccessRecordListByPass(_this.deviceId, "PASS")
-                    }
-                }
+                var scrollHeight3 = document.getElementById("accessPass").scrollHeight
+
 
             },
             handleScrollUnregistered() {
-                var scrollTop4 = document.getElementById("attentionDiv").scrollTop
+                var scrollTop4 = document.getElementById("accessRegis").scrollTop
                 if (scrollTop4 > 1) {
                     clearInterval(timeFetchAccess)
                 }
@@ -1196,20 +1148,20 @@
                         _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "STRANGER")
                     }, 3000)
                 }
-                var windowHeight4 = document.getElementById("attentionDiv").clientHeight
-
-                var scrollHeight4 = document.getElementById("attentionDiv").scrollHeight
-               if (_this.firstLoad){
-                   if (scrollTop4 + windowHeight4 == scrollHeight4) {
-                       _this.firstLoad=false;
-                       _this.getAccessRecordListByIdentity(_this.deviceId, "STRANGER")
-                   }
-               }
+                var windowHeight4 = document.getElementById("accessRegis").clientHeight
+                var scrollHeight4 = document.getElementById("accessRegis").scrollHeight
+                /* if (_this.firstLoad){
+                     if (scrollTop4 + windowHeight4 == scrollHeight4) {
+                         _this.firstLoad=false;
+                         _this.getAccessRecordListByIdentity(_this.deviceId, "STRANGER")
+                     }
+                 }*/
 
 
             },
+
             handleScrollBlack() {
-                var scrollTop6 = document.getElementById("blackDiv").scrollTop
+                var scrollTop6 = document.getElementById("accessBlack").scrollTop
                 if (scrollTop6 > 1) {
                     clearInterval(timeFetchAccess)
                 }
@@ -1219,16 +1171,8 @@
                         _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "BLACKLIST")
                     }, 3000)
                 }
-                var windowHeight6 = document.getElementById("blackDiv").clientHeight
-
-
-                var scrollHeight6 = document.getElementById("blackDiv").scrollHeight
-                 if (_this.firstLoad){
-                     if (scrollTop6 + windowHeight6 == scrollHeight6) {
-                         _this.firstLoad=false;
-                         _this.getAccessRecordListByIdentity(_this.deviceId, "BLACKLIST")
-                     }
-                 }
+                var windowHeight6 = document.getElementById("accessBlack").clientHeight
+                var scrollHeight6 = document.getElementById("accessBlack").scrollHeight
 
 
             },
@@ -1265,11 +1209,74 @@
 
             handleSelectScroll() {
                 document.getElementById("div1").addEventListener("scroll", _this.handleScrollNight);
-                document.getElementById("revisiDiv").addEventListener("scroll", _this.handleScrollAccessAll);
-                document.getElementById("passDiv").addEventListener("scroll", _this.handleScrollAccessPass);
-                document.getElementById("attentionDiv").addEventListener("scroll", _this.handleScrollUnregistered);
-                document.getElementById("blackDiv").addEventListener("scroll", _this.handleScrollBlack);
+                document.getElementById("accessAll").addEventListener("scroll", _this.handleScrollAccessAll);
+                document.getElementById("accessPass").addEventListener("scroll", _this.handleScrollAccessPass);
+                document.getElementById("accessRegis").addEventListener("scroll", _this.handleScrollUnregistered);
+                document.getElementById("accessBlack").addEventListener("scroll", _this.handleScrollBlack);
             },
+            handleMoreAccess(item) {
+                //$(".vlc").css("display:none")
+                document.getElementById("vlc").style.display = "none"
+                //document.getElementById("vlc1").style.display = "none"
+                _this.defaultDate();
+                _this.fetchMoreAccess(item);
+                _this.accessDialogVisble = true;
+            },
+            fetchMoreAccess(item) {
+                let params = new URLSearchParams();
+                params.append("page", _this.currentPage)
+                params.append("size", _this.accessSize);
+                params.append("deviceId", _this.deviceId);
+                params.append("queryFinishTime", _this.beginTime[0]);
+                params.append("queryEndTime", _this.beginTime[1]);
+                if (_this.selected == 'second') {
+                    params.append("pass", item);
+                } else if (_this.selected == 'third' || _this.selected == 'fourth') {
+                    params.append("identity", item);
+                }
+                request({
+                    url: HOST + _this.submitUrl,
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            //_this.moreAccessList = res.data.data.list;
+                            if (res.data.data.list != null) {
+                                _this.totalRecords = res.data.data.total;
+                                for (let i = 0; i < res.data.data.list.length; i++) {
+                                    res.data.data.list[i].imageId = IP + "/image/" + res.data.data.list[i].imageId;
+                                }
+                                _this.moreAccessList = res.data.data.list;
+                            }
+                        } else {
+                            showMessage(_this, "获取最新通行记录失败", 0)
+                        }
+                    }
+                ).catch(error => {
+                    showMessage(_this, "getAccessRecordList===>:{}" + error, 0)
+                })
+            },
+            handleCurrentChange(val) {
+                _this.defaultDate();
+                _this.currentPage = val - 1;
+                if (_this.selected == "first") {
+                    _this.submitUrl = "dorm/getAccessRecordList";
+                    _this.fetchMoreAccess();
+                } else if (_this.selected == "second") {
+                    _this.submitUrl = "dorm/getAccessRecordListByPass";
+                    _this.fetchMoreAccess("PASS")
+                } else if (_this.selected == "third") {
+                    _this.submitUrl = "dorm/getAccessRecordListByIdentity";
+                    _this.fetchMoreAccess("STRANGER")
+                } else if (_this.selected == "fourth") {
+                    _this.submitUrl = "dorm/getAccessRecordListByIdentity";
+                    _this.fetchMoreAccess("BLACKLIST")
+                }
+            },
+            loginOut() {
+                _this.$router.push("/login")
+                sessionStorage.removeItem("user")
+            }
         },
         created() {
             this.userInfo = JSON.parse(sessionStorage.getItem("user"))
@@ -1277,64 +1284,39 @@
 
         },
         mounted() {
+            _this.defaultDate();
             _this.fetchAttendanceAndInOrOut(_this.userInfo.floorName);
             setInterval(function () {
                 _this.fetchAttendanceAndInOrOut(_this.userInfo.floorName)
             }, 1000 * 60 * 30)
             _this.fetchNumbers(_this.userInfo.floorName)
-            timeFetchAccess = setInterval(function () {
-                _this.fetchNewestAccessRecordList(_this.deviceId)
-            }, 3000)
             _this.SetEchart();
             _this.handleSelectScroll();
 
         },
-        beforeDestroy(){
-            removeEventListener("scroll", _this.handleScrollAccessAll)
+        beforeDestroy() {
+            //removeEventListener("scroll", _this.handleScrollAccessAll)
             clearTimeout(timeOut, timeFetchNight)
             clearInterval(timeFetchAccess)
         },
 
         watch: {
-            selected: function (val, oldval) {
-                switch (val) {
-                    case "1":
-                        _this.accessList = [];
-                        clearInterval(timeFetchAccess)
-                        _this.firstLoad=true;
-                        _this.fetchNewestAccessRecordList(_this.deviceId);
-                        timeFetchAccess = setInterval(function () {
-                            _this.fetchNewestAccessRecordList(_this.deviceId);
-                            ;
-                        }, 3000)
-                        break;
-                    case "2":
-                        clearInterval(timeFetchAccess)
-                        _this.firstLoad=true;
-                        _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS");
-                        timeFetchAccess = setInterval(function () {
-                            _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS");
-                        }, 3000)
-                        break;
-                    case "3":
-                        clearInterval(timeFetchAccess)
-                        _this.firstLoad=true;
-                        _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "STRANGER");
-                        break;
-                    case "4":
-                        clearInterval(timeFetchAccess)
-                        _this.firstLoad=true;
-                        _this.fetchNewestAccessRecordListByIdentity(_this.deviceId, "BLACKLIST");
-                        break;
-                }
-
-            },
             imgDialogVisible: function (val, oldval) {
                 if (val == false) {
                     document.getElementById("vlc").style.display = "block";
-                    document.getElementById("vlc1").style.display = "block"
+                    //document.getElementById("vlc1").style.display = "block"
                 }
-            }
+            },
+            accessDialogVisble: function (val, oldval) {
+                if (val == false) {
+                    document.getElementById("vlc").style.display = "block";
+                    //document.getElementById("vlc1").style.display = "block"
+                    _this.accessPage = 1;
+                    _this.currentPage = 0;
+                }
+
+            },
+
         },
 
     }
@@ -1345,13 +1327,88 @@
         font: 25px Extra Small;
         color: #6a747c;
         font-weight: bold;
-
-
     }
 
-    .el-tabs__nav-scroll {
+    .a .el-tabs__nav-scroll {
         float: right;
+    }
 
+    .b .el-tabs__nav-scroll {
+        margin-left: 20px;
+    }
+
+    .a .el-tabs__item {
+        padding: 0 20px;
+        height: 40px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        line-height: 40px;
+        display: inline-block;
+        list-style: none;
+        font-size: 17px;
+        font-weight: 600;
+        color: #727272;
+        position: relative;
+    }
+
+    .b .el-tabs__item {
+        padding: 0 50px;
+        height: 40px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        line-height: 40px;
+        display: inline-block;
+        list-style: none;
+        font-size: 17px;
+        font-family: PingFangSC-Semibold;
+        font-weight: 600;
+        color: #727272;
+        text-align: center;;
+        position: relative;
+    }
+
+    /* .b .el-tabs__item is-top is-active {
+         width: 60px;
+         transform: translateX(-29px);
+     }
+ */
+    .revisiDiv::-webkit-scrollbar {
+        width: 5px;
+        height: 1px;
+    }
+
+    .revisiDiv::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(246, 244, 255, 0.2);
+        background: white;
+    }
+
+    .revisiDiv::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
+        border-radius: 10px;
+        background: #F6F4FF;
+    }
+
+    .revisiDiv {
+        -ms-scroll-chaining: chained;
+        -ms-overflow-style: none;
+        -ms-content-zooming: zoom;
+        -ms-scroll-rails: none;
+        -ms-content-zoom-limit-min: 100%;
+        -ms-content-zoom-limit-max: 500%;
+        -ms-scroll-snap-type: proximity;
+        -ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
+        -ms-overflow-style: none;
+        overflow: auto;
+    }
+
+    .accesDialog li {
+        float: left;
+        margin-left: 60px;
+    }
+
+    .el-tabs__active-bar {
+        background-color: #93A0D0
     }
 
     .bg-purple {
@@ -1442,5 +1499,9 @@
     .el-input--suffix .el-input__inner {
         padding-right: 30px;
         border-radius: 15px;
+    }
+
+    .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
+        width: 393px;
     }
 </style>

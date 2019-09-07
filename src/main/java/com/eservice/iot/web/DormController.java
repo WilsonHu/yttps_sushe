@@ -4,8 +4,13 @@ import com.eservice.iot.core.Result;
 import com.eservice.iot.core.ResultGenerator;
 import com.eservice.iot.model.web.AccessRecordModel;
 import com.eservice.iot.service.DormService;
+import com.eservice.iot.service.park.AccessService;
 import com.eservice.iot.service.park.TagService;
 import com.eservice.iot.util.RedisUtil;
+import com.eservice.iot.util.Util;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/dorm")
@@ -32,16 +41,20 @@ public class DormController {
     @Resource
     private DormService dormService;
 
+    @Resource
+    private AccessService accessService;
+
     /**
      * 调取查询最新数据接口
+     *
      * @param size
      * @param deviceId
      * @return
      */
     @PostMapping("/getNewestAccessRecordList")
-    public Result getNewestAccessRecordList(@RequestParam(defaultValue = "10") Integer size ,String deviceId) {
+    public Result getNewestAccessRecordList(@RequestParam(defaultValue = "10") Integer size, String deviceId) {
         ArrayList<AccessRecordModel> accessRecordModelList = new ArrayList<>();
-        if (deviceId != "") {
+        if (!deviceId.equals("")) {
             String[] accessDeviceIds = deviceId.split(",");
             accessRecordModelList = dormService.getNewestVisitRecord(size, accessDeviceIds);
         }
@@ -50,8 +63,8 @@ public class DormController {
     }
 
     @PostMapping("/getNewestAccessRecordListByPass")
-    public Result getNewestAccessRecordListByPass(@RequestParam(defaultValue = "10") Integer size, String deviceId,String pass) {
-        if (deviceId!="") {
+    public Result getNewestAccessRecordListByPass(@RequestParam(defaultValue = "10") Integer size, String deviceId, String pass) {
+        if (deviceId != "") {
             String deviceIdList[] = deviceId.split(",");
             ArrayList<AccessRecordModel> accessRecordModelList = dormService.getNewestAccessRecordByPass(size, deviceIdList, pass);
             return ResultGenerator.genSuccessResult(accessRecordModelList);
@@ -75,74 +88,84 @@ public class DormController {
 
     /**
      * 调取分页查询接口
+     *
+     * @param page
      * @param size
      * @param deviceId
-     * @param time
+     * @param queryFinishTime
+     * @param queryEndTime
      * @return
      */
 
     @PostMapping("/getAccessRecordList")
-    public Result getAccessRecordList(@RequestParam(defaultValue = "10") Integer size, String deviceId, String time) {
+    public Result getAccessRecordList(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String deviceId, String queryFinishTime, String queryEndTime) {
         String deviceIdList[] = deviceId.split(",");
-        Long endTime = 0L;
-        if (time!=""){
-            try {
-                logger.info("time:{}",time);
-                endTime = formatter.parse(time).getTime() / 1000L-1;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                endTime=System.currentTimeMillis()/1000L;
-            }
+        try {
+            Long startTime = formatter.parse(queryFinishTime).getTime() / 1000L;
+            Long endTime = formatter.parse(queryEndTime).getTime() / 1000L;
+            ArrayList<AccessRecordModel> accessRecordModelList = dormService.getVisitRecord(page, size, deviceIdList, startTime, endTime);
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", accessRecordModelList);
+            map.put("total", accessService.getTotal());
+
+            return ResultGenerator.genSuccessResult(map);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        ArrayList<AccessRecordModel> accessRecordModelList = dormService.getVisitRecord(size, deviceIdList,endTime);
-        return ResultGenerator.genSuccessResult(accessRecordModelList);
+        return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/getAccessRecordListByPass")
-    public Result getAccessRecordListByPass(@RequestParam(defaultValue = "10") Integer size, String deviceId,String time,String pass) {
+    public Result getAccessRecordListByPass(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String deviceId, String queryFinishTime, String queryEndTime, String pass) {
         String deviceIdList[] = deviceId.split(",");
-        ArrayList<AccessRecordModel> accessRecordModelList=new ArrayList<>();
-        Long endTime = System.currentTimeMillis()/1000L;
-        if (time!=""){
-            try {
-                endTime = formatter.parse(time).getTime() / 1000L-1;
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-             accessRecordModelList = dormService.getAccessRecordByPass(size, deviceIdList, endTime,pass);
-            return ResultGenerator.genSuccessResult(accessRecordModelList);
+        ArrayList<AccessRecordModel> accessRecordModelList = new ArrayList<>();
+        try {
+            Long startTime = formatter.parse(queryFinishTime).getTime() / 1000L;
+            Long endTime = formatter.parse(queryEndTime).getTime() / 1000L;
+            accessRecordModelList = dormService.getAccessRecordByPass(page, size, deviceIdList, startTime, endTime, pass);
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", accessRecordModelList);
+            map.put("total", accessService.getTotal());
+            return ResultGenerator.genSuccessResult(map);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        return ResultGenerator.genSuccessResult(accessRecordModelList);
+        return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/getAccessRecordListByName")
-    public Result getAccessRecordListByName(@RequestParam(defaultValue = "10") Integer size, String deviceId, String time,String name) {
+    public Result getAccessRecordListByName(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String deviceId, String queryFinishTime, String queryEndTime, String name) {
         String deviceIdList[] = deviceId.split(",");
-        Long endTime = System.currentTimeMillis()/1000L;
-        if (time!=""){
-            try {
-                endTime = formatter.parse(time).getTime() / 1000L-1;
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        try {
+            Long startTime = formatter.parse(queryFinishTime).getTime() / 1000L;
+            Long endTime = formatter.parse(queryEndTime).getTime() / 1000L;
+            ArrayList<AccessRecordModel> accessRecordModelList = dormService.getAccessRecordByName(page, size, deviceIdList, startTime, endTime, name);
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", accessRecordModelList);
+            map.put("total", accessService.getTotal());
+            return ResultGenerator.genSuccessResult(map);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        ArrayList<AccessRecordModel> accessRecordModelList = dormService.getAccessRecordByName(size, deviceIdList,endTime,name);
-        return ResultGenerator.genSuccessResult(accessRecordModelList);
+
+        return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/getAccessRecordListByIdentity")
-    public Result getAccessRecordListByIdentity(@RequestParam(defaultValue = "10") Integer size, String deviceId, String time,String identity) {
+    public Result getAccessRecordListByIdentity(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String deviceId, String queryFinishTime, String queryEndTime, String identity) {
         String deviceIdList[] = deviceId.split(",");
-        Long endTime =System.currentTimeMillis()/1000L;
-        if (time!=""){
-            try {
-                endTime = formatter.parse(time).getTime() / 1000L-1;
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        try {
+            Long startTime = formatter.parse(queryFinishTime).getTime() / 1000L;
+            Long endTime = formatter.parse(queryEndTime).getTime() / 1000L;
+            ArrayList<AccessRecordModel> accessRecordModelList = dormService.getVisitRecordByIdentity(page, size, deviceIdList, startTime, endTime, identity);
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", accessRecordModelList);
+            map.put("total", accessService.getTotal());
+            return ResultGenerator.genSuccessResult(map);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        ArrayList<AccessRecordModel> accessRecordModelList = dormService.getVisitRecordByIdentity(size, deviceIdList,endTime,identity);
-        return ResultGenerator.genSuccessResult(accessRecordModelList);
+        return ResultGenerator.genSuccessResult();
     }
 
 

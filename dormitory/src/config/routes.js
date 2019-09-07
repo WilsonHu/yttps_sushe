@@ -1,6 +1,7 @@
 import Login from '../components/Login.vue'
 import NotFound from '../components/404.vue'
 import Dormitory from '../components/dormitory.vue'
+import Home from '../components/home.vue'
 export default
 [
 	{
@@ -19,5 +20,9 @@ export default
 	{
 		path: '/dormitory',
         component:Dormitory,
+	},
+	{
+		path: '/home',
+		component:Home,
 	},
 ]

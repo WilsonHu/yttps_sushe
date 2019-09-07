@@ -29,6 +29,7 @@ public class AccessRecordModel {
 
     private List<String> tagIds;
 
+
     public List<String> getTagIds() {
         return tagIds;
     }
@@ -92,4 +93,5 @@ public class AccessRecordModel {
     public void setType(String type) {
         this.type = type;
     }
+
 }

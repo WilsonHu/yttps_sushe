@@ -55,20 +55,21 @@ public class DormService {
     private SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
 
     private static long queryTime = 0L;
-    private static  String day;
+    private static String day;
 
     //通行记录过滤
     private static ArrayList<String> recordExistList = new ArrayList<>();
     //考勤过滤
-    private static  ArrayList<String>[]  attendExistList = null;
+    private static ArrayList<String>[] attendExistList = null;
     //出过滤
-    private static  ArrayList<String>[]  outExistList = null;
+    private static ArrayList<String>[] outExistList = null;
     //进过滤
-    private static  ArrayList<String>[]  inExistList = null;
+    private static ArrayList<String>[] inExistList = null;
 
-    public DormService(){
-        day  = simple.format(new Date()) + " ";
+    public DormService() {
+        day = simple.format(new Date()) + " ";
     }
+
     /**
      * 每天5：0：0 清除
      */
@@ -82,32 +83,32 @@ public class DormService {
             logger.info("Clear attendance record. size: {} -> {}", begin, end);
         }
         if (attendExistList.length > 0) {
-            for(int i=0; i<attendExistList.length;i++){
+            for (int i = 0; i < attendExistList.length; i++) {
                 int begin = attendExistList[i].size();
                 attendExistList[i].clear();
                 int end = attendExistList[i].size();
-                logger.info("Clear attendExistList[{}] record. size: {} -> {}",i,begin, end);
+                logger.info("Clear attendExistList[{}] record. size: {} -> {}", i, begin, end);
             }
         }
         if (outExistList.length > 0) {
-            for(int i=0; i<outExistList.length;i++){
+            for (int i = 0; i < outExistList.length; i++) {
                 int begin = outExistList[i].size();
                 outExistList[i].clear();
                 int end = outExistList[i].size();
-                logger.info("Clear outExistList[{}] record. size: {} -> {}",i,begin, end);
+                logger.info("Clear outExistList[{}] record. size: {} -> {}", i, begin, end);
             }
         }
         if (inExistList.length > 0) {
-            for(int i=0; i<inExistList.length;i++){
+            for (int i = 0; i < inExistList.length; i++) {
                 int begin = inExistList[i].size();
                 inExistList[i].clear();
                 int end = inExistList[i].size();
-                logger.info("Clear inExistList[{}] record. size: {} -> {}",i,begin, end);
+                logger.info("Clear inExistList[{}] record. size: {} -> {}", i, begin, end);
             }
         }
     }
 
-    @Scheduled(initialDelay = 5000, fixedRate = 1000*60*15)
+    @Scheduled(initialDelay = 5000, fixedRate = 1000 * 60 * 15)
     private void countFloorStaffNumber() {
         if (queryTime == 0L) {
             try {
@@ -214,10 +215,10 @@ public class DormService {
         }
     }
 
-    @Scheduled(initialDelay = 8000, fixedRate = 1000*60*20)
-    private void countFloorStaffNumbers(){
+    @Scheduled(initialDelay = 8000, fixedRate = 1000 * 60 * 20)
+    private void countFloorStaffNumbers() {
         List<Tag> tags = tagService.getFloorTagList();
-        if(tags!=null&&tags.size()>0) {
+        if (tags != null && tags.size() > 0) {
             //分楼栋统计（整点）
             for (Tag tag : tags) {
                 AttendanceNumber attendanceNumber = null;
@@ -240,7 +241,7 @@ public class DormService {
                         attendanceNumbers.attendanceNumbers = moveArray(attendanceNumbers.attendanceNumbers);
                         attendanceNumbers.inDormitories = moveArray(attendanceNumbers.inDormitories);
                         attendanceNumbers.outDormitories = moveArray(attendanceNumbers.outDormitories);
-                        index=INDEX-1;
+                        index = INDEX - 1;
                     }
                 }
 
@@ -251,8 +252,8 @@ public class DormService {
                     if (redisUtil.set("_Num" + tag.getTag_id(), attendanceNumbers)) {
                         redisUtil.set("index", ++index);
                         logger.info("countFloorStaffNumbers ==>Set  {} : {} ", tag.getTag_name(), attendanceNumbers.show());
-                    }else {
-                        logger.error("countFloorStaffNumbers ==>Set  {} save Key {} false ! ",tag.getTag_name(),"_Num" + tag.getTag_id());
+                    } else {
+                        logger.error("countFloorStaffNumbers ==>Set  {} save Key {} false ! ", tag.getTag_name(), "_Num" + tag.getTag_id());
                     }
                 }
             }
@@ -261,11 +262,12 @@ public class DormService {
 
     /**
      * 自动查询最新数据
+     *
      * @param size
      * @param deviceIds
      * @return
      */
-    public ArrayList<AccessRecordModel> getNewestVisitRecord(int size,String[] deviceIds) {
+    public ArrayList<AccessRecordModel> getNewestVisitRecord(int size, String[] deviceIds) {
         List<String> arrayList = Arrays.asList(deviceIds);
 
         HashMap<String, Object> postParameters = new HashMap<>();
@@ -284,7 +286,7 @@ public class DormService {
         return null;
     }
 
-    public ArrayList<AccessRecordModel> getNewestAccessRecordByPass(int size,String[] deviceIds,String pass) {
+    public ArrayList<AccessRecordModel> getNewestAccessRecordByPass(int size, String[] deviceIds, String pass) {
         List<String> arrayList = Arrays.asList(deviceIds);
 
         HashMap<String, Object> postParameters = new HashMap<>();
@@ -297,7 +299,7 @@ public class DormService {
         ///指定通行状态
         ArrayList<String> passes = new ArrayList<>();
         passes.add(pass);
-        postParameters.put("pass_result_list",passes);
+        postParameters.put("pass_result_list", passes);
         ///指定人员身份
         ArrayList<String> identities = new ArrayList<>();
         identities.add(Constant.STAFF);
@@ -309,7 +311,7 @@ public class DormService {
         return null;
     }
 
-    public ArrayList<AccessRecordModel> getNewestAccessRecordByName(int size, String[] deviceIds ,String name){
+    public ArrayList<AccessRecordModel> getNewestAccessRecordByName(int size, String[] deviceIds, String name) {
         List<String> arrayList = Arrays.asList(deviceIds);
         HashMap<String, Object> postParameters = new HashMap<>();
         ///通行记录分页查询
@@ -319,7 +321,7 @@ public class DormService {
         ///指定设备
         postParameters.put("device_id_list", arrayList);
         ///指定员工名称
-        postParameters.put("fuzzy_name",name);
+        postParameters.put("fuzzy_name", name);
 
         List<VisitRecord> visitRecords = accessService.requestParkAccessRecord(postParameters);
         if (visitRecords != null && visitRecords.size() > 0) {
@@ -328,7 +330,7 @@ public class DormService {
         return null;
     }
 
-    public ArrayList<AccessRecordModel> getNewestVisitRecordByIdentity(int size,String[] deviceIds,String identity) {
+    public ArrayList<AccessRecordModel> getNewestVisitRecordByIdentity(int size, String[] deviceIds, String identity) {
         List<String> arrayList = Arrays.asList(deviceIds);
 
         HashMap<String, Object> postParameters = new HashMap<>();
@@ -341,7 +343,7 @@ public class DormService {
         ///指定人员身份
         ArrayList<String> identities = new ArrayList<>();
         identities.add(identity);
-        postParameters.put("identity_list",identities);
+        postParameters.put("identity_list", identities);
 
         List<VisitRecord> visitRecords = accessService.requestParkVisitRecord(postParameters);
         if (visitRecords != null && visitRecords.size() > 0) {
@@ -351,20 +353,24 @@ public class DormService {
     }
 
     /**
-     *  分页查询所有数据
-     * @param size
+     * 分页查询所有数据
+     *
+     * @param startTime
      * @param deviceIds
      * @param endTime
      * @return
      */
-    public ArrayList<AccessRecordModel> getVisitRecord(int size, String[] deviceIds,Long endTime){
+    public ArrayList<AccessRecordModel> getVisitRecord(Integer page, Integer size, String[] deviceIds, Long startTime, Long endTime) {
         List<String> arrayList = Arrays.asList(deviceIds);
         HashMap<String, Object> postParameters = new HashMap<>();
-        ///通行记录分页查询
-        postParameters.put("size", size);
+     /*   ///通行记录分页查询
+        postParameters.put("size", size);*/
         ///指定设备
+        postParameters.put("page", page);
+        postParameters.put("size", size);
         postParameters.put("device_id_list", arrayList);
         ///指定通行记录查询结束时间
+        postParameters.put("start_timestamp", startTime);
         postParameters.put("end_timestamp", endTime);
 
         List<VisitRecord> visitRecords = accessService.requestParkVisitRecord(postParameters);
@@ -375,19 +381,23 @@ public class DormService {
         return null;
     }
 
-    public ArrayList<AccessRecordModel> getAccessRecordByPass(int size, String[] deviceIds,Long endTime,String pass){
+
+    public ArrayList<AccessRecordModel> getAccessRecordByPass(int page, int size, String[] deviceIds, Long startTime, Long endTime, String pass) {
         List<String> arrayList = Arrays.asList(deviceIds);
         HashMap<String, Object> postParameters = new HashMap<>();
         ///通行记录分页查询
+        postParameters.put("page", page);
         postParameters.put("size", size);
         ///指定设备
         postParameters.put("device_id_list", arrayList);
         ///指定通行记录查询结束时间
+        postParameters.put("start_timestamp", startTime);
+
         postParameters.put("end_timestamp", endTime);
         ///指定通行状态
         ArrayList<String> passes = new ArrayList<>();
         passes.add(pass);
-        postParameters.put("pass_result_list",passes);
+        postParameters.put("pass_result_list", passes);
         ///指定人员身份
         ArrayList<String> identities = new ArrayList<>();
         identities.add(Constant.STAFF);
@@ -399,17 +409,19 @@ public class DormService {
         return null;
     }
 
-    public ArrayList<AccessRecordModel> getAccessRecordByName(int size, String[] deviceIds,Long endTime,String name){
+    public ArrayList<AccessRecordModel> getAccessRecordByName(int page,int size, String[] deviceIds,Long startTime, Long endTime, String name) {
         List<String> arrayList = Arrays.asList(deviceIds);
         HashMap<String, Object> postParameters = new HashMap<>();
         ///通行记录分页查询
+        postParameters.put("page",page);
         postParameters.put("size", size);
         ///指定设备
         postParameters.put("device_id_list", arrayList);
         ///指定通行记录查询结束时间
+        postParameters.put("start_timestamp", startTime);
         postParameters.put("end_timestamp", endTime);
         ///指定员工名称
-        postParameters.put("fuzzy_name",name);
+        postParameters.put("fuzzy_name", name);
 
         List<VisitRecord> visitRecords = accessService.requestParkAccessRecord(postParameters);
         if (visitRecords != null && visitRecords.size() > 0) {
@@ -418,14 +430,16 @@ public class DormService {
         return null;
     }
 
-    public ArrayList<AccessRecordModel> getVisitRecordByIdentity(int size, String[] deviceIds,Long endTime,String identity) {
+    public ArrayList<AccessRecordModel> getVisitRecordByIdentity(int page,int size, String[] deviceIds,Long startTime, Long endTime, String identity) {
         List<String> arrayList = Arrays.asList(deviceIds);
         HashMap<String, Object> postParameters = new HashMap<>();
         ///通行记录分页查询
+        postParameters.put("page",page);
         postParameters.put("size", size);
         ///指定设备
         postParameters.put("device_id_list", arrayList);
         ///指定通行记录查询结束时间
+        postParameters.put("start_timestamp", startTime);
         postParameters.put("end_timestamp", endTime);
         ///指定人员身份
         ArrayList<String> identities = new ArrayList<>();
@@ -441,10 +455,11 @@ public class DormService {
 
     /**
      * 晚归和未归的记录
+     *
      * @param deviceIds
      * @return
      */
-    public  ArrayList<AccessRecordModel>  getNightAccessRecord(String[] deviceIds) {
+    public ArrayList<AccessRecordModel> getNightAccessRecord(String[] deviceIds) {
         try {
             List<String> arrayList = Arrays.asList(deviceIds);
 
@@ -463,11 +478,11 @@ public class DormService {
             }
             List<VisitRecord> visitRecords = accessService.requestParkAccessRecord(postParameters);
             if (tagService.getFloorTagList() != null && tagService.getFloorTagList().size() > 0) {
-                if (visitRecords != null&&visitRecords.size()>0) {
+                if (visitRecords != null && visitRecords.size() > 0) {
                     ArrayList<AccessRecordModel> accessRecordModels = new ArrayList<>();
                     for (VisitRecord visitRecord : visitRecords) {
                         //筛选 员工
-                        if(visitRecord.getIdentity().equals(Constant.STAFF)) {
+                        if (visitRecord.getIdentity().equals(Constant.STAFF)) {
                             accessRecordModels.add(processStaffRecord(visitRecord));
                         }
                     }
@@ -481,11 +496,12 @@ public class DormService {
     }
 
     /**
-     *  AccessRecords To AccessRecordModels
+     * AccessRecords To AccessRecordModels
+     *
      * @param visitRecords
      * @return
      */
-    public  ArrayList<AccessRecordModel>  processRecords(List<VisitRecord> visitRecords) {
+    public ArrayList<AccessRecordModel> processRecords(List<VisitRecord> visitRecords) {
         ArrayList<AccessRecordModel> accessRecordModels = new ArrayList<>();
         for (VisitRecord visitRecord : visitRecords) {
             //分类型进行数据抽象
@@ -503,10 +519,10 @@ public class DormService {
                     break;
             }
         }
-        return  accessRecordModels;
+        return accessRecordModels;
     }
 
-    public  AccessRecordModel  processStaffRecord(VisitRecord visitRecord) {
+    public AccessRecordModel processStaffRecord(VisitRecord visitRecord) {
         AccessRecordModel accessRecordModel = new AccessRecordModel();
         accessRecordModel.setClasses(tagService.getTagName(visitRecord.getPerson().getTag_id_list().get(0)));
         accessRecordModel.setName(visitRecord.getPerson().getPerson_information().getName());
@@ -519,7 +535,7 @@ public class DormService {
         return accessRecordModel;
     }
 
-    public  AccessRecordModel  processBlackListRecord(VisitRecord visitRecord) {
+    public AccessRecordModel processBlackListRecord(VisitRecord visitRecord) {
         AccessRecordModel accessRecordModel = new AccessRecordModel();
         accessRecordModel.setClasses(tagService.getTagName(visitRecord.getPerson().getTag_id_list().get(0)));
         accessRecordModel.setName(visitRecord.getPerson().getPerson_information().getRemark());
@@ -531,7 +547,7 @@ public class DormService {
         return accessRecordModel;
     }
 
-    public  AccessRecordModel  processStrangeRecord(VisitRecord visitRecord) {
+    public AccessRecordModel processStrangeRecord(VisitRecord visitRecord) {
         AccessRecordModel accessRecordModel = new AccessRecordModel();
         accessRecordModel.setClasses("? ? ?");
         accessRecordModel.setName("陌生人");
@@ -565,27 +581,28 @@ public class DormService {
 
     /**
      * 统计过滤变量初始化
+     *
      * @param size
      */
     private void initExistList(int size) {
         logger.info("\n================ 初始化过滤 ===============");
-        if (attendExistList==null) {
+        if (attendExistList == null) {
             attendExistList = new ArrayList[size];
-            for(int i=0; i<size; i++){
+            for (int i = 0; i < size; i++) {
                 attendExistList[i] = new ArrayList<>();
             }
             logger.info("Init attendExistList record size {} .", attendExistList.length);
         }
-        if (outExistList==null) {
-            outExistList= new ArrayList[size];
-            for(int i=0; i<size; i++){
+        if (outExistList == null) {
+            outExistList = new ArrayList[size];
+            for (int i = 0; i < size; i++) {
                 outExistList[i] = new ArrayList<>();
             }
             logger.info("Init outExistList record size {} .", outExistList.length);
         }
-        if (inExistList==null) {
-            inExistList= new ArrayList[size];
-            for(int i=0; i<size; i++){
+        if (inExistList == null) {
+            inExistList = new ArrayList[size];
+            for (int i = 0; i < size; i++) {
                 inExistList[i] = new ArrayList<>();
             }
             logger.info("Init inExistList record size {} .", inExistList.length);

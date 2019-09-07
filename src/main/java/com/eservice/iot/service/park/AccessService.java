@@ -37,6 +37,8 @@ public class AccessService {
     @Autowired
     private ImageService imageService;
 
+    private Integer total;
+
     private String token;
 
     public List<VisitRecord> requestParkAccessRecord(HashMap<String, Object> postParameters) {
@@ -94,6 +96,7 @@ public class AccessService {
             String body = responseEntity.getBody();
             if (body != null) {
                 ResponseModel responseModel = JSONObject.parseObject(body, ResponseModel.class);
+                total=responseModel.getTotal();
                 if (responseModel != null && responseModel.getResult() != null) {
                     List<VisitRecord> tempList = JSONArray.parseArray(responseModel.getResult(), VisitRecord.class);
                     if (tempList != null && tempList.size() > 0) {
@@ -110,6 +113,7 @@ public class AccessService {
             String body = responseEntity.getBody();
             if (body != null) {
                 ResponseModel responseModel = JSONObject.parseObject(body, ResponseModel.class);
+                total=responseModel.getTotal();
                 if (responseModel != null && responseModel.getResult() != null) {
                     List<VisitRecord> tempList =  JSONArray.parseArray(responseModel.getResult(), VisitRecord.class);
                     if (tempList != null && tempList.size() > 0) {
@@ -139,4 +143,9 @@ public class AccessService {
         }
         return null;
     }
+
+    public Integer getTotal() {
+        return total;
+    }
+
 }

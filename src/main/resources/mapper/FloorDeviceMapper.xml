@@ -9,6 +9,7 @@
     <result column="floor_no" jdbcType="INTEGER" property="floorNo" />
     <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
     <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="device_rtsp" jdbcType="VARCHAR" property="deviceRtsp" />
   </resultMap>
 
 </mapper>

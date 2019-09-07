@@ -12,16 +12,13 @@ import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 
 Vue.use(MintUI)
-// 引用路由
 import VueRouter from 'vue-router'
-// 光引用不成，还得使用
+
 
 Vue.use(Echarts)
 
 Vue.use(VueRouter)
-// 引用路由配置文件
 import routes from './config/routes'
-// 使用配置文件规则
 const router = new VueRouter({
   routes
 })

@@ -21,6 +21,12 @@ public class FloorDevice {
     private String deviceId;
 
     /**
+     * 设备对应的rtsp视频流
+     */
+    @Column(name = "device_rtsp")
+    private String deviceRtsp;
+
+    /**
      * 设备进出类型：0=>进，1=>出
      */
     private Integer type;
@@ -91,5 +97,13 @@ public class FloorDevice {
      */
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getDeviceRtsp() {
+        return deviceRtsp;
+    }
+
+    public void setDeviceRtsp(String deviceRtsp) {
+        this.deviceRtsp = deviceRtsp;
     }
 }
