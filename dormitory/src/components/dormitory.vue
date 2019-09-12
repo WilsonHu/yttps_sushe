@@ -144,7 +144,7 @@
                 <div class="grid-content"
                      style="background-image: linear-gradient(135deg, #676F8C 0%, #0C101D 100%);box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);">
                     <div id='vlc'>
-                        <div style="height: 470px;width: 400px;" v-for="i in deviceRtsp" >
+                        <div style="height: 470px;width: 400px;" v-for="i in deviceRtsp">
                             <span style="position: relative;top: 20px;left:25px;font-size: 18px;color: white">1号机位</span>
                             <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/"
                                     class="vlc"
@@ -441,6 +441,30 @@
                 </el-pagination>
             </div>
         </el-dialog>
+
+        <div class="warning">
+            <el-dialog :visible.sync="warningDialogVisble" width="18%" style="border-radius: 20px">
+                <el-row>
+                    <el-col>
+                        <img class="waringPerson" src="../assets/img/ldh.png" width="345px" height="250px"
+                             style="margin-left: -20px"/>
+                    </el-col>
+                    <el-col>
+                        <img src="../assets/img/info_warning.png" width="100px" height="100px"
+                             style="border-radius: 50%;margin-left: 8rem;margin-top: -3rem"/>
+                    </el-col>
+                    <el-col>
+                        <span style="margin-left: 8rem;font-size: 22px;font-weight: 500;color: #C42E3B ">WARNING</span>
+                    </el-col>
+                    <el-col>
+                        <span style="margin-left: 4rem;font-size: 40px;font-weight: 500;color: #C42E3B ">【陌生人】</span>
+                    </el-col>
+                    <el-col>
+                        <span style="margin-left: 9rem;font-size: 22px;font-weight: 500;color: #C42E3B;margin-top: 10rem">09:34:51</span>
+                    </el-col>
+                </el-row>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -493,6 +517,7 @@
                 nightFallListLength: 0,
                 imgDialogVisible: false,
                 accessDialogVisble: false,
+                warningDialogVisble: false,
                 nightTotal: 0,
                 bigImg: "",
                 activeName: 'first',
@@ -503,15 +528,16 @@
                 beginTime: [],
                 submitUrl: "dorm/getAccessRecordList",
                 deviceRtsp: [],
+                warningTime: ''
 
             }
         },
         methods: {
             big(item) {
-                document.getElementById("vlc").style.display = "none";
-                //document.getElementById("vlc1").style.display = "none"
-                _this.imgDialogVisible = true;
-                _this.bigImg = item.imageId
+                /* document.getElementById("vlc").style.display = "none";
+                 _this.imgDialogVisible = true;
+                 _this.bigImg = item.imageId*/
+                _this.warningDialogVisble = true;
             },
             handleClick(tab, event) {
                 switch (_this.infoManage) {
@@ -632,6 +658,7 @@
                                 res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
                             }
                             _this.accessList = res.data.data;
+
                         } else {
                             showMessage(_this, "获取最新通行记录失败", 0)
                         }
@@ -676,25 +703,6 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            /* if (_this.accessList == null || _this.accessList == "") {
-                                 if (res.data.data != null) {
-                                     _this.accessList = res.data.data;
-                                     for (let i = 0; i < _this.accessList.length; i++) {
-                                         _this.getImage(_this.accessList[i].imageId, _this.accessList[i]);
-                                     }
-                                 } else {
-                                     showMessage(_this, "数据为空", 0)
-                                 }
-
-                             } else {
-                                 let list = res.data.data;
-                                 for (let i = 0; i < list.length; i++) {
-                                     _this.getImage(list[i].imageId, list[i]);
-                                 }
-                                 setTimeout(function () {
-                                     _this.accessList = list;
-                                 }, 200)
-                             }*/
                             for (let i = 0; i < res.data.data.length; i++) {
                                 res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
                             }
@@ -744,30 +752,6 @@
                     data: parmas
                 }).then(res => {
                     if (res.data.code == 200) {
-                        /*if (_this.nightFallList == null || _this.nightFallList == "") {
-                            if (res.data.data != null) {
-                                _this.nightFallList = res.data.data.list;
-                                _this.nightTotal = res.data.data.total;
-                                for (let i = 0; i < _this.nightFallList.length; i++) {
-                                    _this.getImage(_this.nightFallList[i].imageId, _this.nightFallList[i]);
-                                }
-                                _this.firstLoad = true;
-                            } else {
-                                _this.$notify({
-                                    showClose: true,
-                                    message: '当前晚归数据为空',
-                                    type: 'success'
-                                });
-                            }
-                        } else {
-                            let list = res.data.data.list;
-                            for (let i = 0; i < list.length; i++) {
-                                _this.getImage(list[i].imageId, list[i]);
-                                _this.nightFallList.push(list[i])
-                            }
-
-                            _this.nightFallListLength = _this.nightFallList.length
-                        }*/
                         if (res.data.data != null) {
                             for (let i = 0; i < res.data.data.list.length; i++) {
                                 res.data.data.list[i].imageId = IP + "/image/" + res.data.data.list[i].imageId;
@@ -1105,16 +1089,6 @@
                 //变量scrollHeight是滚动条的总高度
                 var scrollHeight2 = document.getElementById("accessAll").scrollHeight
                 //滚动条到底部的条件
-                /* if (_this.firstLoad) {
-                     if (scrollTop2 + windowHeight2 == scrollHeight2) {
-                         if (_this.name != "" && _this.name != null) {
-                             _this.getAccessRecordListByName(_this.deviceId, _this.name)
-                         } else {
-                             _this.firstLoad = false;
-                             _this.getAccessRecordList(_this.deviceId)
-                         }
-                     }
-                 }*/
                 if (scrollTop2 + windowHeight2 == scrollHeight2) {
                     $(".mess").html("+ 点击查看更多通行记录")
                 }
@@ -1176,24 +1150,6 @@
 
 
             },
-
-            getImage(id, item) {
-                request({
-                    url: HOST + 'image/' + id,
-                    async: false,
-                    method: 'post'
-                }).then(res => {
-                    if (res.data.code == 200) {
-                        item.imageId = 'data:image/jpg;base64,' + res.data.data;
-                    } else {
-                        showMessage("没有查到图片");
-                    }
-
-                }).catch(error => {
-                    console.log(error);
-                })
-
-            },
             verifyForm(formObj) {
                 let result = true;
                 if (formObj.deviceId == null || formObj.deviceId == "") {
@@ -1215,9 +1171,7 @@
                 document.getElementById("accessBlack").addEventListener("scroll", _this.handleScrollBlack);
             },
             handleMoreAccess(item) {
-                //$(".vlc").css("display:none")
                 document.getElementById("vlc").style.display = "none"
-                //document.getElementById("vlc1").style.display = "none"
                 _this.defaultDate();
                 _this.fetchMoreAccess(item);
                 _this.accessDialogVisble = true;
@@ -1276,6 +1230,20 @@
             loginOut() {
                 _this.$router.push("/login")
                 sessionStorage.removeItem("user")
+            },
+
+            warningStranger() {
+                _this.warningTime = _this.accessList[0].pass_time;
+                let Stranger = [];
+                for (let i = 0; i < _this.accessList.length; i++) {
+                    if (_this.accessList[i].pass_time > _this.warningTime) {
+                        Stranger.push(_this.accessList[i])
+                        if (_this.accessList[i].name == '陌生人') {
+
+                        }
+                    }
+                }
+
             }
         },
         created() {
@@ -1304,13 +1272,11 @@
             imgDialogVisible: function (val, oldval) {
                 if (val == false) {
                     document.getElementById("vlc").style.display = "block";
-                    //document.getElementById("vlc1").style.display = "block"
                 }
             },
             accessDialogVisble: function (val, oldval) {
                 if (val == false) {
                     document.getElementById("vlc").style.display = "block";
-                    //document.getElementById("vlc1").style.display = "block"
                     _this.accessPage = 1;
                     _this.currentPage = 0;
                 }
@@ -1439,6 +1405,15 @@
         padding: 15px 0;
     }
 
+    .warning .el-dialog {
+        position: relative;
+        margin: 0 auto 50px;
+        border-radius: 19px;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+        box-shadow: 0 30px 60px -15px #E01E1E;
+        box-sizing: border-box;
+        width: 50%;
+    }
 
     /*右边选项卡字体*/
     .el-tabs__item {
