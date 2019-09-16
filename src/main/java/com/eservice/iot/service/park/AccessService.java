@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.eservice.iot.model.ResponseCode;
 import com.eservice.iot.model.ResponseModel;
 import com.eservice.iot.model.park.VisitRecord;
+import com.eservice.iot.util.FileUtil;
+import com.eservice.iot.util.PhotoDigestUtil;
 import com.eservice.iot.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +16,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -37,9 +41,13 @@ public class AccessService {
     @Autowired
     private ImageService imageService;
 
+
+
     private Integer total;
 
     private String token;
+
+
 
     public List<VisitRecord> requestParkAccessRecord(HashMap<String, Object> postParameters) {
         if (token == null) {
@@ -143,6 +151,7 @@ public class AccessService {
         }
         return null;
     }
+
 
     public Integer getTotal() {
         return total;

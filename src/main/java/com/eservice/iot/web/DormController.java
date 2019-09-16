@@ -2,9 +2,11 @@ package com.eservice.iot.web;
 
 import com.eservice.iot.core.Result;
 import com.eservice.iot.core.ResultGenerator;
+import com.eservice.iot.model.park.VisitRecord;
 import com.eservice.iot.model.web.AccessRecordModel;
 import com.eservice.iot.service.DormService;
 import com.eservice.iot.service.park.AccessService;
+import com.eservice.iot.service.park.AlarmService;
 import com.eservice.iot.service.park.TagService;
 import com.eservice.iot.util.RedisUtil;
 import com.eservice.iot.util.Util;
@@ -40,9 +42,11 @@ public class DormController {
     TagService tagService;
     @Resource
     private DormService dormService;
-
     @Resource
     private AccessService accessService;
+    @Resource
+    private AlarmService alarmService;
+
 
     /**
      * 调取查询最新数据接口
@@ -169,4 +173,17 @@ public class DormController {
     }
 
 
+    @PostMapping("/getStrangerList")
+    public Result getStrangerList(String deviceId, String queryStartTime, String queryFinishTime) {
+        String deviceIdList[] = deviceId.split(",");
+        try {
+            Long startTime = formatter.parse(queryStartTime).getTime() / 1000L;
+            Long endTime = formatter.parse(queryFinishTime).getTime() / 1000L;
+            List<VisitRecord> strangerList = alarmService.requestParkStranger(deviceIdList, startTime, endTime);
+            return ResultGenerator.genSuccessResult(strangerList);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return ResultGenerator.genSuccessResult();
+    }
 }

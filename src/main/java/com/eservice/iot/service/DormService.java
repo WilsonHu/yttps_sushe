@@ -66,6 +66,9 @@ public class DormService {
     //进过滤
     private static ArrayList<String>[] inExistList = null;
 
+
+
+
     public DormService() {
         day = simple.format(new Date()) + " ";
     }
@@ -557,6 +560,7 @@ public class DormService {
         accessRecordModel.setDeviceId(visitRecord.getDevice_id());
         return accessRecordModel;
     }
+
 
     /**
      * 判断是进还是出,
