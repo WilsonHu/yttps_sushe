@@ -476,7 +476,8 @@
 
     var timeOut;
     var timeFetchAccess;
-    var timeFetchNight
+    var timeFetchNight;
+    var strangerTime;
     export default {
         name: "dormitory",
         data() {
@@ -529,7 +530,7 @@
                 submitUrl: "dorm/getAccessRecordList",
                 deviceRtsp: [],
                 warningTime: '',
-                strangerTime: new Date()
+                strangerTime: new Date(),
 
             }
         },
@@ -626,7 +627,11 @@
                         timeFetchAccess = setInterval(function () {
                             _this.fetchNewestAccessRecordList(_this.deviceId)
                         }, 3000)
-                        _this.fetchStrangerAlarm()
+
+                       /* strangerTime = setInterval(function () {
+                            _this.fetchStrangerAlarm()
+                        }, 3000)
+*/
 
                     } else {
                         showMessage(_this, '设备信息获取失败', 0)
@@ -747,52 +752,38 @@
             fetchStrangerAlarm() {
                 let params = new URLSearchParams();
                 params.append("deviceId", _this.deviceId);
-                params.append("queryStartTime", '2019-09-16 19:00:00');
-                params.append("queryFinishTime", '2019-09-16 22:30:00');
+                params.append("queryStartTime", _this.strangerTime);
+                params.append("queryFinishTime", new Date().format("yyyy-MM-dd hh:mm:ss"));
                 request({
                     url: HOST + "dorm/getStrangerList",
                     method: 'post',
                     data: params
                 }).then(res => {
                     if (res.data.code == 200 && res.data.data != null) {
-                        let list = res.data.data.list;
+                        let list = res.data.data;
                         let time = new Date();
+                        let waring = require('../assets/img/info_warning.png')
                         for (let i = 0; i < list.length; i++) {
-                            let da= new Date(list[0].timestamp);
-                            var year=da.getFullYear()+"-"+da.getMonth()+"-"+da.getDate()+" "+da.getHours()+":"+da.getMinutes()+":"+da.getSeconds();
-                            var nowTime=da.getHours()+":"+da.getMinutes()+":"+da.getSeconds();
+                            let da = new Date((list[0].timestamp + 1) * 1000);
+                            _this.strangerTime = formatDateTime(da)
+                            var nowTime = da.getHours() + ":" + da.getMinutes() + ":" + da.getSeconds();
                             _this.$notify({
                                 title: '自定义位置',
                                 dangerouslyUseHTMLString: true,
                                 message: '<div class="warning">' +
-                                    '<img style="width:315px; height:245px;margin-top: 20px;margin-left:-20px" src=' + IP + '/image/'+list[i].face_image_id + '/>' +
+                                    '<img style="width:315px; height:245px;margin-top: 20px;margin-left:-20px" src=' + IP + '/image/' + list[i].face_image_id + '/>' +
                                     '<img style="border-radius: 50%;margin-left: 8rem;margin-top: -3rem;width:90px; height:90px" src=' + waring + '/>' +
                                     '<span style="margin-left: 7.5rem;margin-top:50px;font-size: 22px;font-weight: 500;color: #C42E3B ">WARNING</span><br/>' +
                                     '<span style="margin-left: 6.8rem;font-size: 25px;font-weight: 500;color: #C42E3B;margin-top: 20px ">【陌生人】</span><br/>' +
-                                    '<span style="margin-left: 8.3rem;font-size: 22px;font-weight: 500;color: #C42E3B;margin-top: 10rem">'+nowTime+'</span>' +
+                                    '<span style="margin-left: 8.3rem;font-size: 22px;font-weight: 500;color: #C42E3B;margin-top: 10rem">' + nowTime + '</span>' +
                                     '</div>',
                                 position: 'top-left'
                             });
                         }
-
                     }
                 }).catch(error => {
-                    showMessage(_this, '服务器内部错误', 0)
+                    showMessage(_this, error, 0);
                 })
-              /*    let img = 'https://10.250.62.200:9812/image/5d7f73ab158aaef254384118'
-                  let waring = require('../assets/img/info_warning.png')
-                  _this.$notify({
-                      dangerouslyUseHTMLString: true,
-                      duration: 0,
-                      message: '<div class="warning">' +
-                          '<img style="width:315px; height:245px;margin-top: 20px;margin-left:-20px" src=' + IP + '/image/5d7f73ab158aaef254384118' + '/>' +
-                          '<img style="border-radius: 50%;margin-left: 8rem;margin-top: -3rem;width:90px; height:90px" src=' + waring + '/>' +
-                          '<span style="margin-left: 7.5rem;margin-top:50px;font-size: 22px;font-weight: 500;color: #C42E3B ">WARNING</span><br/>' +
-                          '<span style="margin-left: 6.8rem;font-size: 25px;font-weight: 500;color: #C42E3B;margin-top: 20px ">【陌生人】</span><br/>' +
-                          '<span style="margin-left: 8.3rem;font-size: 22px;font-weight: 500;color: #C42E3B;margin-top: 10rem">09:34:51</span>' +
-                          '</div>',
-                      position: 'top-left'
-                  });*/
             },
 
             fethcNightFall(floorNo) {
@@ -1386,7 +1377,7 @@
         display: inline-block;
         list-style: none;
         font-size: 17px;
-        font-family: PingFangSC-Semibold;
+      /* font-family: PingFangSC-Semibold;*/
         font-weight: 600;
         color: #727272;
         text-align: center;;

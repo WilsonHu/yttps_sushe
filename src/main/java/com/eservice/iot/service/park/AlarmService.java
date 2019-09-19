@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -56,11 +57,30 @@ public class AlarmService {
     @Value("${attendance_size}")
     private int ATTENDANCE_SIZE;
 
+    @Value("${valid_time}")
+    private int VALID_TIME;
+
     private String token;
 
     private static ArrayList<VisitRecord> CURRENT_ATTENDANCE = new ArrayList<>();
     private static ArrayList<String> CURRENT_TRACK = new ArrayList<>();
     private static ArrayList<String> IMAGE_NAMES = new ArrayList<>();
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void resetStaffDataScheduled() {
+        logger.info("每天凌晨一点清除前一天签到记录：{}", formatter.format(new Date()));
+
+
+        logger.info("================ 清理临时文件 ===============");
+        if (IMAGE_NAMES.size() > 0) {
+            for (String name : IMAGE_NAMES) {
+                FileUtil.deleteFile(name);
+            }
+        }
+        //通过MQTT将员工签到信息发送至web端
+        logger.warn("Send message to client to clear sign in data!");
+        //mqttMessageHelper.sendToClient("staff/sign_in/reset", "{}");
+    }
 
     public List<VisitRecord> requestParkStranger(String[] deviceId, Long startTime, Long queryEndTime) {
         if (token == null && tokenService != null) {
@@ -106,7 +126,7 @@ public class AlarmService {
                                 //queryStartTime = queryEndTime - 1;
                                 return strangerList;
                             } else {
-                                return null;
+                                clear();
                             }
                         }
                     }
@@ -129,6 +149,7 @@ public class AlarmService {
         Collections.reverse(records);
         for (VisitRecord visitRecord : records) {
             ArrayList<VisitRecord> mSendList = new ArrayList<>();
+            logger.info("STRANGER visitRecord score : " + visitRecord.getScore());
             if (visitRecord.getIdentity().equals("STRANGER") && visitRecord.getScore() < STRANGER_SCORE) {
                 String img = imageService.getImageById(visitRecord.getFace_image_id());
                 //String isTrue = imageService.qualityVerify(img);
@@ -136,6 +157,7 @@ public class AlarmService {
 //                    logger.warn(" qualityVerify : {} ", isTrue);
 //                    continue;
 //                }
+
                 logger.info("visitRecord TrackId : " + visitRecord.getTrack_id());
                 if (!initial) {
                     if (!CURRENT_TRACK.contains(visitRecord.getTrack_id())) {
@@ -166,7 +188,6 @@ public class AlarmService {
 
                             }
                         });*/
-
                     }
                 }
             }
@@ -203,6 +224,20 @@ public class AlarmService {
         mExecutor.setMaxPoolSize(100);
         mExecutor.setThreadNamePrefix("YTTPS-");
         mExecutor.initialize();
+    }
+
+    public void clear() {
+        if (CURRENT_ATTENDANCE.size() > 0) {
+            int begin = CURRENT_ATTENDANCE.size();
+            CURRENT_ATTENDANCE.removeIf(
+                    visitRecord -> System.currentTimeMillis() / 1000 - visitRecord.getTimestamp() >= VALID_TIME
+            );
+            int end = CURRENT_ATTENDANCE.size();
+            if (begin != end) {
+                logger.info(" CURRENT_ATTENDANCE size {} -> {} ", begin, end);
+            }
+
+        }
     }
 
 }

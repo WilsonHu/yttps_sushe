@@ -400,6 +400,30 @@ function isIE() {
     }
 }
 
+function dateFormat(date,format) {
+    var time;
+    if(!date)return "";
+    if(typeof date === 'string'){
+        time = new Date(date.replace(/-/g,'/').replace(/T|Z/g,' ').trim());
+    }else if(typeof date === 'object'){
+        time = new Date(date) ;
+    }
+    var o = {
+        "M+": time.getMonth() + 1, //月份
+        "d+": time.getDate(), //日
+        "h+": time.getHours(), //小时
+        "m+": time.getMinutes(), //分
+        "s+": time.getSeconds(), //秒
+        "q+": Math.floor((time.getMonth() + 3) / 3), //季度
+        "S": time.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (time.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return format;
+}
+
+
 function requestFullScreen() {
     var doc = document.documentElement;
     var i = 0;
@@ -470,3 +494,20 @@ function compareDate(dStart, dEnd) {
     end_at = new Date(dEnd.replace(/^(\d{4})(\d{2})(\d{2})$/, "$1/$2/$3"));
     return end_at > start_at;
 }
+
+
+function formatDateTime(inputTime) {
+    var date = new Date(inputTime);
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    var d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    var h = date.getHours();
+    h = h < 10 ? ('0' + h) : h;
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    minute = minute < 10 ? ('0' + minute) : minute;
+    second = second < 10 ? ('0' + second) : second;
+    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+};
