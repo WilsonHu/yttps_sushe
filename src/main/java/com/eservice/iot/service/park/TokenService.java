@@ -49,13 +49,14 @@ public class TokenService {
             headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
             HttpEntity r = new HttpEntity<>(JSON.toJSONString(postParameters), headers);
             try {
-                ResponseEntity<String> responseEntity = restTemplate.postForEntity(PARK_BASE_URL + "/user/login", r, String.class);
+                ResponseEntity<String> responseEntity = restTemplate.postForEntity(PARK_BASE_URL + "/login", r, String.class);
                 if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
                     String body = responseEntity.getBody();
                     if (body != null) {
                         ResponseModel responseModel = JSONObject.parseObject(body, ResponseModel.class);
                         if (responseModel != null && responseModel.getResult() != null) {
                             token = responseModel.getResult();
+                            logger.info("token is == >{}",token);
                         }
                     }
                 }
