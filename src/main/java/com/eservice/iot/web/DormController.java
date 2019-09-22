@@ -25,10 +25,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/dorm")
@@ -174,14 +171,16 @@ public class DormController {
 
 
     @PostMapping("/getStrangerList")
-    public Result getStrangerList(String deviceId, String queryStartTime, String queryFinishTime) {
+    public Result getStrangerList(String deviceId, Date queryStartTime, Date queryFinishTime) {
         String deviceIdList[] = deviceId.split(",");
         try {
-            Long startTime = formatter.parse(queryStartTime).getTime() / 1000L;
-            Long endTime = formatter.parse(queryFinishTime).getTime() / 1000L;
+            /*Long startTime = formatter.parse(queryStartTime).getTime() / 1000L;
+            Long endTime = formatter.parse(queryFinishTime).getTime() / 1000L;*/
+            Long startTime = queryStartTime.getTime() / 1000L;
+            Long endTime = queryFinishTime.getTime() / 1000L;
             List<VisitRecord> strangerList = alarmService.requestParkStranger(deviceIdList, startTime, endTime);
             return ResultGenerator.genSuccessResult(strangerList);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ResultGenerator.genSuccessResult();

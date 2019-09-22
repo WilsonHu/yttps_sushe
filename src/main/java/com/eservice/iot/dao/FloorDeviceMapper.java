@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface FloorDeviceMapper extends Mapper<FloorDevice> {
 
+    List<FloorDevice> getFloorDeviceInfo(@Param("key") String key);
 }

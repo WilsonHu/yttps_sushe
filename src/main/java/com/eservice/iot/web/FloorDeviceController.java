@@ -33,7 +33,7 @@ public class FloorDeviceController {
 
     @PostMapping("/add")
     public Result add(String jsonData) {
-        FloorDevice floorDevice= JSON.parseObject(jsonData,FloorDevice.class);
+        FloorDevice floorDevice = JSON.parseObject(jsonData, FloorDevice.class);
         floorDeviceService.save(floorDevice);
         return ResultGenerator.genSuccessResult();
     }
@@ -46,7 +46,7 @@ public class FloorDeviceController {
 
     @PostMapping("/update")
     public Result update(String jsonData) {
-        FloorDevice floorDevice= JSON.parseObject(jsonData,FloorDevice.class);
+        FloorDevice floorDevice = JSON.parseObject(jsonData, FloorDevice.class);
         floorDeviceService.update(floorDevice);
         return ResultGenerator.genSuccessResult();
     }
@@ -58,18 +58,20 @@ public class FloorDeviceController {
     }
 
     @PostMapping("/list")
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size, String key) {
         PageHelper.startPage(page, size);
-        List<FloorDevice> list = floorDeviceService.findAll();
+        List<FloorDevice> list = floorDeviceService.getFloorDeviceInfo(key);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
     @PostMapping("/getDevice")
     public Result getDevice(String floorNo) {
-       Condition condition=new Condition(FloorDevice.class);
-       condition.createCriteria().andEqualTo("floorNo",floorNo);
-       List<FloorDevice> list=floorDeviceService.findByCondition(condition);
+        Condition condition = new Condition(FloorDevice.class);
+        condition.createCriteria().andEqualTo("floorNo", floorNo);
+        List<FloorDevice> list = floorDeviceService.findByCondition(condition);
         return ResultGenerator.genSuccessResult(list);
     }
+
+
 }

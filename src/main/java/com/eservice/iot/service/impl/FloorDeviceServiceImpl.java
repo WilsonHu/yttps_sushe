@@ -13,15 +13,20 @@ import java.util.List;
 
 
 /**
-* Class Description: xxx
-* @author Mr.Zhang
-* @date 2019/07/14.
-*/
+ * Class Description: xxx
+ *
+ * @author Mr.Zhang
+ * @date 2019/07/14.
+ */
 @Service
 @Transactional
 public class FloorDeviceServiceImpl extends AbstractService<FloorDevice> implements FloorDeviceService {
     @Resource
     private FloorDeviceMapper floorDeviceMapper;
+
+    public List<FloorDevice> getFloorDeviceInfo(String key) {
+        return floorDeviceMapper.getFloorDeviceInfo(key);
+    }
 
 
 }

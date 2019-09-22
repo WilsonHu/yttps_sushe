@@ -2,27 +2,62 @@ import Login from '../components/Login.vue'
 import NotFound from '../components/404.vue'
 import Dormitory from '../components/dormitory.vue'
 import Home from '../components/home.vue'
-export default
-[
-	{
-		path: '/login',
-		component: Login,
-		name: 'Login',
-		hidden: true
-	},
-	{
-		path: '/404',
-		component: NotFound,
-		name: '404',
-		hidden: true
-	},
 
-	{
-		path: '/dormitory',
-        component:Dormitory,
-	},
-	{
-		path: '/home',
-		component:Home,
-	},
+import System from '../components/system.vue'
+import UserManage from '../components/system/userManage.vue'
+import FloorDeviceManage from '../components/system/floorDeviceManage.vue'
+
+export default [
+    {
+        path: '/login',
+        component: Login,
+        name: 'Login',
+        hidden: true
+    },
+    {
+        path: '/404',
+        component: NotFound,
+        name: '404',
+        hidden: true
+    },
+
+    {
+        path: '/dormitory',
+        component: Dormitory,
+        hidden: true
+    },
+    {
+        path: '/home',
+        component: Home,
+        redirect: '/home/system/userManage',
+        children: [
+            {
+                path: '/home/system',
+                component: System,
+                name: 'System',
+                meta: "系统管理",
+                icon: 'el-icon-s-tools',
+                hidden: false,
+                children: [
+                    {
+                        path: '/home/system/userManage',
+                        component: UserManage,
+                        name: 'UserManage',
+                        meta: '用户管理'
+                    },
+                    {
+                        path: '/home/system/floorDeviceManage',
+                        component: FloorDeviceManage,
+                        name: 'floorDeviceManage',
+                        meta: '楼层设备管理'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        path: '*',
+        redirect: '/home',
+        hidden: true
+    },
 ]

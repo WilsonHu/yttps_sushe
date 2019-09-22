@@ -96,7 +96,7 @@ public class AlarmService {
                 queryEndTime = System.currentTimeMillis() / 1000;
             }
             postParameters.put("end_timestamp", queryEndTime);
-            logger.info("startTime :  {} ,queryEndTime : {}", formatter.format(startTime * 1000L), formatter.format(queryEndTime * 1000L));
+            //logger.info("startTime :  {} ,queryEndTime : {}", formatter.format(startTime * 1000L), formatter.format(queryEndTime * 1000L));
             //只获取员工数据
             ArrayList<String> identity = new ArrayList<>();
             identity.add("STRANGER");

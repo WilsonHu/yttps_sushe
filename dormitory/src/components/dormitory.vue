@@ -1,5 +1,6 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
-    <div style="width: 100%;height: 100%;background-color: #F6F4FF;">
+    <div style="width: 100%;height: 100%;background-color: #F6F4FF;padding-top: 50px">
+        <audio id="error"  src="./src/assets/audio/ly-17-02-22-17.mp3"></audio>
         <el-row :gutter="0">
             <el-col :span="8">
                 <div class="grid-content bg-purple">
@@ -31,7 +32,7 @@
 
                         <div class="well well-lg"
                              style="height: 610px;margin-left:60px; width:85%;background: #FFFFFF;box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);border-radius: 10px; ">
-                            <i style=" font:20px Extra Small; font-weight: bold;color: #6a747c;">出入信息统计</i>
+                            <i style=" font-size: 20px; font-weight: 600;color: #6a747c;">出入信息统计</i>
                             <el-tabs v-model="infoManage" @tab-click="handleClick" class="a"
                                      style="margin-top: -20px;">
                                 <el-tab-pane label="当前" name="first">
@@ -151,7 +152,7 @@
                                     events='false'
                                     classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921'
                                     codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
-                                    width="587" height="340" style="margin-top: 50px;margin-left: 30px">
+                                    width="587" height="340" style="margin-top: 50px;margin-left: 32px">
                                 <param name='mrl' :value='i'/>
                                 <param name='volume' value='50'/>
                                 <param name='autoplay' value='true'/>
@@ -327,15 +328,14 @@
                                         <div style="height: 780px;overflow:auto" class="revisiDiv" id="accessBlack">
                                             <ul style="margin-top: 10px;margin-left: -10px ">
                                                 <li v-for="i in accessList" v-if="i.type=='黑名单'">
-                                                    <el-col :span="2" style="margin-top: -19px">
-                                                        <img :src="require('../assets/img/'+'info_warning'+'.png')"
-                                                             style=" height: 52px;width:50px;border-radius:50%;margin-top: -41px;margin-left: -6px;position: relative;top: 69px;left: -21px">
-                                                    </el-col>
                                                     <el-card
-                                                            style="border-radius: 10px;width:432px;height: 80px;margin-left: -2px">
+                                                            style="border-radius: 10px;width:462px;height: 80px;margin-left: -20px">
                                                         <div>
                                                             <el-row>
-
+                                                                <el-col :span="2">
+                                                                    <img :src="require('../assets/img/'+'info_warning'+'.png')"
+                                                                         style=" height: 78px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                </el-col>
                                                                 <el-col :span="2" :offset="2"
                                                                         style="margin-top: 8px;font-size: 15px;">
                                                                     <span>{{i.pass_time.split(" ")[1]}}</span>
@@ -376,19 +376,29 @@
                 <img :src="bigImg" width="680px" height="700px" style="margin-left: 20px"/>
             </el-row>
         </el-dialog>
-        <el-dialog title="通行记录" :visible.sync="accessDialogVisble" width="60%">
-            <el-row style="width: 20rem">
-                <el-date-picker
-                        v-model="beginTime"
-                        type="datetimerange"
-                        align="left"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        unlink-panels
-                        range-separator="—"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                </el-date-picker>
+
+        <el-dialog title="通行记录" :visible.sync="accessDialogVisble" size="tiny" width="60%">
+            <el-row :gutter="20">
+                <el-col :span="7">
+                    <el-date-picker
+                            v-model="beginTime"
+                            type="datetimerange"
+                            align="left"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            unlink-panels
+                            range-separator="—"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-col>
+                <el-col :span="5">
+                    <el-input style="margin-left: 150px;"
+                              placeholder="按姓名查询" clearable
+                              v-model="staffName" @keyup.enter.native="getStaffByName">
+                        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                    </el-input>
+                </el-col>
             </el-row>
             <el-row>
                 <div style="height: 500px;overflow:auto;" class="revisiDiv">
@@ -442,29 +452,6 @@
             </div>
         </el-dialog>
 
-        <div class="warning">
-            <el-dialog :visible.sync="warningDialogVisble" width="18%" style="border-radius: 20px">
-                <el-row>
-                    <el-col>
-                        <img class="waringPerson" src="../assets/img/ldh.png" width="345px" height="250px"
-                             style="margin-left: -20px"/>
-                    </el-col>
-                    <el-col>
-                        <img src="../assets/img/info_warning.png" width="100px" height="100px"
-                             style="border-radius: 50%;margin-left: 8rem;margin-top: -3rem"/>
-                    </el-col>
-                    <el-col>
-                        <span style="margin-left: 8rem;font-size: 22px;font-weight: 500;color: #C42E3B ">WARNING</span>
-                    </el-col>
-                    <el-col>
-                        <span style="margin-left: 4rem;font-size: 40px;font-weight: 500;color: #C42E3B ">【陌生人】</span>
-                    </el-col>
-                    <el-col>
-                        <span style="margin-left: 9rem;font-size: 22px;font-weight: 500;color: #C42E3B;margin-top: 10rem">09:34:51</span>
-                    </el-col>
-                </el-row>
-            </el-dialog>
-        </div>
     </div>
 </template>
 
@@ -485,6 +472,7 @@
             return {
                 selected: "first",
                 infoManage: 'first',
+                staffName: '',
                 attendanceNumber: [],
                 indormitoryNumber: [],
                 outdormitoryNumber: [],
@@ -535,11 +523,25 @@
             }
         },
         methods: {
+            /*  handleCloseTitle(done) {
+                  this.$confirm('是否取消?', '提示', {
+                      confirmButtonText: '确定',
+                      cancelButtonText: '取消',
+                      type: 'warning'
+
+                  }).then(() => {
+                      moreAccessList=[]
+                      done();
+                  })
+                      .catch(_ => {
+
+                      });
+              },*/
             big(item) {
-                /* document.getElementById("vlc").style.display = "none";
-                 _this.imgDialogVisible = true;
-                 _this.bigImg = item.imageId*/
-                _this.warningDialogVisble = true;
+                document.getElementById("vlc").style.display = "none";
+                _this.imgDialogVisible = true;
+                _this.bigImg = item.imageId
+                // _this.warningDialogVisble = true;
             },
             handleClick(tab, event) {
                 switch (_this.infoManage) {
@@ -565,11 +567,12 @@
                         _this.submitUrl = "dorm/getAccessRecordList";
                         break;
                     case "second":
+                        _this.audioStranage();
                         clearInterval(timeFetchAccess)
                         _this.firstLoad = true;
-                        _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS");
+                        _this.fetchNewestAccessRecordListByPass(_this.deviceId, "STAFF");
                         timeFetchAccess = setInterval(function () {
-                            _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS");
+                            _this.fetchNewestAccessRecordListByPass(_this.deviceId, "STAFF");
                         }, 3000)
                         _this.submitUrl = "dorm/getAccessRecordListByPass"
                         break;
@@ -590,7 +593,6 @@
             },
             search() {
                 _this.accessList = []
-
                 if (_this.name != "" && _this.name != null) {
                     clearInterval(timeFetchAccess)
                     _this.selected = "first"
@@ -628,16 +630,23 @@
                             _this.fetchNewestAccessRecordList(_this.deviceId)
                         }, 3000)
 
-                       /* strangerTime = setInterval(function () {
+                        strangerTime = setInterval(function () {
                             _this.fetchStrangerAlarm()
                         }, 3000)
-*/
 
                     } else {
-                        showMessage(_this, '设备信息获取失败', 0)
+                        _this.$notify({
+                            title: '错误',
+                            message: '设备信息获取失败',
+                            type: 'error'
+                        });
                     }
                 }).catch(error => {
-                    showMessage(_this, error, 0)
+                    _this.$notify({
+                        title: '错误',
+                        message: error,
+                        type: 'error'
+                    });
                 })
             },
             defaultDate() {
@@ -650,210 +659,6 @@
                 console.log("当天:" + beg)
                 _this.beginTime = [beg, end]
             },
-
-            //通行记录
-            fetchNewestAccessRecordList(floorDevice) {
-                let params = new URLSearchParams();
-                params.append("size", _this.pageSize);
-                params.append("deviceId", floorDevice);
-                request({
-                    url: HOST + "dorm/getNewestAccessRecordList",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                        if (res.data.code == 200) {
-                            for (let i = 0; i < res.data.data.length; i++) {
-                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
-                            }
-                            _this.accessList = res.data.data;
-
-                        } else {
-                            showMessage(_this, "获取最新通行记录失败", 0)
-                        }
-                    }
-                ).catch(error => {
-                    showMessage(_this, "fetchNewestAccessRecordList===>:{}" + error, 0)
-                })
-
-            },
-            fetchNewestAccessRecordListByPass(floorDevice, pass) {
-                let params = new URLSearchParams();
-                params.append("size", _this.pageSize);
-                params.append("deviceId", floorDevice);
-                params.append("pass", pass)
-                request({
-                    url: HOST + "dorm/getNewestAccessRecordListByPass",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                        if (res.data.code == 200) {
-                            for (let i = 0; i < res.data.data.length; i++) {
-                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
-                            }
-                            _this.accessByPassList = res.data.data;
-                        } else {
-                            showMessage(_this, "获取最新通行记录失败==>ByPass", 0)
-                        }
-                    }
-                ).catch(error => {
-                    showMessage(_this, "fetchNewestAccessRecordListByPass===>:{}" + error, 0)
-                })
-
-            },
-            fetchNewestAccessRecordListByName(floorDevice, name) {
-                let params = new URLSearchParams();
-                params.append("size", _this.pageSize);
-                params.append("deviceId", floorDevice);
-                params.append("name", name)
-                request({
-                    url: HOST + "dorm/getNewestAccessRecordListByName",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                        if (res.data.code == 200) {
-                            for (let i = 0; i < res.data.data.length; i++) {
-                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
-                            }
-                            _this.accessList = res.data.data;
-                        } else {
-                            showMessage(_this, "获取最新通行记录失败==>ByName", 0)
-                        }
-                    }
-                ).catch(error => {
-                    showMessage(_this, "fetchNewestAccessRecordListByName===>:{}" + error, 0)
-                })
-
-            },
-            fetchNewestAccessRecordListByIdentity(floorDevice, identity) {
-                let params = new URLSearchParams();
-                params.append("size", _this.pageSize);
-                params.append("deviceId", floorDevice);
-                params.append("identity", identity)
-                request({
-                    url: HOST + "dorm/getNewestAccessRecordListByIdentity",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                        if (res.data.code == 200) {
-                            for (let i = 0; i < res.data.data.length; i++) {
-                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
-                            }
-                            _this.accessList = res.data.data;
-                        } else {
-                            showMessage(_this, "获取最新通行记录失败==>ByIdentity", 0)
-                        }
-                    }
-                ).catch(error => {
-                    showMessage(_this, "fetchNewestAccessRecordListByIdentity===>:{}" + error, 0)
-                })
-
-            },
-
-            fetchStrangerAlarm() {
-                let params = new URLSearchParams();
-                params.append("deviceId", _this.deviceId);
-                params.append("queryStartTime", _this.strangerTime);
-                params.append("queryFinishTime", new Date().format("yyyy-MM-dd hh:mm:ss"));
-                request({
-                    url: HOST + "dorm/getStrangerList",
-                    method: 'post',
-                    data: params
-                }).then(res => {
-                    if (res.data.code == 200 && res.data.data != null) {
-                        let list = res.data.data;
-                        let time = new Date();
-                        let waring = require('../assets/img/info_warning.png')
-                        for (let i = 0; i < list.length; i++) {
-                            let da = new Date((list[0].timestamp + 1) * 1000);
-                            _this.strangerTime = formatDateTime(da)
-                            var nowTime = da.getHours() + ":" + da.getMinutes() + ":" + da.getSeconds();
-                            _this.$notify({
-                                title: '自定义位置',
-                                dangerouslyUseHTMLString: true,
-                                message: '<div class="warning">' +
-                                    '<img style="width:315px; height:245px;margin-top: 20px;margin-left:-20px" src=' + IP + '/image/' + list[i].face_image_id + '/>' +
-                                    '<img style="border-radius: 50%;margin-left: 8rem;margin-top: -3rem;width:90px; height:90px" src=' + waring + '/>' +
-                                    '<span style="margin-left: 7.5rem;margin-top:50px;font-size: 22px;font-weight: 500;color: #C42E3B ">WARNING</span><br/>' +
-                                    '<span style="margin-left: 6.8rem;font-size: 25px;font-weight: 500;color: #C42E3B;margin-top: 20px ">【陌生人】</span><br/>' +
-                                    '<span style="margin-left: 8.3rem;font-size: 22px;font-weight: 500;color: #C42E3B;margin-top: 10rem">' + nowTime + '</span>' +
-                                    '</div>',
-                                position: 'top-left'
-                            });
-                        }
-                    }
-                }).catch(error => {
-                    showMessage(_this, error, 0);
-                })
-            },
-
-            fethcNightFall(floorNo) {
-                let parmas = new URLSearchParams();
-                parmas.append("page", _this.nightPage)
-                parmas.append("size", _this.nightPageSize);
-                parmas.append("deviceList", floorNo)
-                request({
-                    url: HOST + "access/getNightfall",
-                    method: "post",
-                    data: parmas
-                }).then(res => {
-                    if (res.data.code == 200) {
-                        if (res.data.data != null) {
-                            for (let i = 0; i < res.data.data.list.length; i++) {
-                                res.data.data.list[i].imageId = IP + "/image/" + res.data.data.list[i].imageId;
-                            }
-                            _this.nightFallList = res.data.data.list;
-                        } else {
-                            showMessage(_this, '当前晚归数据为空', 1)
-                        }
-                    } else {
-                        showMessage(_this, "晚归考勤查询失败")
-                    }
-                }).catch(error => {
-                    showMessage(_this, error, 0)
-                })
-            },
-            fetchNumbers(floorNo) {
-                let params = new URLSearchParams()
-                params.append("floor", floorNo)
-                request({
-                    url: HOST + "access/getNumber",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                    if (res.data.code == 200) {
-                        _this.attendanceNumber = res.data.data.attendanceNumbers;
-                        _this.indormitoryNumber = res.data.data.inDormitories;
-                        _this.outdormitoryNumber = res.data.data.outDormitories;
-                        _this.SetEchart();
-                    } else {
-                        showMessage(_this, "获取时段人数失败", 0)
-                    }
-                }).catch(error => {
-                    showMessage(_this, error, 0)
-                })
-            },
-            fetchAttendanceAndInOrOut(floorNo) {
-                let params = new URLSearchParams()
-                params.append("floor", floorNo)
-                request({
-                    url: HOST + "access/attendanceCount",
-                    method: "post",
-                    data: params
-                }).then(res => {
-                    if (res.data.code == 200) {
-                        _this.attendanceNumList.attendanceNum = res.data.data.attendanceNum
-                        _this.attendanceNumList.inDormitory = res.data.data.inDormitory
-                        _this.attendanceNumList.outDormitory = res.data.data.outDormitory
-                        _this.attendanceNumList.total = res.data.data.total
-
-                    } else {
-                        showMessage(_this, "获取进出记录失败", 0)
-                    }
-                }).catch(error => {
-                    showMessage(_this, error, 0)
-                })
-            },
-
             SetEchart() {
                 let myChart = echarts.init(document.getElementById('myChart'))
                 let attendace = echarts.init(document.getElementById('attendace'))
@@ -1049,7 +854,7 @@
                             stack: '总量',
                             label: {},
                             //_this.outdormitoryNumber
-                            data: [15, 25, 16, 35, 25, 16, 15, 39, 26, 28, 10, 0],
+                            data: _this.outdormitoryNumber,
                             areaStyle: {
                                 normal: {
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -1088,6 +893,274 @@
                 myChart.setOption(option);
                 attendace.setOption(option1);
                 outSide.setOption(option2);
+            },
+            fethcNightFall(floorNo) {
+                let parmas = new URLSearchParams();
+                parmas.append("page", _this.nightPage)
+                parmas.append("size", _this.nightPageSize);
+                parmas.append("deviceList", floorNo)
+                request({
+                    url: HOST + "access/getNightfall",
+                    method: "post",
+                    data: parmas
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        if (res.data.data != null) {
+                            for (let i = 0; i < res.data.data.list.length; i++) {
+                                res.data.data.list[i].imageId = IP + "/image/" + res.data.data.list[i].imageId;
+                            }
+                            _this.nightFallList = res.data.data.list;
+                        } else {
+                            _this.$notify({
+                                title: '提示',
+                                message: '当前晚归数据为空',
+                                type: 'success'
+                            });
+                        }
+                    } else {
+                        _this.$notify({
+                            title: '错误',
+                            message: '晚归查询失败',
+                            type: 'error'
+                        });
+                    }
+                }).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: error,
+                        type: 'error'
+                    });
+                })
+            },
+            fetchNumbers(floorNo) {
+                let params = new URLSearchParams()
+                params.append("floor", floorNo)
+                request({
+                    url: HOST + "access/getNumber",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        _this.attendanceNumber = res.data.data.attendanceNumbers;
+                        _this.indormitoryNumber = res.data.data.inDormitories;
+                        _this.outdormitoryNumber = res.data.data.outDormitories;
+                        _this.SetEchart();
+                    } else {
+                        _this.$notify({
+                            title: '错误',
+                            message: '获取时段人数失败',
+                            type: 'error'
+                        });
+                    }
+                }).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: error,
+                        type: 'error'
+                    });
+                })
+            },
+            fetchAttendanceAndInOrOut(floorNo) {
+                let params = new URLSearchParams()
+                params.append("floor", floorNo)
+                request({
+                    url: HOST + "access/attendanceCount",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        _this.attendanceNumList.attendanceNum = res.data.data.attendanceNum
+                        _this.attendanceNumList.inDormitory = res.data.data.inDormitory
+                        _this.attendanceNumList.outDormitory = res.data.data.outDormitory
+                        _this.attendanceNumList.total = res.data.data.total
+
+                    } else {
+                        _this.$notify({
+                            title: '错误',
+                            message: "获取进出记录失败",
+                            type: 'error'
+                        });
+                    }
+                }).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: error,
+                        type: 'error'
+                    });
+                })
+            },
+
+
+            //通行记录
+            fetchNewestAccessRecordList(floorDevice) {
+
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                request({
+                    url: HOST + "dorm/getNewestAccessRecordList",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                            }
+                            _this.accessList = res.data.data;
+
+                        } else {
+                            _this.$notify({
+                                title: '错误',
+                                message: "获取最新通行记录失败",
+                                type: 'error'
+                            });
+                        }
+                    }
+                ).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: "fetchNewestAccessRecordList===>:" + error,
+                        type: 'error'
+                    });
+                })
+
+            },
+            fetchNewestAccessRecordListByPass(floorDevice, pass) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                params.append("pass", pass)
+                request({
+                    url: HOST + "dorm/getNewestAccessRecordListByPass",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                            }
+                            _this.accessByPassList = res.data.data;
+                        } else {
+                            _this.$notify({
+                                title: '错误',
+                                message: "获取最新通行记录失败==>ByPass",
+                                type: 'error'
+                            });
+                        }
+                    }
+                ).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: "fetchNewestAccessRecordListByPass===>:" + error,
+                        type: 'error'
+                    });
+                })
+
+            },
+            fetchNewestAccessRecordListByName(floorDevice, name) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                params.append("name", name)
+                request({
+                    url: HOST + "dorm/getNewestAccessRecordListByName",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                            }
+                            _this.accessList = res.data.data;
+                        } else {
+                            _this.$notify({
+                                title: '错误',
+                                message: "获取最新通行记录失败==>ByName",
+                                type: 'error'
+                            });
+                        }
+                    }
+                ).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: "fetchNewestAccessRecordListByName===>:" + error,
+                        type: 'error'
+                    });
+                })
+
+            },
+            fetchNewestAccessRecordListByIdentity(floorDevice, identity) {
+                let params = new URLSearchParams();
+                params.append("size", _this.pageSize);
+                params.append("deviceId", floorDevice);
+                params.append("identity", identity)
+                request({
+                    url: HOST + "dorm/getNewestAccessRecordListByIdentity",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        if (res.data.code == 200) {
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                            }
+                            _this.accessList = res.data.data;
+                        } else {
+                            _this.$notify({
+                                title: '错误',
+                                message: "获取最新通行记录失败==>ByIdentity",
+                                type: 'error'
+                            });
+                        }
+                    }
+                ).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: "fetchNewestAccessRecordListByIdentity===>:" + error,
+                        type: 'error'
+                    });
+                })
+
+            },
+            fetchStrangerAlarm() {
+                let params = new URLSearchParams();
+                params.append("deviceId", _this.deviceId);
+                params.append("queryStartTime", _this.strangerTime);
+                params.append("queryFinishTime", new Date());
+                request({
+                    url: HOST + "dorm/getStrangerList",
+                    method: 'post',
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200 && res.data.data != null) {
+                        let list = res.data.data;
+                        let time = new Date();
+                        let waring = require('../assets/img/info_warning.png')
+                        _this.audioStranage();
+                        for (let i = 0; i < list.length; i++) {
+                            let da = new Date((list[0].timestamp + 1) * 1000);
+                            _this.strangerTime = da;
+                            var nowTime = da.getHours() + ":" + da.getMinutes() + ":" + da.getSeconds();
+                            _this.$notify({
+                                title: '陌生人',
+                                dangerouslyUseHTMLString: true,
+                                message: '<div class="warning">' +
+                                    '<img style="width:315px; height:245px;margin-top: 20px;margin-left:-20px" src=' + IP + '/image/' + list[i].face_image_id + '/>' +
+                                    '<img style="border-radius: 50%;margin-left: 8rem;margin-top: -3rem;width:90px; height:90px" src=' + waring + '/>' +
+                                    '<span style="margin-left: 7.5rem;margin-top:50px;font-size: 22px;font-weight: 500;color: #C42E3B ">WARNING</span><br/>' +
+                                    '<span style="margin-left: 6.8rem;font-size: 25px;font-weight: 500;color: #C42E3B;margin-top: 20px ">【陌生人】</span><br/>' +
+                                    '<span style="margin-left: 8.3rem;font-size: 22px;font-weight: 500;color: #C42E3B;margin-top: 10rem">' + nowTime + '</span>' +
+                                    '</div>',
+                                position: 'top-left'
+                            });
+                        }
+                    }
+                }).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: error,
+                        type: 'error'
+                    });
+                })
             },
             handleScrollNight() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
@@ -1146,14 +1219,16 @@
                 }
                 if (scrollTop3 == 0) {
                     timeFetchAccess = setInterval(function () {
-                        _this.fetchNewestAccessRecordListByPass(_this.deviceId, "PASS")
+                        _this.fetchNewestAccessRecordListByPass(_this.deviceId, "STAFF")
                     }, 3000)
                 }
                 //变量windowHeight是可视区的高度
                 var windowHeight3 = document.getElementById("accessPass").clientHeight
                 //变量scrollHeight是滚动条的总高度
                 var scrollHeight3 = document.getElementById("accessPass").scrollHeight
-
+                if (scrollTop3 + windowHeight3 == scrollHeight3) {
+                    $(".mess").html("+ 点击查看更多通行记录")
+                }
 
             },
             handleScrollUnregistered() {
@@ -1169,12 +1244,9 @@
                 }
                 var windowHeight4 = document.getElementById("accessRegis").clientHeight
                 var scrollHeight4 = document.getElementById("accessRegis").scrollHeight
-                /* if (_this.firstLoad){
-                     if (scrollTop4 + windowHeight4 == scrollHeight4) {
-                         _this.firstLoad=false;
-                         _this.getAccessRecordListByIdentity(_this.deviceId, "STRANGER")
-                     }
-                 }*/
+                if (scrollTop4 + windowHeight4 == scrollHeight4) {
+                    $(".mess").html("+ 点击查看更多通行记录")
+                }
 
 
             },
@@ -1192,22 +1264,29 @@
                 }
                 var windowHeight6 = document.getElementById("accessBlack").clientHeight
                 var scrollHeight6 = document.getElementById("accessBlack").scrollHeight
-
+                if (scrollTop6 + windowHeight6 == scrollHeight6) {
+                    $(".mess").html("+ 点击查看更多通行记录")
+                }
 
             },
             verifyForm(formObj) {
                 let result = true;
                 if (formObj.deviceId == null || formObj.deviceId == "") {
-                    showMessage(_this, "设备id不能为空", 0)
+                    _this.$notify({
+                        title: '提示',
+                        message: '设备id不能为空'
+                    });
                     result = false;
                 } else if (formObj.floorNo == null || formObj.floorNo == "") {
-                    showMessage(_this, "设备名称不能为空", 0)
+                    _this.$notify({
+                        title: '提示',
+                        message: '设备名称不能为空'
+                    });
                     result = false;
                 }
 
                 return result;
             },
-
             handleSelectScroll() {
                 document.getElementById("div1").addEventListener("scroll", _this.handleScrollNight);
                 document.getElementById("accessAll").addEventListener("scroll", _this.handleScrollAccessAll);
@@ -1248,46 +1327,90 @@
                                 _this.moreAccessList = res.data.data.list;
                             }
                         } else {
-                            showMessage(_this, "获取最新通行记录失败", 0)
+                            _this.$notify({
+                                title: '提示',
+                                message: '获取最新通行记录失败'
+                            });
                         }
                     }
                 ).catch(error => {
-                    showMessage(_this, "getAccessRecordList===>:{}" + error, 0)
+                    _this.$notify({
+                        title: '提示',
+                        message: "getAccessRecordList===>:" + error,
+                    });
+
                 })
             },
             handleCurrentChange(val) {
                 _this.defaultDate();
                 _this.currentPage = val - 1;
-                if (_this.selected == "first") {
-                    _this.submitUrl = "dorm/getAccessRecordList";
-                    _this.fetchMoreAccess();
-                } else if (_this.selected == "second") {
-                    _this.submitUrl = "dorm/getAccessRecordListByPass";
-                    _this.fetchMoreAccess("PASS")
-                } else if (_this.selected == "third") {
-                    _this.submitUrl = "dorm/getAccessRecordListByIdentity";
-                    _this.fetchMoreAccess("STRANGER")
-                } else if (_this.selected == "fourth") {
-                    _this.submitUrl = "dorm/getAccessRecordListByIdentity";
-                    _this.fetchMoreAccess("BLACKLIST")
+                if (_this.staffName != null && _this.staffName != "") {
+                    _this.getStaffByName();
+                } else {
+                    if (_this.selected == "first") {
+                        _this.submitUrl = "dorm/getAccessRecordList";
+                        _this.fetchMoreAccess();
+                    } else if (_this.selected == "second") {
+                        _this.submitUrl = "dorm/getAccessRecordListByPass";
+                        _this.fetchMoreAccess("STAFF")
+                    } else if (_this.selected == "third") {
+                        _this.submitUrl = "dorm/getAccessRecordListByIdentity";
+                        _this.fetchMoreAccess("STRANGER")
+                    } else if (_this.selected == "fourth") {
+                        _this.submitUrl = "dorm/getAccessRecordListByIdentity";
+                        _this.fetchMoreAccess("BLACKLIST")
+                    }
                 }
+
             },
             loginOut() {
                 _this.$router.push("/login")
                 sessionStorage.removeItem("user")
+                clearInterval(timeOut);
+                clearInterval(timeFetchAccess)
+                clearInterval(timeFetchNight)
+                clearInterval(strangerTime)
             },
+            audioStranage() {
+                document.getElementById("error").play();
+            },
+            getStaffByName() {
 
-            warningStranger() {
-                _this.warningTime = _this.accessList[0].pass_time;
-                let Stranger = [];
-                for (let i = 0; i < _this.accessList.length; i++) {
-                    if (_this.accessList[i].pass_time > _this.warningTime) {
-                        Stranger.push(_this.accessList[i])
-                        if (_this.accessList[i].name == '陌生人') {
-
+                let params = new URLSearchParams();
+                params.append("page", _this.currentPage)
+                params.append("size", _this.accessSize);
+                params.append("deviceId", _this.deviceId);
+                params.append("name", _this.staffName)
+                params.append("queryFinishTime", _this.beginTime[0]);
+                params.append("queryEndTime", _this.beginTime[1]);
+                request({
+                    url: HOST + "dorm/getAccessRecordListByName",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                        _this.moreAccessList = [];
+                        if (res.data.code == 200) {
+                            if (res.data.data.list != null) {
+                                _this.totalRecords = res.data.data.total;
+                                for (let i = 0; i < res.data.data.list.length; i++) {
+                                    res.data.data.list[i].imageId = IP + "/image/" + res.data.data.list[i].imageId;
+                                }
+                                _this.moreAccessList = res.data.data.list;
+                            }
+                        } else {
+                            _this.$notify({
+                                title: '提示',
+                                message: '获取最新通行记录失败'
+                            });
                         }
                     }
-                }
+                ).catch(error => {
+                    _this.$notify({
+                        title: '错误',
+                        message: "getAccessRecordListByName===>:" + error,
+                        type: 'error'
+                    });
+                })
 
             }
         },
@@ -1309,8 +1432,10 @@
         },
         beforeDestroy() {
             //removeEventListener("scroll", _this.handleScrollAccessAll)
-            clearTimeout(timeOut, timeFetchNight)
+            clearInterval(timeOut);
             clearInterval(timeFetchAccess)
+            clearInterval(timeFetchNight)
+            clearInterval(strangerTime)
         },
 
         watch: {
@@ -1335,9 +1460,9 @@
 
 <style>
     .title {
-        font: 25px Extra Small;
+        font-size: 22px;
         color: #6a747c;
-        font-weight: bold;
+        font-weight: 600;
     }
 
     .a .el-tabs__nav-scroll {
@@ -1377,7 +1502,7 @@
         display: inline-block;
         list-style: none;
         font-size: 17px;
-      /* font-family: PingFangSC-Semibold;*/
+        /* font-family: PingFangSC-Semibold;*/
         font-weight: 600;
         color: #727272;
         text-align: center;;

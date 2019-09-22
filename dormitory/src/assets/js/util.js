@@ -41,9 +41,10 @@ Date.prototype.toJSON = function () {
 function resetObject(obj) {
     if (obj == null || obj.length == 0) {
         return;
-    };
+    }
+    ;
     for (let k of Object.keys(obj)) {
-        let typeName = typeof(obj[k]);
+        let typeName = typeof (obj[k]);
         switch (typeName) {
             case 'string':
                 obj[k] = '';
@@ -70,7 +71,7 @@ function resetArray(obj) {
         return;
     }
     for (let item of obj) {
-        let typeName = typeof(item);
+        let typeName = typeof (item);
         switch (typeName) {
             case 'string':
                 item = '';
@@ -94,8 +95,7 @@ function loadXMLDoc(xml_name) {
     var xmlDoc;
     try {
         xmlDoc = new ActiveXObject("Microsoft.XMLDOM"); // Support IE
-    }
-    catch (e) {
+    } catch (e) {
         try {
             // Support Firefox, Mozilla, Opera, etc
             xmlDoc = document.implementation.createDocument("", "", xml_name);// 创建一个空的 XML 文档对象。
@@ -163,7 +163,7 @@ Array.prototype.getMaxValue = function () {
         return 0;
     }
     this.sort(function (a, b) {
-        if (typeof(a) != 'number' || typeof(b) != 'number') {
+        if (typeof (a) != 'number' || typeof (b) != 'number') {
             return 0;
         }
         return b - a;
@@ -177,7 +177,7 @@ Array.prototype.getMinValue = function () {
         return 0;
     }
     this.sort(function (a, b) {
-        if (typeof(a) != 'number' || typeof(b) != 'number') {
+        if (typeof (a) != 'number' || typeof (b) != 'number') {
             return 0;
         }
         return a - b;
@@ -187,10 +187,10 @@ Array.prototype.getMinValue = function () {
 
 function objValueIsEmpty(obj) {
     for (var key in obj) {
-        if (typeof(obj[key]) == 'object') {
+        if (typeof (obj[key]) == 'object') {
             return objValueIsEmpty(obj[key]);
         }
-        if (typeof(obj[key]) == 'string') {
+        if (typeof (obj[key]) == 'string') {
             if (isStringEmpty(obj[key])) {
                 return key;
             }
@@ -241,16 +241,14 @@ function validateIsDifferent(obj1, obj2) {
     var isDifferent = false;
     for (var i in obj1) {
         var item = obj1[i];
-        if (typeof(obj1[item]) == "function") {
+        if (typeof (obj1[item]) == "function") {
             continue;
-        }
-        else if (typeof(obj1[item]) == "number") {
+        } else if (typeof (obj1[item]) == "number") {
             if (obj1[item].toString() != obj2[item].toString()) {
                 isDifferent = true;
                 break;
             }
-        }
-        else if (obj1[item] != obj2[item]) {
+        } else if (obj1[item] != obj2[item]) {
             isDifferent = true;
             break;
         }
@@ -265,7 +263,7 @@ function isInteger(obj) {
 function isStringEmpty(data) {
     if (data == null)
         return true;
-    if (typeof(data) == "number") {
+    if (typeof (data) == "number") {
         data = data.toString();
     }
     return data.replace(/(^s*)|(s*$)/g, "").length == 0;
@@ -429,16 +427,13 @@ function requestFullScreen() {
     var i = 0;
     if (doc.requestFullScreen) {//W3C
         doc.requestFullScreen();
-    }
-    else if (doc.webkitRequestFullScreen) {//Chrome
+    } else if (doc.webkitRequestFullScreen) {//Chrome
         doc.webkitRequestFullScreen();
         i = 1;
-    }
-    else if (doc.msRequestFullscreen) {//IE
+    } else if (doc.msRequestFullscreen) {//IE
         doc.msRequestFullscreen();
         i = 2;
-    }
-    else if (doc.mozRequestFullScreen) {//firefox
+    } else if (doc.mozRequestFullScreen) {//firefox
         doc.mozRequestFullScreen();
         i = 3;
     }

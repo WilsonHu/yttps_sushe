@@ -67,8 +67,6 @@ public class DormService {
     private static ArrayList<String>[] inExistList = null;
 
 
-
-
     public DormService() {
         day = simple.format(new Date()) + " ";
     }
@@ -128,8 +126,13 @@ public class DormService {
         postParameters.put("start_timestamp", queryTime);
         ///通行记录查询结束时间
         postParameters.put("end_timestamp", endTime);
+        ArrayList<String> identity = new ArrayList<>();
+        identity.add("STAFF");
+        postParameters.put("identity_list", identity);
         //查询记录
-        List<VisitRecord> records = accessService.requestParkAccessRecord(postParameters);
+        List<VisitRecord> records = accessService.requestParkVisitRecord(postParameters);
+
+
         //记录过滤
         ArrayList<VisitRecord> visitRecords = new ArrayList<>();
         Collections.reverse(records);
@@ -299,15 +302,11 @@ public class DormService {
         postParameters.put("size", size);
         ///指定设备
         postParameters.put("device_id_list", arrayList);
-        ///指定通行状态
-        ArrayList<String> passes = new ArrayList<>();
-        passes.add(pass);
-        postParameters.put("pass_result_list", passes);
         ///指定人员身份
         ArrayList<String> identities = new ArrayList<>();
         identities.add(Constant.STAFF);
         postParameters.put("identity_list", identities);
-        List<VisitRecord> visitRecords = accessService.requestParkAccessRecord(postParameters);
+        List<VisitRecord> visitRecords = accessService.requestParkVisitRecord(postParameters);
         if (visitRecords != null && visitRecords.size() > 0) {
             return processRecords(visitRecords);
         }
@@ -322,11 +321,15 @@ public class DormService {
         ///通行记录分页查询
         postParameters.put("size", size);
         ///指定设备
+        ///指定人员身份
+        ArrayList<String> identities = new ArrayList<>();
+        identities.add(Constant.STAFF);
+        postParameters.put("identity_list", identities);
         postParameters.put("device_id_list", arrayList);
         ///指定员工名称
         postParameters.put("fuzzy_name", name);
 
-        List<VisitRecord> visitRecords = accessService.requestParkAccessRecord(postParameters);
+        List<VisitRecord> visitRecords = accessService.requestParkVisitRecord(postParameters);
         if (visitRecords != null && visitRecords.size() > 0) {
             return processRecords(visitRecords);
         }
@@ -384,7 +387,6 @@ public class DormService {
         return null;
     }
 
-
     public ArrayList<AccessRecordModel> getAccessRecordByPass(int page, int size, String[] deviceIds, Long startTime, Long endTime, String pass) {
         List<String> arrayList = Arrays.asList(deviceIds);
         HashMap<String, Object> postParameters = new HashMap<>();
@@ -405,18 +407,18 @@ public class DormService {
         ArrayList<String> identities = new ArrayList<>();
         identities.add(Constant.STAFF);
         postParameters.put("identity_list", identities);
-        List<VisitRecord> visitRecords = accessService.requestParkAccessRecord(postParameters);
+        List<VisitRecord> visitRecords = accessService.requestParkVisitRecord(postParameters);
         if (visitRecords != null && visitRecords.size() > 0) {
             return processRecords(visitRecords);
         }
         return null;
     }
 
-    public ArrayList<AccessRecordModel> getAccessRecordByName(int page,int size, String[] deviceIds,Long startTime, Long endTime, String name) {
+    public ArrayList<AccessRecordModel> getAccessRecordByName(int page, int size, String[] deviceIds, Long startTime, Long endTime, String name) {
         List<String> arrayList = Arrays.asList(deviceIds);
         HashMap<String, Object> postParameters = new HashMap<>();
         ///通行记录分页查询
-        postParameters.put("page",page);
+        postParameters.put("page", page);
         postParameters.put("size", size);
         ///指定设备
         postParameters.put("device_id_list", arrayList);
@@ -426,18 +428,18 @@ public class DormService {
         ///指定员工名称
         postParameters.put("fuzzy_name", name);
 
-        List<VisitRecord> visitRecords = accessService.requestParkAccessRecord(postParameters);
+        List<VisitRecord> visitRecords = accessService.requestParkVisitRecord(postParameters);
         if (visitRecords != null && visitRecords.size() > 0) {
             return processRecords(visitRecords);
         }
         return null;
     }
 
-    public ArrayList<AccessRecordModel> getVisitRecordByIdentity(int page,int size, String[] deviceIds,Long startTime, Long endTime, String identity) {
+    public ArrayList<AccessRecordModel> getVisitRecordByIdentity(int page, int size, String[] deviceIds, Long startTime, Long endTime, String identity) {
         List<String> arrayList = Arrays.asList(deviceIds);
         HashMap<String, Object> postParameters = new HashMap<>();
         ///通行记录分页查询
-        postParameters.put("page",page);
+        postParameters.put("page", page);
         postParameters.put("size", size);
         ///指定设备
         postParameters.put("device_id_list", arrayList);
@@ -479,7 +481,7 @@ public class DormService {
             if (arrayList != null && arrayList.size() > 0) {
                 postParameters.put("device_id_list", arrayList);
             }
-            List<VisitRecord> visitRecords = accessService.requestParkAccessRecord(postParameters);
+            List<VisitRecord> visitRecords = accessService.requestParkVisitRecord(postParameters);
             if (tagService.getFloorTagList() != null && tagService.getFloorTagList().size() > 0) {
                 if (visitRecords != null && visitRecords.size() > 0) {
                     ArrayList<AccessRecordModel> accessRecordModels = new ArrayList<>();

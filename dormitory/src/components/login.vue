@@ -97,7 +97,12 @@
                             _this.isError = data.code != 200;
                             if (!_this.isError) {
                                 sessionStorage.setItem('user', JSON.stringify(data.data));//res.data
-                                _this.$router.push("/dormitory");
+                                if (data.data.account=='admin'){
+                                    _this.$router.push("/home");
+                                } else {
+                                    _this.$router.push("/dormitory")
+                                }
+
                             } else {
                                 _this.errorMsg = data.message;// '请输入正确的用户名和密码！'
                             }
