@@ -7,7 +7,7 @@
                         <div v-for="sub in root.children" v-if="!sub.hidden">
                             <el-menu-item v-for="item in sub.children" :index="item.path"
                                           v-if="sub.path == '/home/system'"
-                                          style="text-align: center;font-size: 14px; font-weight: bold">
+                                          style="font-size: 14px; font-weight: bold">
                                 {{item.meta}}
                             </el-menu-item>
                         </div>

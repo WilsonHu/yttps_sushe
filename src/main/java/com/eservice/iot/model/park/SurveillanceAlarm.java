@@ -15,15 +15,13 @@ public class SurveillanceAlarm {
     private String face_id;
     private String face_image_id;
     private String identity;
-    private String location;
     private Person person;
     private String record_type;
     private String scene_image_id;
     private double score;
+    private List<String> surveillance_policy_id_list;
     private int timestamp;//截取时间
-    private String track_id;
-    private List<String> access_policy_id_list;
-    private String pass_result;
+    private String type;
 
     public String getCard_number() {
         return card_number;
@@ -73,22 +71,6 @@ public class SurveillanceAlarm {
         this.identity = identity;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getTrack_id() {
-        return track_id;
-    }
-
-    public void setTrack_id(String track_id) {
-        this.track_id = track_id;
-    }
-
     public String getFace_image_id() {
         return face_image_id;
     }
@@ -121,20 +103,20 @@ public class SurveillanceAlarm {
         this.timestamp = timestamp;
     }
 
-    public List<String> getAccess_policy_id_list() {
-        return access_policy_id_list;
+    public List<String> getSurveillance_policy_id_list() {
+        return surveillance_policy_id_list;
     }
 
-    public void setAccess_policy_id_list(List<String> access_policy_id_list) {
-        this.access_policy_id_list = access_policy_id_list;
+    public void setSurveillance_policy_id_list(List<String> surveillance_policy_id_list) {
+        this.surveillance_policy_id_list = surveillance_policy_id_list;
     }
 
-    public String getPass_result() {
-        return pass_result;
+    public String getType() {
+        return type;
     }
 
-    public void setPass_result(String pass_result) {
-        this.pass_result = pass_result;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public boolean equals(String[] devices) {

@@ -4,9 +4,10 @@
             <el-header style="background-color: steelblue">
                 <el-row>
                     <el-col :span="2">
-                        <span style="cursor: pointer;color: #409eff;font-size: 26px; font-weight: bolder; float: left"
+                        <span style="cursor: pointer;font-size: 24px;color: white; font-weight: bolder; float: left;font-family:Helvetica Neue"
                               @click="goToHome()">
-                            <img src="../assets/img/home_logo.jpg" style="height: 32px; margin-left: 10px">
+                            <!--<img src="../assets/img/home_logo.jpg" style="height: 32px; margin-left: 10px">-->
+                            <span>上海交通大学</span>
                         </span>
                     </el-col>
                     <el-col :span="18">
@@ -131,6 +132,7 @@
 
 <script>
     import Vue from 'vue'
+
     var _this
     $(function () {
         $('#modifyPwdDialog').on('hidden.bs.modal', function () {
@@ -140,7 +142,7 @@
     export default {
         name: "home",
         components: {},
-        data () {
+        data() {
             _this = this;
             return {
                 system_name: SYSTEMNAME,
@@ -169,14 +171,12 @@
                 _this.$router.push("/home");
             },
 
-            validateUserPwd(userObj)
-            {
-               /* return isStringEmpty(userObj.password) ||
-                        isStringEmpty(userObj.oldPassword);*/
+            validateUserPwd(userObj) {
+                /* return isStringEmpty(userObj.password) ||
+                         isStringEmpty(userObj.oldPassword);*/
             },
 
-            showUserInfo()
-            {
+            showUserInfo() {
                 _this.submitUser.account = _this.userinfo.account;
                 _this.submitUser.name = _this.userinfo.name;
                 _this.submitUser.password = "";
@@ -214,8 +214,7 @@
                 });
             },
 
-            onConfirmUpdate()
-            {
+            onConfirmUpdate() {
                 $.ajax({
                     url: HOST + "user/requestLogin",
                     type: 'POST',
@@ -341,9 +340,7 @@
 
     .el-main {
         color: #333;
-        text-align: center;
     }
-
 
 
 </style>

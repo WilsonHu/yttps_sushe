@@ -21,21 +21,6 @@
                         @click="handleAdd">添加
                 </el-button>
             </el-col>
-            <el-col :span="3">
-                <el-upload
-                        class="upload-demo"
-                        :action=File
-                        name="multipartFile"
-                        :limit="1"
-                        ref="upload"
-                        :beforeUpload="beforeAvatarUpload"
-                        :on-exceed="exceedFile"
-                        :on-change="handleChange"
-                        :before-remove="beforeRemove"
-                        :file-list="fileList">
-                    <el-button type="primary" style="width: 150px;">点击上传</el-button>
-                </el-upload>
-            </el-col>
         </el-row>
         <el-table
                 v-loading="loadingUI"
@@ -224,7 +209,7 @@
                 currentPage: 1,
                 startRow: 1,
                 fileList: [],
-                File: "",
+
                 key: '',
                 modifyForm: {
                     id: '',
@@ -477,34 +462,6 @@
                 if (ev.keyCode == 13) {//enter key
                     _this.search();
                 }
-            },
-            beforeAvatarUpload(file) {
-                const isXls = file.type === 'application/vnd.ms-excel';
-                const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-                const isLt2M = file.size / 1024 / 1024 < 50;
-                if (!isLt2M) {
-                    _this.$message.error('上传文件大小不能超过 50MB!');
-                }
-
-                if (!isXls && !isXlsx) {
-                    _this.$message.error('只能上传格式是 xls 或 xlxs 的Excel文件');
-                }
-                return (isXls || isXlsx);
-                //return isLt2M
-            },
-            exceedFile() {
-                _this.$message.error('每次只能上传一个文件！');
-            },
-            handleChange(file, fileList) {
-                this.fileList = fileList.slice(-3);
-            },
-            beforeRemove(file, fileList) {
-                /*  const isTrue = this.$confirm(`确定移除 ${file.name}？`);
-                  if (isTrue) {
-                      _this.fileList = [];
-                  }*/
-                _this.fileList = []
-                return true;
             },
         },
         mounted() {

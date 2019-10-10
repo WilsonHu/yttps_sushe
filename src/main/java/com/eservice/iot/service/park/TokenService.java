@@ -44,7 +44,7 @@ public class TokenService {
         if(Util.isPortUsing(HOST,9812)) {
             HashMap<String, String> postParameters = new HashMap<>();
             postParameters.put("username", PARK_USERNAME);
-            postParameters.put("password", Util.getMD5String(PARK_PASSWORD));
+            postParameters.put("password", Util.getSHA256StrJava(PARK_PASSWORD));
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
             HttpEntity r = new HttpEntity<>(JSON.toJSONString(postParameters), headers);
@@ -56,7 +56,6 @@ public class TokenService {
                         ResponseModel responseModel = JSONObject.parseObject(body, ResponseModel.class);
                         if (responseModel != null && responseModel.getResult() != null) {
                             token = responseModel.getResult();
-                            logger.info("token is == >{}",token);
                         }
                     }
                 }

@@ -59,10 +59,11 @@ public class TagService {
     private List<Tag> staffTagList = new ArrayList<>();
 
     private List<Tag> floorTagList = new ArrayList<>();
+
     /**
      * 一分钟更新一次TAG
      */
-    @Scheduled(initialDelay = 1000,fixedRate = 1000 * 60)
+    @Scheduled(initialDelay = 1000, fixedRate = 1000 * 60)
     public void fetchTags() {
         if (token == null && tokenService != null) {
             token = tokenService.getToken();
@@ -98,7 +99,7 @@ public class TagService {
         ResponseModel responseModel = JSONObject.parseObject(body, ResponseModel.class);
         if (responseModel != null && responseModel.getResult() != null) {
             ArrayList<Tag> tmpList = (ArrayList<Tag>) JSONArray.parseArray(responseModel.getResult(), Tag.class);
-            if (tmpList != null &&tmpList.size()>0) {
+            if (tmpList != null && tmpList.size() > 0) {
                 ArrayList<Tag> visitorTagList = new ArrayList<>();
                 ArrayList<Tag> staffTagList = new ArrayList<>();
                 ArrayList<Tag> floorTagList = new ArrayList<>();
@@ -110,7 +111,7 @@ public class TagService {
                         if (Constant.STAFF.equals(str)) {
                             staffTagList.add(tag);
                         }
-                        if(tag.getTag_name().indexOf("号")!=-1){
+                        if (tag.getTag_name().indexOf("号") != -1) {
                             floorTagList.add(tag);
                         }
                     }
@@ -122,14 +123,14 @@ public class TagService {
                     logger.info("The number of visitorTagList：{} ==> {}", this.visitorTagList.size(), visitorTagList.size());
                 }
                 this.allTagList = tmpList;
-                this.floorTagList=floorTagList;
+                this.floorTagList = floorTagList;
                 this.staffTagList = staffTagList;
                 this.visitorTagList = visitorTagList;
             }
         }
     }
 
-    public boolean createTag(String name, String identity,Map mate) {
+    public boolean createTag(String name, String identity, Map mate) {
         if (token == null && tokenService != null) {
             token = tokenService.getToken();
         }
@@ -184,6 +185,7 @@ public class TagService {
     /**
      * 根据名称获取id，名称不存在则新建
      * 多用于新增员工
+     *
      * @param tagNames
      * @return
      */
@@ -203,6 +205,7 @@ public class TagService {
     /**
      * 根据名称获取id，名称不存在则新建
      * 多用于新增访客
+     *
      * @param tagNames
      * @return
      */
@@ -227,7 +230,7 @@ public class TagService {
             }
         }
         if (!isExist) {
-            createTag(tagName, Constant.STAFF,null);
+            createTag(tagName, Constant.STAFF, null);
         }
     }
 
@@ -239,36 +242,49 @@ public class TagService {
             }
         }
         if (!isExist) {
-            createTag(tagName, Constant.VISITOR,null);
+            createTag(tagName, Constant.VISITOR, null);
         }
     }
 
     /**
      * 根据tagId获取tagName
+     *
      * @param tagId
      * @return tagId or ""
      */
     public String getTagName(String tagId) {
         String tagName = "";
-        for(Tag tag : allTagList){
-            if(tagId.equals(tag.getTag_id())){
-                tagName=tag.getTag_name();
+        for (Tag tag : allTagList) {
+            if (tagId.equals(tag.getTag_id())) {
+                tagName = tag.getTag_name();
                 break;
             }
         }
         return tagName;
     }
 
+    public String getTagId(String tagName) {
+        String tagId = "";
+        for (Tag tag : allTagList) {
+            if (tagName.equals(tag.getTag_name())) {
+                tagId = tag.getTag_id();
+                break;
+            }
+        }
+        return tagId;
+    }
+
     /**
      * 根据tagIds获取tagNames
+     *
      * @param tagIds
      * @return tagIds  or tagIds.size = 0
      */
-    public ArrayList<String> getTagName(List<String> tagIds){
+    public ArrayList<String> getTagName(List<String> tagIds) {
         ArrayList<String> tagNames = new ArrayList<>();
-        for(String tagId : tagIds){
-            for(Tag tag : allTagList){
-                if(tagId.equals(tag.getTag_id())){
+        for (String tagId : tagIds) {
+            for (Tag tag : allTagList) {
+                if (tagId.equals(tag.getTag_id())) {
                     tagNames.add(tag.getTag_name());
                     break;
                 }

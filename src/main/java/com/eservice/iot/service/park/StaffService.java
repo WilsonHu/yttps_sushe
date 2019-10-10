@@ -48,13 +48,14 @@ public class StaffService {
      */
     private ArrayList<Staff> staffList = new ArrayList<>();
 
+
     @Autowired
     private TokenService tokenService;
-  
+
     /**
      * 每10分钟获取一次需要签到的员工信息
      */
-    @Scheduled(initialDelay = 2000, fixedRate = 1000*60*10)
+    @Scheduled(initialDelay = 2000, fixedRate = 1000 * 60 * 10)
     public void fetchStaffScheduled() {
         if (token == null && tokenService != null) {
             token = tokenService.getToken();
@@ -91,7 +92,7 @@ public class StaffService {
         if (responseModel != null && responseModel.getResult() != null) {
             ArrayList<Staff> tmpList = (ArrayList<Staff>) JSONArray.parseArray(responseModel.getResult(), Staff.class);
             if (tmpList != null && tmpList.size() != 0) {
-                if (staffList.size()!=tmpList.size()) {
+                if (staffList.size() != tmpList.size()) {
                     logger.info("The number of staff：{} ==> {}", staffList.size(), tmpList.size());
                 }
                 staffList = tmpList;
@@ -115,8 +116,8 @@ public class StaffService {
                     if (body != null) {
                         ResponseModel responseModel = JSONObject.parseObject(body, ResponseModel.class);
                         if (responseModel != null && responseModel.getRtn() == 0) {
-                            logger.info("id ："+staffId+"\t"+responseModel.getMessage());
-                            return  true;
+                            logger.info("id ：" + staffId + "\t" + responseModel.getMessage());
+                            return true;
                         }
                     }
                 }
@@ -167,15 +168,15 @@ public class StaffService {
             headers.add(HttpHeaders.AUTHORIZATION, token);
             HttpEntity httpEntity = new HttpEntity<>(JSON.toJSONString(postParameters), headers);
             try {
-            ResponseEntity<String> responseEntity = restTemplate.postForEntity(PARK_BASE_URL + "/staffs", httpEntity, String.class);
-            if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
-                return  examineBody(responseEntity.getBody(),map.get("name").toString());
-            }
-            }catch (HttpClientErrorException exception) {
+                ResponseEntity<String> responseEntity = restTemplate.postForEntity(PARK_BASE_URL + "/staffs", httpEntity, String.class);
+                if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
+                    return examineBody(responseEntity.getBody(), map.get("name").toString());
+                }
+            } catch (HttpClientErrorException exception) {
                 if (exception.getStatusCode().value() == ResponseCode.TOKEN_INVALID) {
                     token = tokenService.getToken();
                     if (token != null) {
-                        createStaff( map);
+                        createStaff(map);
                     }
                 }
             }
@@ -189,7 +190,7 @@ public class StaffService {
      * @param map
      * @return
      */
-    public boolean updateStaff(Map map, List<String> faceId,String staffId) {
+    public boolean updateStaff(Map map, List<String> faceId, String staffId) {
         if (token == null && tokenService != null) {
             token = tokenService.getToken();
         }
@@ -220,13 +221,13 @@ public class StaffService {
             try {
                 ResponseEntity<String> responseEntity = restTemplate.exchange(PARK_BASE_URL + "/staffs/" + staffId, HttpMethod.PUT, httpEntity, String.class);
                 if (responseEntity.getStatusCodeValue() == ResponseCode.OK) {
-                    return   examineBody(responseEntity.getBody(),map.get("name").toString());
+                    return examineBody(responseEntity.getBody(), map.get("name").toString());
                 }
             } catch (HttpClientErrorException exception) {
                 if (exception.getStatusCode().value() == ResponseCode.TOKEN_INVALID) {
                     token = tokenService.getToken();
                     if (token != null) {
-                        updateStaff(map, faceId,staffId);
+                        updateStaff(map, faceId, staffId);
                     }
                 }
             }
@@ -234,11 +235,11 @@ public class StaffService {
         return false;
     }
 
-    public String isExistToPark(String id,List<String> faceId) {
-        String staffId=null;
+    public String isExistToPark(String id, List<String> faceId) {
+        String staffId = null;
         for (Staff temp : staffList) {
             if (temp.getPerson_information().getId().equals(id)) {
-                staffId=temp.getStaffId();
+                staffId = temp.getStaffId();
                 for (FaceListBean faceListBean : temp.getFace_list()) {
                     faceId.add(faceListBean.getFace_id());
                 }
@@ -247,13 +248,13 @@ public class StaffService {
         return staffId;
     }
 
-    public boolean examineBody(String body,String name){
+    public boolean examineBody(String body, String name) {
         if (body != null) {
             ResponseModel responseModel = JSONObject.parseObject(body, ResponseModel.class);
-            if (responseModel != null &&responseModel.getRtn() != 0) {
+            if (responseModel != null && responseModel.getRtn() != 0) {
                 responseModel = JSONObject.parseObject(responseModel.getResult(), ResponseModel.class);
-                logger.error("姓名："+name+"\t"+responseModel.getMessage());
-            }else {
+                logger.error("姓名：" + name + "\t" + responseModel.getMessage());
+            } else {
                 fetchStaffScheduled();
                 return true;
             }
@@ -263,5 +264,13 @@ public class StaffService {
 
     public ArrayList<Staff> getStaffAllList() {
         return staffList;
+    }
+
+    public List<String> getStaffIdList() {
+        List<String> staffIdList = new ArrayList<>();
+        for (Staff staff : staffList) {
+            staffIdList.add(staff.getStaffId());
+        }
+        return staffIdList;
     }
 }

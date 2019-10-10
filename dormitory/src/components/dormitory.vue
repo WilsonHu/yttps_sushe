@@ -1,6 +1,6 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <div style="width: 100%;height: 100%;background-color: #F6F4FF;padding-top: 50px">
-        <audio id="error"  src="./src/assets/audio/ly-17-02-22-17.mp3"></audio>
+        <audio id="error" src="./src/assets/audio/ly-17-02-22-17.mp3"></audio>
         <el-row :gutter="0">
             <el-col :span="8">
                 <div class="grid-content bg-purple">
@@ -19,7 +19,7 @@
                                         <i style=" font:36px PingFangSC-Semibold;  color: #525252;">{{userInfo.floorNo}}</i>
                                     </p>
                                 </el-col>
-                                <el-col :offset="4" style="border: 1px solid silver;width: 1px;height: 9.5rem"></el-col>
+                                <el-col :offset="4" style="border: 1px solid silver;width: 1px;height: 8rem"></el-col>
                                 <el-col :span="5" :offset="4">
                                     <p style="margin-left: 20px;margin-top: 20px">
                                         <span>入住总人数</span><br>
@@ -33,7 +33,7 @@
                         <div class="well well-lg"
                              style="height: 610px;margin-left:60px; width:85%;background: #FFFFFF;box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);border-radius: 10px; ">
                             <i style=" font-size: 20px; font-weight: 600;color: #6a747c;">出入信息统计</i>
-                            <el-tabs v-model="infoManage" @tab-click="handleClick" class="a"
+                            <el-tabs v-model="infoManage" class="a"
                                      style="margin-top: -20px;">
                                 <el-tab-pane label="当前" name="first">
                                     <el-row style="margin-top: 30px;">
@@ -78,48 +78,11 @@
                                         </el-col>
                                     </el-row>
                                 </el-tab-pane>
-                                <el-tab-pane label="夜归考勤" name="second" class="revisiDiv"
-                                             style="background-color: #F6F4FF;">
-                                    <div style="height: 500px;overflow:auto" id="div1">
-                                        <ul style="margin-top: 10px;margin-left: -30px">
-                                            <li v-for="i in nightFallList">
-                                                <el-card style="height: 80px;width: 450px;border-radius: 20px">
-                                                    <div>
-                                                        <el-row>
-                                                            <el-col :span="2">
-                                                                <img :src="require('../assets/img/'+(i.type.split('_')[0]=='进'? 'info_pass':'info_forbid')+'.png')"
-                                                                     style=" height: 78px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
-                                                            </el-col>
-                                                            <el-col :span="2" :offset="2">
-                                                                <img :src="i.imageId" width="70px"
-                                                                     height="70px"
-                                                                     style="border-radius: 50%;margin-top: -15px">
-                                                            </el-col>
-                                                            <el-col :span="5" :offset="4">
-                                                                <span>{{i.name}}</span><br/><span>{{i.classes}}</span>
-                                                            </el-col>
-                                                            <el-col :span="18" :offset="14" style="margin-top: -50px">
-                                                                <span>{{i.pass_time}}</span><span
-                                                                    :style="{color:(i.type.split('_')[0]=='进'?'green':'red')}">【{{i.type.split("_")[0]}}】</span>
-                                                            </el-col>
-
-                                                        </el-row>
-                                                        <p style="margin-left: 80px;margin-top: -50px">
-                                                        </p>
-                                                    </div>
-                                                </el-card>
-
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <span class="mes"></span>
-                                    <span style="margin-left: 50px" class="count"></span>
-                                </el-tab-pane>
                             </el-tabs>
                         </div>
 
                         <div style="height: 100px; width:85% ;margin-left:60px;background: #FFFFFF;box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);border-radius: 10px; "
-                             class="well well-lg" @click="loginOut">
+                             class="well well-lg" @click="">
                             <div>
                                 <el-col :span="3">
                                     <img src="../assets/img/person.png" width="70px" height="70px"
@@ -134,9 +97,21 @@
                                         <label>电话:</label><span style="margin-left: 10px;font-size: 15px;">{{userInfo.phone}}</span>
                                     </p>
                                 </el-col>
-                            </div>
-                        </div>
 
+                                <el-popover
+                                        placement="top"
+                                        width="160"
+                                        v-model="visible">
+                                    <p>确定退出当前账号吗？</p>
+                                    <div style="text-align: right; margin: 0">
+                                        <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+                                        <el-button type="primary" size="mini" @click="loginOut">确定</el-button>
+                                    </div>
+                                    <el-button slot="reference" style="margin-left: 15%">退出</el-button>
+                                </el-popover>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </el-col>
@@ -144,42 +119,91 @@
             <el-col :span="8">
                 <div class="grid-content"
                      style="background-image: linear-gradient(135deg, #676F8C 0%, #0C101D 100%);box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);">
-                    <div id='vlc'>
-                        <div style="height: 470px;width: 400px;" v-for="i in deviceRtsp">
-                            <span style="position: relative;top: 20px;left:25px;font-size: 18px;color: white">1号机位</span>
-                            <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/"
-                                    class="vlc"
-                                    events='false'
-                                    classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921'
-                                    codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
-                                    width="587" height="340" style="margin-top: 50px;margin-left: 32px">
-                                <param name='mrl' :value='i'/>
-                                <param name='volume' value='50'/>
-                                <param name='autoplay' value='true'/>
-                                <param name="enablefullscreen controls" value="1">
-                                <param name="windowlessVideo" value="0">
-                                <param name='loop' value='false'/>
-                                <param name='fullscreen' value='false'/>
-                                <param name="height" value="600">
-                            </object>
+                    <div style="height: 100%">
+                        <div style=" min-height:100%;;width:90% ;background-color:transparent;margin-left:40px;margin-top: 10px"
+                             class="">
+                            <el-row>
+                                <el-tabs v-model="visitSelected"  stretch class="visitA">
+                                    <el-tab-pane label="夜归考勤" name="first">
+                                        <div style="height: 850px;overflow:auto;" id="div1" class="visiiDiv">
+                                            <ul style="margin-top: 10px;margin-left: -10px">
+                                                <li v-for="i in nightFallList">
+                                                    <el-card
+                                                            style="border-radius: 10px;width:100%;height: 80px;margin-left: -20px;background: #EEF2FF">
+                                                        <div>
+                                                            <el-row>
+                                                                <el-col :span="2">
+                                                                    <img :src="require('../assets/img/'+(i.type.split('_')[0]=='进'? 'info_pass':'info_forbid')+'.png')"
+                                                                         style=" height: 78px;width:70px;border-radius: 0 0 0 0;margin-top: -20px;margin-left: -20px">
+                                                                </el-col>
+                                                                <el-col :span="3" :offset="3">
+                                                                    <span style="font-size: 20px;">{{i.name}}</span><br/><span>{{i.classes}}</span>
+                                                                </el-col>
+                                                                <el-col :span="2" :offset="1">
+                                                                    <img :src="i.imageId" width="70px"
+                                                                         height="70px"
+                                                                         style="border-radius: 50%;margin-top: -15px">
+                                                                </el-col>
+
+                                                                <el-col :span="18" :offset="14"
+                                                                        style="margin-top: -50px;">
+                                                                    <span style="font-size: 18px;">{{i.pass_time}}</span><span
+                                                                        :style="{color:(i.type.split('_')[0]=='进'?'green':'red')}">【{{i.type.split("_")[0]}}】</span>
+                                                                </el-col>
+
+                                                            </el-row>
+                                                            <p style="margin-left: 80px;margin-top: -50px">
+                                                            </p>
+                                                        </div>
+                                                    </el-card>
+
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <span class="mes"></span>
+                                        <span style="margin-left: 50px" class="count"></span>
+                                    </el-tab-pane>
+                                    <el-tab-pane label="超时未归" name="second">
+                                        <div style="height: 850px;overflow:auto;" class="visiiDiv">
+                                            <ul style="margin-top: 10px;margin-left: -10px ">
+                                                <li v-for="i in visiRecordList">
+                                                    <el-card
+                                                            style="border-radius: 10px;width:100%;height: 80px;margin-left: -20px;background: #EEF2FF">
+                                                        <div>
+                                                            <el-row>
+                                                                <el-col :span="10"
+                                                                        style="margin-top: 8px;font-size: 20px;color: #434343;font-weight:bold">
+                                                                    <span>{{i.time}}</span>
+                                                                </el-col>
+                                                                <el-col :span="2" :offset="1">
+                                                                    <img v-if="i.imageId==''|| i.imageId==null"
+                                                                         src="../assets/img/avator.png">
+
+                                                                    <img :src="i.imageId" width="70px"
+                                                                         height="70px"
+                                                                         style="border-radius: 50%;margin-top: -16px;position: relative;z-index: 5"
+                                                                         @click="big(i)">
+                                                                </el-col>
+                                                                <el-col :span="5" :offset="4"
+                                                                        style="font-family: PingFangSC-Semibold;color:  #282828">
+                                                                    <span style="font-size: 18px;font-weight:bold">{{i.name}}</span><br/><span>{{i.tagNames[0]}}</span>
+                                                                </el-col>
+                                                                <el-col :span="5" :offset="21"
+                                                                        style="margin-top: -45px;font-size: 15px;">
+                                                                    <span :style="{color:(i.type.split('_')[0]=='进'?'#9FD36B':(i.type=='未注册'?'#F3A32B':(i.type=='黑名单'?'#C42E3B':'blue')))}">【{{i.type.split('_')[0]}}】</span>
+                                                                </el-col>
+                                                            </el-row>
+                                                        </div>
+                                                    </el-card>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </el-tab-pane>
+
+                                </el-tabs>
+                            </el-row>
                         </div>
                     </div>
-                    <!--  <div style="height: 500px;width: 400px;margin-top: -100px">
-                          <span style="position: relative;top: 40px;left:25px;font-size: 18px;color: white">2号机位</span>
-                          <object type='application/x-vlc-plugin' id='vlc1' events='True'
-                                  classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921'
-                                  codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
-                                  width="587" height="340" style="margin-top: 50px;margin-left: 30px">
-                              <param name='mrl' value='rtsp://admin:admin123@10.250.62.134:554/h264/ch33/main/av_stream'/>
-                              <param name='volume' value='50'/>
-                              <param name='autoplay' value='true'/>
-                              <param name="enablefullscreen controls" value="1">
-                              <param name="windowlessVideo" value="0">
-                              <param name='loop' value='false'/>
-                              <param name='fullscreen' value='false'/>
-                              <param name="height" value="600">
-                          </object>
-                      </div>-->
                 </div>
             </el-col>
 
@@ -203,7 +227,7 @@
                                             <ul style="margin-top: 10px;margin-left: -10px ">
                                                 <li v-for="i in accessList">
                                                     <el-card
-                                                            style="border-radius: 10px;width:462px;height: 80px;margin-left: -20px">
+                                                            style="border-radius: 10px;width:100%;height: 80px;margin-left: -20px">
                                                         <div>
                                                             <el-row>
                                                                 <el-col :span="2">
@@ -232,7 +256,6 @@
                                                                     <span :style="{color:(i.type.split('_')[0]=='进'?'#9FD36B':(i.type=='未注册'?'#F3A32B':(i.type=='黑名单'?'#C42E3B':'blue')))}">【{{i.type.split('_')[0]}}】</span>
                                                                 </el-col>
                                                             </el-row>
-
                                                         </div>
                                                     </el-card>
                                                 </li>
@@ -371,6 +394,7 @@
                 </div>
             </el-col>
         </el-row>
+
         <el-dialog :visible.sync="imgDialogVisible" width="40%">
             <el-row>
                 <img :src="bigImg" width="680px" height="700px" style="margin-left: 20px"/>
@@ -464,13 +488,14 @@
     var timeOut;
     var timeFetchAccess;
     var timeFetchNight;
-    var strangerTime;
+    var strangerTimes;
     export default {
         name: "dormitory",
         data() {
             _this = this
             return {
                 selected: "first",
+                visible: false,
                 infoManage: 'first',
                 staffName: '',
                 attendanceNumber: [],
@@ -519,6 +544,8 @@
                 deviceRtsp: [],
                 warningTime: '',
                 strangerTime: new Date(),
+                visiRecordList: [],
+                visitSelected: 'first'
 
             }
         },
@@ -537,24 +564,25 @@
 
                       });
               },*/
+
             big(item) {
-                document.getElementById("vlc").style.display = "none";
+                ;
                 _this.imgDialogVisible = true;
                 _this.bigImg = item.imageId
                 // _this.warningDialogVisble = true;
             },
-            handleClick(tab, event) {
-                switch (_this.infoManage) {
-                    case "second":
-                        _this.firstLoad = true;
-                        _this.nightFallList = []
-                        _this.fethcNightFall(_this.deviceId)
-                        break;
-                }
-                $(".mes").html("")
-                $(".mess").html("")
-                $(".count").html("")
-            },
+            /*   handleClick(tab, event) {
+                   switch (_this.visitSelected) {
+                       case "second":
+                           _this.firstLoad = true;
+                           _this.nightFallList = []
+                           _this.fethcNightFall(_this.deviceId)
+                           break;
+                   }
+                   $(".mes").html("")
+                   $(".mess").html("")
+                   $(".count").html("")
+               },*/
             handleAccess() {
                 switch (_this.selected) {
                     case "first":
@@ -625,12 +653,13 @@
                                 _this.deviceRtsp.push(floorDevice[i].deviceRtsp);
                             }
                         }
+                        _this.fethcNightFall(_this.deviceId)
                         _this.fetchNewestAccessRecordList(_this.deviceId);
                         timeFetchAccess = setInterval(function () {
                             _this.fetchNewestAccessRecordList(_this.deviceId)
                         }, 3000)
 
-                        strangerTime = setInterval(function () {
+                        strangerTimes = setInterval(function () {
                             _this.fetchStrangerAlarm()
                         }, 3000)
 
@@ -1003,11 +1032,12 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            for (let i = 0; i < res.data.data.length; i++) {
-                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                            if (res.data.data != null) {
+                                for (let i = 0; i < res.data.data.length; i++) {
+                                    res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                                }
+                                _this.accessList = res.data.data;
                             }
-                            _this.accessList = res.data.data;
-
                         } else {
                             _this.$notify({
                                 title: '错误',
@@ -1036,10 +1066,12 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            for (let i = 0; i < res.data.data.length; i++) {
-                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                            if (res.data.data != null) {
+                                for (let i = 0; i < res.data.data.length; i++) {
+                                    res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                                }
+                                _this.accessByPassList = res.data.data;
                             }
-                            _this.accessByPassList = res.data.data;
                         } else {
                             _this.$notify({
                                 title: '错误',
@@ -1068,10 +1100,12 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            for (let i = 0; i < res.data.data.length; i++) {
-                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                            if (res.data.data != null) {
+                                for (let i = 0; i < res.data.data.length; i++) {
+                                    res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                                }
+                                _this.accessList = res.data.data;
                             }
-                            _this.accessList = res.data.data;
                         } else {
                             _this.$notify({
                                 title: '错误',
@@ -1100,10 +1134,12 @@
                     data: params
                 }).then(res => {
                         if (res.data.code == 200) {
-                            for (let i = 0; i < res.data.data.length; i++) {
-                                res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                            if (res.data.data != null) {
+                                for (let i = 0; i < res.data.data.length; i++) {
+                                    res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                                }
+                                _this.accessList = res.data.data;
                             }
-                            _this.accessList = res.data.data;
                         } else {
                             _this.$notify({
                                 title: '错误',
@@ -1121,13 +1157,16 @@
                 })
 
             },
+            /**
+             * 查询陌生人
+             */
             fetchStrangerAlarm() {
                 let params = new URLSearchParams();
-                params.append("deviceId", _this.deviceId);
+                params.append("deviceIds", _this.deviceId);
                 params.append("queryStartTime", _this.strangerTime);
                 params.append("queryFinishTime", new Date());
                 request({
-                    url: HOST + "dorm/getStrangerList",
+                    url: HOST + "access/getStranageList",
                     method: 'post',
                     data: params
                 }).then(res => {
@@ -1162,6 +1201,8 @@
                     });
                 })
             },
+
+
             handleScrollNight() {
                 //变量scrollTop是滚动条滚动时，距离顶部的距离
                 var scrollTop = document.getElementById("div1").scrollTop
@@ -1295,7 +1336,6 @@
                 document.getElementById("accessBlack").addEventListener("scroll", _this.handleScrollBlack);
             },
             handleMoreAccess(item) {
-                document.getElementById("vlc").style.display = "none"
                 _this.defaultDate();
                 _this.fetchMoreAccess(item);
                 _this.accessDialogVisble = true;
@@ -1325,6 +1365,9 @@
                                     res.data.data.list[i].imageId = IP + "/image/" + res.data.data.list[i].imageId;
                                 }
                                 _this.moreAccessList = res.data.data.list;
+                            } else {
+                                _this.totalRecords = 0
+                                _this.moreAccessList = []
                             }
                         } else {
                             _this.$notify({
@@ -1365,11 +1408,12 @@
             },
             loginOut() {
                 _this.$router.push("/login")
+                _this.visible = true;
                 sessionStorage.removeItem("user")
                 clearInterval(timeOut);
                 clearInterval(timeFetchAccess)
                 clearInterval(timeFetchNight)
-                clearInterval(strangerTime)
+                clearInterval(strangerTimes)
             },
             audioStranage() {
                 document.getElementById("error").play();
@@ -1412,12 +1456,37 @@
                     });
                 })
 
+            },
+
+            //获取最近一次抓拍记录在五天前的记录
+            fetchVisitRecord(floorName) {
+                let params = new URLSearchParams();
+                params.append("tagName", floorName);
+                request({
+                    url: HOST + "access/getVisitRecord",
+                    method: "post",
+                    data: params
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        for (let i = 0; i < res.data.data.length; i++) {
+                            res.data.data[i].imageId = IP + "/image/" + res.data.data[i].imageId;
+                        }
+                        _this.visiRecordList = res.data.data;
+                    } else {
+                        showMessage()
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
             }
         },
         created() {
             this.userInfo = JSON.parse(sessionStorage.getItem("user"))
             _this.getFloorDevice(_this.userInfo.floorNo);
-
+            _this.fetchVisitRecord(_this.userInfo.floorName)
+            setInterval(function () {
+                _this.fetchVisitRecord(_this.userInfo.floorName)
+            }, 1000 * 60 * 20)
         },
         mounted() {
             _this.defaultDate();
@@ -1429,31 +1498,35 @@
             _this.SetEchart();
             _this.handleSelectScroll();
 
-        },
+        }
+        ,
         beforeDestroy() {
             //removeEventListener("scroll", _this.handleScrollAccessAll)
             clearInterval(timeOut);
             clearInterval(timeFetchAccess)
             clearInterval(timeFetchNight)
-            clearInterval(strangerTime)
-        },
+            clearInterval(strangerTimes)
+        }
+        ,
 
         watch: {
             imgDialogVisible: function (val, oldval) {
                 if (val == false) {
-                    document.getElementById("vlc").style.display = "block";
+
                 }
-            },
+            }
+            ,
             accessDialogVisble: function (val, oldval) {
                 if (val == false) {
-                    document.getElementById("vlc").style.display = "block";
                     _this.accessPage = 1;
                     _this.currentPage = 0;
                 }
 
-            },
+            }
+            ,
 
-        },
+        }
+        ,
 
     }
 </script>
@@ -1494,7 +1567,7 @@
     }
 
     .b .el-tabs__item {
-        padding: 0 50px;
+        padding: 0 30px;
         height: 40px;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
@@ -1542,6 +1615,41 @@
         -ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
         -ms-overflow-style: none;
         overflow: auto;
+    }
+
+    .visiiDiv::-webkit-scrollbar {
+        width: 5px;
+        height: 1px;
+    }
+
+    .visiiDiv::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(246, 244, 255, 0.2);
+        background: #0C101D;
+    }
+
+    .visiiDiv::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
+        border-radius: 10px;
+        background: #0C101D;
+    }
+
+    .visiiDiv {
+        -ms-scroll-chaining: chained;
+        -ms-overflow-style: none;
+        -ms-content-zooming: zoom;
+        -ms-scroll-rails: none;
+        -ms-content-zoom-limit-min: 100%;
+        -ms-content-zoom-limit-max: 500%;
+        -ms-scroll-snap-type: proximity;
+        -ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
+        -ms-overflow-style: none;
+        overflow: auto;
+    }
+
+    .visitA .el-tabs__item {
+        color: white;
+        font-size: 17px;
     }
 
     .accesDialog li {
@@ -1655,4 +1763,5 @@
     .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
         width: 393px;
     }
+
 </style>

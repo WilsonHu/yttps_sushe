@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="3">
-                <el-select v-model="key" clearable  placeholder="请选择楼号" style="width: 100%">
+                <el-select v-model="key" clearable placeholder="请选择楼号" style="width: 100%">
                     <el-option
                             v-for="item in floorNo"
                             v-if="item.floorNo!=null"
@@ -65,11 +65,6 @@
             </el-table-column>
             <el-table-column
                     align="center"
-                    prop="deviceRtsp"
-                    label="设备视频流">
-            </el-table-column>
-            <el-table-column
-                    align="center"
                     label="操作"
                     width="200">
                 <template scope="scope">
@@ -92,37 +87,28 @@
         <el-dialog title="添加楼层设备" :before-close="handleCloseTitle" :visible.sync="addFloorDeviceDialog" size="tiny">
             <el-row>
                 <el-form>
-                    <el-col :span="20">
-                        <el-form-item label="楼号：" :label-width="formLabelWidth">
-                            <el-select v-model="from.floorNo" clearable  placeholder="请选择楼号" style="width: 100%">
-                                <el-option
-                                        v-for="item in floorNo"
-                                        v-if="item.floorNo!=null"
-                                        :key="item.floorNo"
-                                        :label="item.floorNo"
-                                        :value="item.floorNo">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="20">
-                        <el-form-item label="设备ip：" :label-width="formLabelWidth">
-                            <el-input type="text" v-model="from.deviceId" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="7">
-                        <el-form-item label="进出类型：" :label-width="formLabelWidth">
-                            <el-radio v-model="from.type" label="0">进</el-radio>
-                            <el-radio v-model="from.type" label="1">出</el-radio>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="20">
-                        <el-form-item label="设备视频：" :label-width="formLabelWidth">
-                            <el-input type="text" v-model="from.deviceRtsp" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
+                    <el-form-item label="楼号" :label-width="formLabelWidth">
+                        <el-select v-model="from.floorNo" clearable placeholder="请选择楼号" style="width: 100%">
+                            <el-option
+                                    v-for="item in floorNo"
+                                    v-if="item.floorNo!=null"
+                                    :key="item.floorNo"
+                                    :label="item.floorNo"
+                                    :value="item.floorNo">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item label="设备ip" :label-width="formLabelWidth">
+                        <el-input type="text" v-model="from.deviceId" auto-complete="off">
+                        </el-input>
+                    </el-form-item>
+
+                    <el-form-item label="进出类型" :label-width="formLabelWidth">
+                        <el-radio v-model="from.type" label="0">进</el-radio>
+                        <el-radio v-model="from.type" label="1">出</el-radio>
+                    </el-form-item>
+
                 </el-form>
             </el-row>
             <el-alert
@@ -139,47 +125,43 @@
         </el-dialog>
 
         <el-dialog title="楼层设备的修改" :before-close="handleCloseTitle" :visible.sync="modifyFloorDeviceDialog" size="tiny">
-            <el-row>
-                <el-form>
-                    <el-col :span="20">
-                        <el-form-item label="楼号：" :label-width="formLabelWidth">
-                            <el-select v-model="modifyFrom.floorNo" clearable  placeholder="请选择楼号" style="width: 100%">
-                                <el-option
-                                        v-for="item in floorNo"
-                                        v-if="item.floorNo!=null"
-                                        :key="item.floorNo"
-                                        :label="item.floorNo"
-                                        :value="item.floorNo">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="20">
-                        <el-form-item label="设备ip：" :label-width="formLabelWidth">
-                            <el-input type="text" v-model="modifyFrom.deviceId" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="7">
-                        <el-form-item label="进出类型：" :label-width="formLabelWidth">
-                            <el-radio v-model="modifyFrom.type" label="0">进</el-radio>
-                            <el-radio v-model="modifyFrom.type" label="1">出</el-radio>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="20">
-                        <el-form-item label="设备视频：" :label-width="formLabelWidth">
-                            <el-input type="text" v-model="modifyFrom.deviceRtsp" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-form>
-                <el-alert v-if="isError" style="margin-top: 20px;padding: 5px;"
-                          :title="errorMsg"
-                          type="error"
-                          :closable="false"
-                          show-icon>
-                </el-alert>
-            </el-row>
+
+            <el-form>
+                <el-form-item label="楼号" :label-width="formLabelWidth">
+                    <el-select v-model="modifyFrom.floorNo" clearable placeholder="请选择楼号" style="width: 100%">
+                        <el-option
+                                v-for="item in floorNo"
+                                v-if="item.floorNo!=null"
+                                :key="item.floorNo"
+                                :label="item.floorNo"
+                                :value="item.floorNo">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="设备ip" :label-width="formLabelWidth">
+                    <el-input type="text" v-model="modifyFrom.deviceId" auto-complete="off">
+                    </el-input>
+                </el-form-item>
+
+
+                <el-form-item label="进出类型" :label-width="formLabelWidth">
+                    <el-radio-group v-model="modifyFrom.type">
+                        <el-radio label="0">进</el-radio>
+                        <el-radio label="1">出</el-radio>
+                    </el-radio-group>
+
+                </el-form-item>
+
+            </el-form>
+
+
+            <el-alert v-if="isError" style="margin-top: 20px;padding: 5px;"
+                      :title="errorMsg"
+                      type="error"
+                      :closable="false"
+                      show-icon>
+            </el-alert>
 
             <span slot="footer" class="dialog-footer">
                     <el-button @click="handleExit">取 消</el-button>
@@ -219,14 +201,14 @@
                     floorNo: 0,
                     deviceId: '',
                     type: '0',
-                    deviceRtsp: ''
+
                 },
                 modifyFrom: {
                     id: 0,
                     floorNo: 0,
                     deviceId: '',
                     type: '0',
-                    deviceRtsp: ''
+
                 },
                 radio: '0',
                 formLabelWidth: '100px',
@@ -244,7 +226,6 @@
                 }).then(() => {
                     done();
                     _this.from = {};
-                    _this.modifyFrom = {}
                     _this.imageUrl = '';
                 })
                     .catch(_ => {
@@ -314,11 +295,11 @@
             },
             handleExit() {
                 _this.modifyFloorDeviceDialog = false;
-                _this.modifyFrom = {};
             },
-            add() {
-                _this.isError = _this.validateForm(_this.from, false)
-                if (_this.isError) {
+            add(item) {
+                _this.isError = _this.validateForm(_this.from)
+                console.log("返回值:" + _this.isError)
+                if (!_this.isError) {
                     $.ajax({
                         url: HOST + "floor/device/add",
                         type: 'post',
@@ -436,7 +417,7 @@
                     }
                 })
             },
-            validateForm(formObj, isEdit) {
+            validateForm(formObj) {
                 var pat = /[`~!@#$%^&*()_\-+=<>?:"{}|,\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/im;
                 var iserror = false;
                 if (!iserror && formObj.floorNo == null || formObj.floorNo == "") {
@@ -462,6 +443,6 @@
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>
