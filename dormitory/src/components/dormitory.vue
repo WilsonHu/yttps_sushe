@@ -123,7 +123,7 @@
                         <div style=" min-height:100%;;width:90% ;background-color:transparent;margin-left:40px;margin-top: 10px"
                              class="">
                             <el-row>
-                                <el-tabs v-model="visitSelected"  stretch class="visitA">
+                                <el-tabs v-model="visitSelected" stretch class="visitA">
                                     <el-tab-pane label="夜归考勤" name="first">
                                         <div style="height: 850px;overflow:auto;" id="div1" class="visiiDiv">
                                             <ul style="margin-top: 10px;margin-left: -10px">
@@ -163,7 +163,7 @@
                                         <span class="mes"></span>
                                         <span style="margin-left: 50px" class="count"></span>
                                     </el-tab-pane>
-                                    <el-tab-pane label="超时未归" name="second">
+                                    <el-tab-pane label="多日未归" name="second">
                                         <div style="height: 850px;overflow:auto;" class="visiiDiv">
                                             <ul style="margin-top: 10px;margin-left: -10px ">
                                                 <li v-for="i in visiRecordList">
@@ -1529,6 +1529,122 @@
         ,
 
     }
+
+    var mqttReconnectInterval = null;
+    var hostname = MqttServer,
+        port = ServerPort,
+        clientId = `client-${newGuid()}`,
+        timeout = 30,
+        keepAlive = 100,
+        cleanSession = true,
+        ssl = false;
+
+    var client = new Paho.MQTT.Client(hostname, port, clientId);
+
+    var options = {
+        invocationContext: {
+            host: hostname,
+            port: port,
+            path: client.path,
+            clientId: clientId
+        },
+        timeout: timeout,
+        keepAliveInterval: keepAlive,
+        cleanSession:cleanSession,
+        useSSL:ssl,
+        onSuccess:onConnect,
+        onFailure:function (e) {
+            console.log(`connect failure:${e}`);
+        }
+    };
+    $(document).ready(function () {
+        client.connect(options);  //连接服务器并注册连接成功处理事件
+        client.onConnectionLost=onConnectionLost;  //注册连接断开处理事件
+        client.onMessageArrived=onMessageArrived; //注册消息接收处理事件
+    });
+
+
+    function onConnect() {
+        console.log("connect successfully");
+        if (mqttReconnectInterval != null) {
+            clearInterval(mqttReconnectInterval);
+            mqttReconnectInterval = null;
+        }
+        for (let item of ServerTOPIC)//订阅主题
+        {
+            console.log(`subscribed server topic: ${item}`);
+            client.subscribe(item);
+        }
+    }
+
+    function newGuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    function onConnectionLost(responseObject) {
+        if (responseObject.errorCode !== 0) {
+            console.log("连接已断开");
+            console.log("onConnectionLost:" + responseObject.errorMessage);
+            mqttReconnectInterval = setInterval(() => {
+                client.connect(options);
+                client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
+                client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
+            }, 2000);
+        }
+    }
+    function onMessageArrived(message) {
+        // console.log("收到消息:" + message.payloadString);
+        console.log("主题：" + message.destinationName);
+        var data = null;
+        try {
+            data = jQuery.parseJSON(message.payloadString);
+            //console.log("解析出来的：data：" + JSON.stringify(data));
+        } catch (e) {
+            console.log(e);
+        }
+        if (data != null) {
+
+            switch (message.destinationName) {
+                case ServerTOPIC[0]: //visitor/response
+                    _this.result = data.result;
+                    _this.name = data.name;
+                    _this.photo = "data:image/jpeg;base64," + data.base64;
+                    if (_this.result == 1) {
+                        _this.openSuccess();
+                    } else {
+                        _this.openError();
+                    }
+                    console.log("页面弹框提示后，跳转路径")
+                    _this.$router.push("/userHome/invitationRegis");
+
+                    break;
+                case ServerTOPIC[1]://visitor/success
+                    _this.name = data.name;
+                    _this.idCard = data.id_num;
+                    _this.address = data.address;
+                    _this.photo = "data:image/jpeg;base64," + data.photo;
+                    _this.fetchImage(data.invitation)
+
+                    _this.$router.push("/userHome/accessManage");
+                    break;
+                case ServerTOPIC[2]://visitor/error
+                    _this.name = data.name;
+                    _this.idCard = data.id_num;
+                    _this.address = data.address;
+                    _this.photo = "data:image/jpeg;base64," + data.photo;
+                    _this.openVerifyError();
+                    _this.$router.push("/userHome/accessManage");
+                    break;
+                default:
+                    console.log("未知主题消息...")
+                    break;
+            }
+        }
+    }
+
 </script>
 
 <style>

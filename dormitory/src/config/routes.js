@@ -6,6 +6,7 @@ import Home from '../components/home.vue'
 import System from '../components/system.vue'
 import UserManage from '../components/system/userManage.vue'
 import FloorDeviceManage from '../components/system/floorDeviceManage.vue'
+import StudentAccessRecord from '../components/system/studentAccessRecord.vue'
 
 export default [
     {
@@ -50,6 +51,12 @@ export default [
                         component: FloorDeviceManage,
                         name: 'floorDeviceManage',
                         meta: '楼层设备管理'
+                    },
+                    {
+                        path: '/home/system/studentAccessRecord',
+                        component: StudentAccessRecord,
+                        name: 'studentAccessRecord',
+                        meta: '学员通行记录'
                     }
                 ]
             }
